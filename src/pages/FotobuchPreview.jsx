@@ -3,13 +3,13 @@ import { supabase } from '../lib/supabase'
 import { Link } from 'react-router-dom'
 import { pdf } from '@react-pdf/renderer'
 import { FotobuchDocument } from '../lib/fotobuchPDF'
-import { QUIZ_QUESTIONS, QUIZ_RESULTS } from '../lib/quizData'
+import { NAME, INSTITUTE, ROLE } from '../config'
 
 const CATEGORIES = [
-  { id: 'wuensche',    emoji: '💛', label: 'Wünsche',       color: '#C9A84C', bg: '#FBF5E6' },
-  { id: 'erinnerungen',emoji: '📸', label: 'Erinnerungen',  color: '#6BAA8B', bg: '#F0F6F3' },
-  { id: 'tipps',       emoji: '💍', label: 'Tipps',         color: '#B87068', bg: '#FAF0EE' },
-  { id: 'party',       emoji: '🎉', label: 'Highlights',    color: '#6B7A8B', bg: '#F0F1F4' },
+  { id: 'dankbarkeit',  emoji: '💛', label: 'Dankbarkeit',   color: '#009775', bg: '#E5F5F1' },
+  { id: 'erinnerungen', emoji: '📸', label: 'Erinnerungen',  color: '#6BAA8B', bg: '#F0F6F3' },
+  { id: 'wuensche',     emoji: '🌟', label: 'Wünsche',       color: '#B87068', bg: '#FAF0EE' },
+  { id: 'humor',        emoji: '😊', label: 'Humor',         color: '#6B7A8B', bg: '#F0F1F4' },
 ]
 
 function formatDate(iso) {
@@ -32,7 +32,7 @@ function A4Page({ children, bg = '#FAF7F2' }) {
       position: 'relative', overflow: 'hidden', pageBreakAfter: 'always',
     }}>
       {/* Doppelter Goldrahmen */}
-      <div style={{ position: 'absolute', inset: '7mm',  border: '0.6px solid #C9A84C', pointerEvents: 'none', zIndex: 10 }} />
+      <div style={{ position: 'absolute', inset: '7mm',  border: '0.6px solid #009775', pointerEvents: 'none', zIndex: 10 }} />
       <div style={{ position: 'absolute', inset: '9.5mm', border: '0.3px solid rgba(201,168,76,0.3)', pointerEvents: 'none', zIndex: 10 }} />
       <div style={{ padding: '14mm 14mm 14mm', minHeight: '297mm', boxSizing: 'border-box' }}>
         {children}
@@ -46,17 +46,15 @@ function CoverPage() {
   return (
     <A4Page>
       <div style={{ height: '269mm', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-        <p style={{ fontFamily: 'Georgia,serif', fontSize: '10px', letterSpacing: '7px', color: '#C9A84C', textTransform: 'uppercase', marginBottom: '28px' }}>
-          Hochzeits · Gästebuch
+        <p style={{ fontFamily: 'Georgia,serif', fontSize: '10px', letterSpacing: '7px', color: '#009775', textTransform: 'uppercase', marginBottom: '28px' }}>
+          Abschiedsbuch
         </p>
-        <Rule color="#C9A84C" />
-        <h1 style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '76px', fontWeight: 300, color: '#2C2418', lineHeight: 1, margin: '20px 0 0' }}>Niklas</h1>
-        <p  style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '36px', fontStyle: 'italic', color: '#C9A84C', margin: '4px 0' }}>&amp;</p>
-        <h1 style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '76px', fontWeight: 300, color: '#2C2418', lineHeight: 1, margin: '0 0 20px' }}>Alexander</h1>
-        <Rule color="#C9A84C" />
-        <p style={{ fontFamily: 'Georgia,serif', fontSize: '12px', letterSpacing: '5px', color: '#8B7D6E', margin: '24px 0 56px' }}>23. MAI 2026</p>
-        <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', fontSize: '15px', color: '#B5A898', maxWidth: '130mm', lineHeight: 1.9 }}>
-          „Die schönsten Augenblicke des Lebens sind jene, die wir mit den Menschen teilen, die uns am meisten bedeuten."
+        <Rule color="#009775" />
+        <h1 style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '56px', fontWeight: 300, color: '#2C2418', lineHeight: 1.1, margin: '20px 0 0', textAlign: 'center' }}>{NAME}</h1>
+        <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '16px', fontStyle: 'italic', color: '#009775', margin: '8px 0 20px' }}>{ROLE} · {INSTITUTE}</p>
+        <Rule color="#009775" />
+        <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', fontSize: '15px', color: '#B5A898', maxWidth: '130mm', lineHeight: 1.9, marginTop: '40px' }}>
+          „Der Ruhestand ist nicht das Ende, sondern der Anfang eines neuen Kapitels voller Möglichkeiten."
         </p>
       </div>
     </A4Page>
@@ -64,7 +62,7 @@ function CoverPage() {
 }
 
 // Dekorative Trennlinie
-function Rule({ color = '#C9A84C', my = '0' }) {
+function Rule({ color = '#009775', my = '0' }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: `${my} 0`, width: '100%', justifyContent: 'center' }}>
       <div style={{ height: '1px', width: '36px', background: `linear-gradient(to right, transparent, ${color})` }} />
@@ -282,102 +280,22 @@ function EntriesPage({ pageEntries, cat, pageIndex }) {
       {/* Fußzeile */}
       <div style={{ position: 'absolute', bottom: '10mm', left: '14mm', right: '14mm', textAlign: 'center', zIndex: 5 }}>
         <p style={{ fontFamily: 'Georgia,serif', fontSize: '7px', color: cat.color + '50', letterSpacing: '3px', margin: 0 }}>
-          ✦ NIKLAS &amp; ALEXANDER · 23. MAI 2026 ✦
+          ✦ {NAME.toUpperCase()} · {INSTITUTE.toUpperCase()} ✦
         </p>
       </div>
     </A4Page>
   )
 }
 
-// Quiz-Ergebnis-Seite
-function QuizResultsPage({ results }) {
-  if (!results.length) return null
-  // Max 15 Ergebnisse pro Seite
-  const pages = []
-  for (let i = 0; i < results.length; i += 15) pages.push(results.slice(i, i + 15))
-
-  return pages.map((chunk, pi) => (
-    <A4Page key={pi}>
-      {pi === 0 && (
-        <div style={{ textAlign: 'center', marginBottom: '10mm' }}>
-          <p style={{ fontFamily: 'Georgia,serif', fontSize: '10px', letterSpacing: '6px', color: '#C9A84C', textTransform: 'uppercase', margin: '0 0 8px' }}>
-            Quiz-Auswertung
-          </p>
-          <h2 style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '40px', fontWeight: 300, color: '#2C2418', margin: '0 0 6px' }}>
-            Wer kennt das Brautpaar?
-          </h2>
-          <Rule />
-          {/* Frage-Legende */}
-          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '6px', marginTop: '8mm' }}>
-            {QUIZ_QUESTIONS.map(q => (
-              <span key={q.id} style={{ fontFamily: 'Georgia,serif', fontSize: '9px', color: '#8B7D6E' }}
-                title={q.text}>
-                {q.id}. {q.emoji}
-              </span>
-            ))}
-          </div>
-          <p style={{ fontFamily: 'Georgia,serif', fontSize: '8px', color: '#B5A898', marginTop: '4px' }}>
-            💙 = Niklas &nbsp;·&nbsp; ❤️ = Alexander
-          </p>
-          <div style={{ height: '1px', background: 'rgba(201,168,76,0.2)', margin: '6mm 0' }} />
-        </div>
-      )}
-
-      {chunk.map((r, i) => {
-        const niklasCount = r.answers.filter(a => a === 'niklas').length
-        const res = QUIZ_RESULTS.find(x => niklasCount >= x.min && niklasCount <= x.max)
-        return (
-          <div key={r.id} style={{
-            display: 'flex', alignItems: 'center', gap: '6mm',
-            paddingBottom: '4mm', marginBottom: '4mm',
-            borderBottom: i < chunk.length - 1 ? '1px solid rgba(201,168,76,0.15)' : 'none',
-          }}>
-            {/* Name */}
-            <div style={{ width: '42mm', flexShrink: 0 }}>
-              <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '14px', color: '#2C2418', margin: 0 }}>{r.name}</p>
-              <p style={{ fontFamily: 'Georgia,serif', fontSize: '8px', color: '#C9A84C', margin: '2px 0 0', letterSpacing: '1px' }}>{res?.title}</p>
-            </div>
-            {/* Antwort-Dots */}
-            <div style={{ display: 'flex', gap: '3px', flexWrap: 'wrap' }}>
-              {r.answers.map((a, idx) => (
-                <span key={idx} style={{ fontSize: '12px', lineHeight: 1 }} title={QUIZ_QUESTIONS[idx]?.text}>
-                  {a === 'niklas' ? '💙' : '❤️'}
-                </span>
-              ))}
-            </div>
-            {/* Score */}
-            <div style={{ marginLeft: 'auto', textAlign: 'right', flexShrink: 0 }}>
-              <p style={{ fontFamily: 'Georgia,serif', fontSize: '9px', color: '#8B7D6E', margin: 0 }}>
-                N {niklasCount} · A {QUIZ_QUESTIONS.length - niklasCount}
-              </p>
-            </div>
-          </div>
-        )
-      })}
-
-      <div style={{ position: 'absolute', bottom: '12mm', left: '14mm', right: '14mm', textAlign: 'center' }}>
-        <p style={{ fontFamily: 'Georgia,serif', fontSize: '8px', color: '#C9A84C', letterSpacing: '3px', margin: 0 }}>
-          ✦ NIKLAS &amp; ALEXANDER · 23. MAI 2026 ✦
-        </p>
-      </div>
-    </A4Page>
-  ))
-}
-
 export default function FotobuchPreview() {
   const [entries,     setEntries]     = useState([])
-  const [quizResults, setQuizResults] = useState([])
   const [loading,     setLoading]     = useState(true)
   const [format,      setFormat]      = useState('a4')
   const [pdfLoading,  setPdfLoading]  = useState(false)
 
   useEffect(() => {
-    Promise.all([
-      supabase.from('entries').select('*').order('created_at'),
-      supabase.from('quiz_results').select('*').order('created_at'),
-    ]).then(([{ data: e }, { data: q }]) => {
+    supabase.from('entries').select('*').order('created_at').then(({ data: e }) => {
       setEntries(e || [])
-      setQuizResults(q || [])
       setLoading(false)
     })
   }, [])
@@ -389,7 +307,7 @@ export default function FotobuchPreview() {
       const url  = URL.createObjectURL(blob)
       const a    = document.createElement('a')
       a.href     = url
-      a.download = `gaestebuch-niklas-alexander-${format}.pdf`
+      a.download = `abschiedsbuch-${format}.pdf`
       a.click()
       URL.revokeObjectURL(url)
     } finally {
@@ -414,8 +332,6 @@ export default function FotobuchPreview() {
       pageCount += groupIntoPages(catEntries).length
     }
   })
-  if (quizResults.length > 0) pageCount += Math.ceil(quizResults.length / 15)
-
   return (
     <div style={{ background: '#3a3530', minHeight: '100vh', paddingBottom: '60px' }}>
       {/* Toolbar */}
@@ -425,9 +341,9 @@ export default function FotobuchPreview() {
         justifyContent: 'space-between', boxShadow: '0 2px 12px rgba(0,0,0,0.4)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <span style={{ fontFamily: 'Georgia,serif', fontStyle: 'italic', color: '#C9A84C', fontSize: '18px' }}>N &amp; A</span>
+          <span style={{ fontFamily: 'Georgia,serif', fontStyle: 'italic', color: '#009775', fontSize: '18px' }}>Abschiedsbuch</span>
           <span style={{ fontFamily: 'sans-serif', fontSize: '11px', color: 'rgba(255,255,255,0.45)', letterSpacing: '2px', textTransform: 'uppercase' }}>
-            Fotobuch-Vorschau · {pageCount} Seiten · {entries.length} Einträge · {quizResults.length} Quiz
+            Fotobuch-Vorschau · {pageCount} Seiten · {entries.length} Einträge
           </span>
         </div>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
@@ -437,9 +353,9 @@ export default function FotobuchPreview() {
               key={f}
               onClick={() => setFormat(f)}
               style={{
-                background: format === f ? '#C9A84C' : 'transparent',
+                background: format === f ? '#009775' : 'transparent',
                 color: format === f ? '#FAF7F2' : 'rgba(255,255,255,0.5)',
-                border: `1px solid ${format === f ? '#C9A84C' : 'rgba(255,255,255,0.2)'}`,
+                border: `1px solid ${format === f ? '#009775' : 'rgba(255,255,255,0.2)'}`,
                 padding: '6px 14px', fontFamily: 'sans-serif', fontSize: '11px',
                 letterSpacing: '1px', textTransform: 'uppercase', cursor: 'pointer', borderRadius: '2px',
               }}
@@ -452,7 +368,7 @@ export default function FotobuchPreview() {
             onClick={handlePDF}
             disabled={pdfLoading}
             style={{
-              background: pdfLoading ? '#A68730' : '#C9A84C',
+              background: pdfLoading ? '#A68730' : '#009775',
               color: '#FAF7F2', border: 'none',
               padding: '8px 20px', fontFamily: 'sans-serif', fontSize: '11px',
               letterSpacing: '2px', textTransform: 'uppercase', cursor: pdfLoading ? 'wait' : 'pointer', borderRadius: '2px',
@@ -480,7 +396,6 @@ export default function FotobuchPreview() {
             </div>
           )
         })}
-        <QuizResultsPage results={quizResults} />
       </div>
 
       <style>{`

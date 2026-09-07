@@ -1,3 +1,5 @@
+import { NAME } from '../../config'
+
 export default function StepMessage({
   name, message,
   onChange, onNext, onBack,
@@ -5,22 +7,22 @@ export default function StepMessage({
   return (
     <div className="page-container animate-fade-up">
       <h2 className="font-display text-3xl font-light text-ink leading-snug mb-2">
-        Eure Worte für das Brautpaar
+        Deine Worte
       </h2>
       <p className="font-body text-sm text-ink-muted mb-10">
-        Schreibt 2–3 Sätze – von Herzen.
+        Schreib 2–3 Sätze – von Herzen.
       </p>
 
       <div className="flex flex-col gap-8 mb-10">
         {/* Name */}
         <div>
           <label className="font-body text-xs tracking-widest uppercase text-ink-muted block mb-3">
-            Euer Name
+            Dein Name
           </label>
           <input
             type="text"
             className="input-field text-lg"
-            placeholder="z. B. Familie Müller"
+            placeholder="z. B. Max Mustermann"
             value={name}
             onChange={(e) => onChange({ name: e.target.value })}
             maxLength={80}
@@ -30,11 +32,11 @@ export default function StepMessage({
         {/* Message */}
         <div>
           <label className="font-body text-xs tracking-widest uppercase text-ink-muted block mb-3">
-            Eure Nachricht
+            Deine Nachricht
           </label>
           <textarea
             className="input-field resize-none text-base leading-relaxed"
-            placeholder="Was möchtet ihr Niklas & Alexander auf den Weg geben?"
+            placeholder={`Was möchtest du ${NAME} auf den Weg geben?`}
             rows={4}
             value={message}
             onChange={(e) => onChange({ message: e.target.value })}

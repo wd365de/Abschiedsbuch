@@ -2,7 +2,8 @@ import { useRef } from 'react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { Link } from 'react-router-dom'
 
-const GUEST_URL = 'https://na26.vercel.app/eintrag'
+// TODO: URL nach Vercel-Deploy anpassen
+const GUEST_URL = 'https://abschiedsbuch.vercel.app/eintrag'
 
 export default function QRCodePage() {
   const qrRef = useRef(null)
@@ -11,15 +12,8 @@ export default function QRCodePage() {
     const canvas = qrRef.current?.querySelector('canvas')
     if (!canvas) return
     const a = document.createElement('a')
-    a.download = 'qrcode-niklas-alexander.png'
+    a.download = 'qrcode-abschiedsbuch.png'
     a.href = canvas.toDataURL('image/png')
-    a.click()
-  }
-
-  const downloadLogo = () => {
-    const a = document.createElement('a')
-    a.href = '/logo-export.html'
-    a.target = '_blank'
     a.click()
   }
 
@@ -28,7 +22,7 @@ export default function QRCodePage() {
       <div className="h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
 
       <header className="px-6 py-5 max-w-lg mx-auto w-full flex items-center justify-between">
-        <Link to="/" className="font-display italic text-gold text-lg">N &amp; A</Link>
+        <Link to="/" className="font-display italic text-gold text-lg">Abschiedsbuch</Link>
         <Link to="/admin" className="font-body text-xs text-ink-muted hover:text-ink transition-colors tracking-wider uppercase">
           Admin
         </Link>
@@ -38,10 +32,10 @@ export default function QRCodePage() {
 
         {/* Title */}
         <h1 className="font-display text-4xl font-light text-ink text-center mb-2 animate-fade-up">
-          QR-Code & Logo
+          QR-Code
         </h1>
         <p className="font-body text-sm text-ink-muted text-center mb-10 animate-fade-up">
-          Für Tischkärtchen, Einladungen und Aushänge
+          Für Aushänge und Einladungen im Institut
         </p>
 
         {/* QR Code */}
@@ -60,14 +54,6 @@ export default function QRCodePage() {
                 bgColor="#FFFFFF"
                 fgColor="#2C2418"
                 level="H"
-                imageSettings={{
-                  src: '/logo-na.svg',
-                  x: undefined,
-                  y: undefined,
-                  height: 52,
-                  width: 52,
-                  excavate: true,
-                }}
               />
             </div>
             <p className="font-body text-xs text-ink-muted text-center mb-6 break-all">
@@ -76,31 +62,6 @@ export default function QRCodePage() {
             <button onClick={downloadQR} className="btn-primary max-w-[280px]">
               QR-Code als PNG herunterladen
             </button>
-          </div>
-        </div>
-
-        {/* Logo */}
-        <div className="animate-fade-up w-full mb-10">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px flex-1 bg-gold/30" />
-            <span className="font-body text-xs tracking-widest uppercase text-gold">Logo</span>
-            <div className="h-px flex-1 bg-gold/30" />
-          </div>
-
-          <div className="bg-white rounded-2xl p-8 flex flex-col items-center shadow-sm border border-ink/5">
-            <img
-              src="/logo-na.svg"
-              alt="Logo Niklas & Alexander"
-              className="w-52 h-52 mb-6"
-            />
-            <a
-              href="/logo-export.html"
-              target="_blank"
-              rel="noreferrer"
-              className="btn-secondary max-w-[280px] block text-center"
-            >
-              Logo als JPG exportieren →
-            </a>
           </div>
         </div>
 

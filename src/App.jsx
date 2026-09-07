@@ -5,9 +5,6 @@ import GalleryPage from './pages/GalleryPage'
 import AdminPage from './pages/AdminPage'
 import QRCodePage from './pages/QRCodePage'
 import FotobuchPreview from './pages/FotobuchPreview'
-import SpielePage from './pages/SpielePage'
-import TischaufstellerPage from './pages/TischaufstellerPage'
-import FlyerHerzPage from './pages/FlyerHerzPage'
 import VisitenkartePage from './pages/VisitenkartePage'
 
 export default function App() {
@@ -20,9 +17,6 @@ export default function App() {
         <Route path="/admin"   element={<AdminPage />} />
         <Route path="/qrcode"  element={<QRCodePage />} />
         <Route path="/fotobuch" element={<FotobuchPreview />} />
-        <Route path="/spiele"         element={<SpielePage />} />
-        <Route path="/tischaufsteller" element={<TischaufstellerPage />} />
-        <Route path="/flyer-herz"      element={<FlyerHerzPage />} />
         <Route path="/visitenkarte"    element={<VisitenkartePage />} />
       </Routes>
     </BrowserRouter>

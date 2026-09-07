@@ -1,16 +1,12 @@
 const CATEGORY_META = {
-  'wuensche':        { label: 'Wünsche für das Hochzeitspaar', color: '#C9A84C', bg: '#FBF5E6' },
-  'erinnerungen':    { label: 'Erinnerungen',                  color: '#7A8B6B', bg: '#F2F4EF' },
-  'tipps':           { label: 'Tipps für eine gelungene Ehe',  color: '#B87068', bg: '#FAF0EE' },
-  'party':           { label: 'Highlight des Tages',           color: '#6B7A8B', bg: '#F0F1F4' },
-  // Alte Kategorien (Rückwärtskompatibilität)
-  'ehe':             { label: 'Für eure Ehe',                  color: '#C9A84C', bg: '#FBF5E6' },
-  'schlechte-tage':  { label: 'Für schlechte Tage',            color: '#B87068', bg: '#FAF0EE' },
-  'zukunft':         { label: 'Für eure Zukunft',              color: '#6B7A8B', bg: '#F0F1F4' },
+  'dankbarkeit':     { label: 'Dankbarkeit',            color: '#009775', bg: '#E5F5F1' },
+  'erinnerungen':    { label: 'Erinnerungen',            color: '#7A8B6B', bg: '#F2F4EF' },
+  'wuensche':        { label: 'Wünsche für die Zukunft', color: '#B87068', bg: '#FAF0EE' },
+  'humor':           { label: 'Humor & Leichtigkeit',    color: '#6B7A8B', bg: '#F0F1F4' },
 }
 
 export default function StepPreview({ formData, onSubmit, onBack, loading, error }) {
-  const meta = CATEGORY_META[formData.category] || { label: formData.category, color: '#C9A84C', bg: '#FBF5E6' }
+  const meta = CATEGORY_META[formData.category] || { label: formData.category, color: '#009775', bg: '#E5F5F1' }
 
   return (
     <div className="page-container animate-fade-up">

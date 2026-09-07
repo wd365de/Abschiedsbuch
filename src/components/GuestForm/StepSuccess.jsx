@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import confetti from 'canvas-confetti'
+import { NAME } from '../../config'
 
 export default function StepSuccess({ name }) {
   useEffect(() => {
@@ -47,8 +48,8 @@ export default function StepSuccess({ name }) {
         className="font-body text-ink-muted leading-relaxed mb-10 max-w-[300px] animate-fade-up"
         style={{ animationDelay: '0.35s' }}
       >
-        Euer Eintrag ist gespeichert. Niklas & Alexander werden sich sehr
-        über eure Worte freuen.
+        Dein Eintrag ist gespeichert. {NAME} wird sich sehr
+        über deine Worte freuen.
       </p>
 
       <div

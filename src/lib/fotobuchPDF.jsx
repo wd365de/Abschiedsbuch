@@ -2,13 +2,14 @@ import {
   Document, Page, View, Text, Image,
   StyleSheet, Font,
 } from '@react-pdf/renderer'
+import { NAME, INSTITUTE, ROLE } from '../config'
 
 // Farben
 const C = {
   cream:    '#FAF7F2',
   creamDark:'#F0EBE1',
-  gold:     '#C9A84C',
-  goldLight:'#DCBA6E',
+  gold:     '#009775',
+  goldLight:'#3DBA9C',
   blush:    '#B87068',
   ink:      '#2C2418',
   inkMuted: '#8B7D6E',
@@ -74,11 +75,11 @@ function Cover({ S }) {
         <Text style={S.ruleStar}>✦</Text>
         <View style={S.ruleLine} />
       </View>
-      <Text style={{ fontSize: 48, color: C.ink, fontFamily: 'Helvetica-Oblique', marginTop: 12, textAlign: 'center' }}>
-        Zum Abschied
+      <Text style={{ fontSize: 40, color: C.ink, fontFamily: 'Helvetica-Oblique', marginTop: 12, textAlign: 'center' }}>
+        {NAME}
       </Text>
       <Text style={{ fontSize: 14, color: C.gold, fontFamily: 'Helvetica-Oblique', marginVertical: 12, textAlign: 'center' }}>
-        Alles Gute für die Zeit danach
+        {ROLE} · {INSTITUTE}
       </Text>
       <View style={S.rule}>
         <View style={S.ruleLine} />
@@ -163,7 +164,7 @@ function Footer({ S }) {
       position: 'absolute', bottom: 18, left: 0, right: 0,
       textAlign: 'center', fontSize: 7, color: C.gold, letterSpacing: 2,
     }}>
-      ✦  NIKLAS &amp; ALEXANDER · 23. MAI 2026  ✦
+      ✦  {NAME.toUpperCase()} · {INSTITUTE.toUpperCase()}  ✦
     </Text>
   )
 }
@@ -191,7 +192,7 @@ export function FotobuchDocument({ entries, format }) {
     : { width: W, height: H }
 
   return (
-    <Document title="Abschiedsbuch">
+    <Document title={`Abschiedsbuch – ${NAME}`}>
       {/* Deckblatt */}
       <Page size={pageSize} style={S.page}>
         <Cover S={S} />

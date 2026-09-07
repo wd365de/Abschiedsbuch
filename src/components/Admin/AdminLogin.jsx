@@ -25,9 +25,9 @@ export default function AdminLogin() {
     <div className="min-h-dvh bg-cream flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <Link to="/" className="font-display italic text-gold text-2xl">N &amp; A</Link>
+          <Link to="/" className="font-display italic text-gold text-2xl">Abschiedsbuch</Link>
           <h1 className="font-display text-3xl font-light text-ink mt-4 mb-1">Admin-Bereich</h1>
-          <p className="font-body text-sm text-ink-muted">Nur für das Brautpaar</p>
+          <p className="font-body text-sm text-ink-muted">Nur für Admin und Institutsleitung</p>
         </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-8">

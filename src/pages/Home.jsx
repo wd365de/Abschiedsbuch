@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
+import { NAME, INSTITUTE, ROLE } from '../config'
 
-// Anpassbare Informationen für das Abschiedsbuch
 const CONFIG = {
-  name: 'Institutsleitung',
+  name: NAME,
   date: '',
-  subtitle: 'Hinterlasst eure Worte, Glückwünsche und schönsten Erinnerungen.',
-  photoBookText: 'Eure Fotos und Nachrichten werden zu einem gedruckten Abschiedsbuch zusammengestellt.',
+  subtitle: `Hinterlasst eure Worte, Wünsche und schönsten Erinnerungen an die gemeinsame Zeit am ${INSTITUTE}.`,
+  photoBookText: `Eure Fotos und Nachrichten werden zu einem gedruckten Abschiedsbuch für den ${ROLE} zusammengestellt.`,
 }
 
 export default function Home() {

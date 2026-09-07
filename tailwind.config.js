@@ -14,9 +14,9 @@ export default {
           dark: '#8E4E47',
         },
         gold: {
-          DEFAULT: '#C9A84C',
-          light: '#DCBA6E',
-          dark: '#A68730',
+          DEFAULT: '#009775',
+          light: '#3DBA9C',
+          dark: '#00664F',
         },
         ink: {
           DEFAULT: '#2C2418',

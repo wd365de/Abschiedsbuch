@@ -1,9 +1,12 @@
 import { QRCodeSVG } from 'qrcode.react'
 import { Link } from 'react-router-dom'
+import { NAME } from '../config'
 
-const TARGET_URL = 'https://na26.vercel.app/eintrag'
+// TODO: URL nach Vercel-Deploy anpassen
+const TARGET_URL = 'https://abschiedsbuch.vercel.app/eintrag'
+const DISPLAY_URL = 'abschiedsbuch.vercel.app'
 
-const GOLD  = '#C9A84C'
+const GOLD  = '#009775'
 const INK   = '#2C2418'
 const CREAM = '#FAF7F2'
 const MUTED = '#8B7D6E'
@@ -59,7 +62,7 @@ function Vorderseite() {
         margin: '0 0 1.5mm',
         width: '100%',
       }}>
-        Hochzeitsgästebuch für Niklas &amp; Alexander
+        Abschiedsbuch für {NAME}
       </p>
 
       {/* Divider */}
@@ -79,8 +82,7 @@ function Vorderseite() {
         Scanne den QR-Code auf der Rückseite und folge den Anweisungen.
       </p>
 
-      {/* Logo */}
-      <img src="/logo-na.svg" alt="N & A" style={{ width: mm(8), height: mm(8), opacity: 0.6 }} />
+      {/* TODO: Institutslogo einfügen, sobald verfügbar */}
     </div>
   )
 }
@@ -103,7 +105,7 @@ function Rueckseite() {
     }}>
       {/* Überschrift – nicht kursiv für bessere Lesbarkeit */}
       <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'normal', fontWeight: 700, fontSize: 17, color: GOLD, letterSpacing: 0.5, margin: 0, lineHeight: 1.2, textAlign: 'center', width: '100%' }}>
-        QR-Code zum Gästebuch
+        QR-Code zum Abschiedsbuch
       </p>
 
       {/* QR-Code – größer (30mm) und Level Q für weniger Dichte */}
@@ -120,7 +122,7 @@ function Rueckseite() {
 
       {/* URL klar und groß */}
       <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'normal', fontSize: 14, color: LIGHT, margin: 0, letterSpacing: 0.5 }}>
-        na26.vercel.app
+        {DISPLAY_URL}
       </p>
 
       {/* Scan-Anleitung */}
@@ -198,7 +200,7 @@ export default function VisitenkartePage() {
       {/* Toolbar */}
       <div className="no-print" style={{ position: 'sticky', top: 0, zIndex: 100, background: INK, padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 2px 12px rgba(0,0,0,0.4)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span style={{ fontFamily: 'Georgia,serif', fontStyle: 'italic', color: GOLD, fontSize: 18 }}>N & A</span>
+          <span style={{ fontFamily: 'Georgia,serif', fontStyle: 'italic', color: GOLD, fontSize: 18 }}>Abschiedsbuch</span>
           <span style={{ fontFamily: 'sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.45)', letterSpacing: 2, textTransform: 'uppercase' }}>
             Visitenkarte · 85×55 mm · beidseitig
           </span>

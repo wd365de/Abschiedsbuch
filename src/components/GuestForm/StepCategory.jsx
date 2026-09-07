@@ -1,17 +1,19 @@
+import { NAME, INSTITUTE } from '../../config'
+
 const CATEGORIES = [
   {
     id:          'dankbarkeit',
     emoji:       '💛',
     title:       'Dankbarkeit',
-    description: 'Wofür bist du dankbar? Deine Worte der Wertschätzung.',
-    accent:      '#C9A84C',
-    glow:        'rgba(201,168,76,0.18)',
+    description: `Wofür möchtest du ${NAME} danken?`,
+    accent:      '#009775',
+    glow:        'rgba(0,151,117,0.18)',
   },
   {
     id:          'erinnerungen',
     emoji:       '📸',
     title:       'Erinnerungen',
-    description: 'Ein schöner oder lustiger Moment, den du gemeinsam erlebt hast.',
+    description: `Was ist deine schönste Erinnerung mit ${NAME} am ${INSTITUTE}?`,
     accent:      '#7A8B6B',
     glow:        'rgba(122,139,107,0.18)',
   },
@@ -19,7 +21,7 @@ const CATEGORIES = [
     id:          'wuensche',
     emoji:       '🌟',
     title:       'Wünsche für die Zukunft',
-    description: 'Wünsche für eine erfüllte Zeit im Ruhestand.',
+    description: `Was wünschst du ${NAME} für die Zeit nach dem Institut?`,
     accent:      '#B87068',
     glow:        'rgba(184,112,104,0.18)',
   },
@@ -27,7 +29,7 @@ const CATEGORIES = [
     id:          'humor',
     emoji:       '😊',
     title:       'Humor & Leichtigkeit',
-    description: 'Ein Witz, eine lustige Anekdote oder ein Augenzwinkern.',
+    description: 'Hast du eine lustige Anekdote aus der gemeinsamen Zeit auf Lager?',
     accent:      '#6B7A8B',
     glow:        'rgba(107,122,139,0.18)',
   },
