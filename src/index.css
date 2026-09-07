@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-cream font-body text-ink antialiased;
+    min-height: 100dvh;
+  }
+
+  input, textarea, select {
+    @apply font-body;
+  }
+
+  /* Paper texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 128px;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply w-full bg-ink text-cream font-body font-medium tracking-widest text-sm uppercase py-4 px-8
+           transition-all duration-300 hover:bg-blush active:scale-[0.98]
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply w-full border border-ink/30 text-ink font-body font-medium tracking-widest text-sm uppercase py-4 px-8
+           transition-all duration-300 hover:border-gold hover:text-gold active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply text-ink-muted font-body text-sm underline-offset-4 hover:underline
+           transition-colors duration-200 hover:text-ink;
+  }
+
+  .input-field {
+    @apply w-full bg-transparent border-0 border-b border-ink/20 pb-2 pt-1
+           font-body text-ink placeholder-ink-light text-base
+           focus:outline-none focus:border-gold transition-colors duration-300
+           autofill:bg-transparent;
+  }
+
+  .gold-rule {
+    @apply flex items-center gap-3 my-6;
+  }
+
+  .gold-rule::before,
+  .gold-rule::after {
+    content: '';
+    @apply flex-1 h-px bg-gradient-to-r from-transparent to-gold/40;
+  }
+
+  .gold-rule::after {
+    @apply from-gold/40 to-transparent;
+  }
+
+  .page-container {
+    @apply min-h-dvh bg-cream px-6 py-10 max-w-lg mx-auto;
+  }
+}

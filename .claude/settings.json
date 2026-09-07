@@ -1,0 +1,48 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" \"C:\\\\Users\\\\spain\\\\AppData\\\\Local\\\\Temp\\\\1\\\\3IiljBwoNUC62s1m9D9mRW8Apnl\\\\resources\\\\hook-post.cjs\" \"http://127.0.0.1:42750/hook/ff9c3db5-8f6c-4d49-97c5-2fa4b105f942\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" \"C:\\\\Users\\\\spain\\\\AppData\\\\Local\\\\Temp\\\\1\\\\3IiljBwoNUC62s1m9D9mRW8Apnl\\\\resources\\\\hook-post.cjs\" \"http://127.0.0.1:42750/hook/ff9c3db5-8f6c-4d49-97c5-2fa4b105f942\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" \"C:\\\\Users\\\\spain\\\\AppData\\\\Local\\\\Temp\\\\1\\\\3IiljBwoNUC62s1m9D9mRW8Apnl\\\\resources\\\\hook-post.cjs\" \"http://127.0.0.1:42750/hook/ff9c3db5-8f6c-4d49-97c5-2fa4b105f942\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" \"C:\\\\Users\\\\spain\\\\AppData\\\\Local\\\\Temp\\\\1\\\\3IiljBwoNUC62s1m9D9mRW8Apnl\\\\resources\\\\hook-post.cjs\" \"http://127.0.0.1:42750/hook/ff9c3db5-8f6c-4d49-97c5-2fa4b105f942\""
+          }
+        ]
+      }
+    ]
+  }
+}
