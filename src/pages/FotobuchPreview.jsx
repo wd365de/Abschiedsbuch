@@ -354,7 +354,7 @@ export default function FotobuchPreview() {
     }
   })
   return (
-    <div style={{ background: '#3a3530', minHeight: '100vh', paddingBottom: '60px' }}>
+    <div className="bg-brand" style={{ minHeight: '100vh', paddingBottom: '60px' }}>
       {/* Toolbar */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100, background: '#2C2418',
@@ -424,7 +424,7 @@ export default function FotobuchPreview() {
         @media print {
           body { margin: 0; background: white !important; }
           div[style*="sticky"]  { display: none !important; }
-          div[style*="3a3530"]  { background: white !important; padding: 0 !important; }
+          .bg-brand              { background: white !important; padding: 0 !important; }
           div[style*="210mm"]   { box-shadow: none !important; margin: 0 auto !important; }
         }
       `}</style>

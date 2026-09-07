@@ -10,10 +10,10 @@ export default function StepPreview({ formData, onSubmit, onBack, loading, error
 
   return (
     <div className="page-container animate-fade-up">
-      <h2 className="font-display text-3xl font-light text-ink leading-snug mb-2">
+      <h2 className="font-display text-3xl font-light text-cream leading-snug mb-2">
         Alles richtig?
       </h2>
-      <p className="font-body text-sm text-ink-muted mb-8">
+      <p className="font-body text-sm text-cream/70 mb-8">
         Schaut euren Eintrag noch einmal durch – danach wird er gespeichert.
       </p>
 

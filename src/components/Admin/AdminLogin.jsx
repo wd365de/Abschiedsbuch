@@ -22,17 +22,17 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-dvh bg-cream flex flex-col items-center justify-center px-6">
+    <div className="min-h-dvh bg-brand flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <Link to="/" className="font-display italic text-gold text-2xl">Abschiedsbuch</Link>
-          <h1 className="font-display text-3xl font-light text-ink mt-4 mb-1">Admin-Bereich</h1>
-          <p className="font-body text-sm text-ink-muted">Nur für Admin und Institutsleitung</p>
+          <Link to="/" className="font-display italic text-gold-light text-2xl">Abschiedsbuch</Link>
+          <h1 className="font-display text-3xl font-light text-cream mt-4 mb-1">Admin-Bereich</h1>
+          <p className="font-body text-sm text-cream/70">Nur für Admin und Institutsleitung</p>
         </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-8">
           <div>
-            <label className="font-body text-xs tracking-widest uppercase text-ink-muted block mb-3">
+            <label className="font-body text-xs tracking-widest uppercase text-cream/60 block mb-3">
               E-Mail
             </label>
             <input
@@ -47,7 +47,7 @@ export default function AdminLogin() {
           </div>
 
           <div>
-            <label className="font-body text-xs tracking-widest uppercase text-ink-muted block mb-3">
+            <label className="font-body text-xs tracking-widest uppercase text-cream/60 block mb-3">
               Passwort
             </label>
             <input

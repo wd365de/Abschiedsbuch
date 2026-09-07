@@ -6,17 +6,17 @@ export default function StepMessage({
 }) {
   return (
     <div className="page-container animate-fade-up">
-      <h2 className="font-display text-3xl font-light text-ink leading-snug mb-2">
+      <h2 className="font-display text-3xl font-light text-cream leading-snug mb-2">
         Deine Worte
       </h2>
-      <p className="font-body text-sm text-ink-muted mb-10">
+      <p className="font-body text-sm text-cream/70 mb-10">
         Schreib 2–3 Sätze – von Herzen.
       </p>
 
       <div className="flex flex-col gap-8 mb-10">
         {/* Name */}
         <div>
-          <label className="font-body text-xs tracking-widest uppercase text-ink-muted block mb-3">
+          <label className="font-body text-xs tracking-widest uppercase text-cream/60 block mb-3">
             Dein Name
           </label>
           <input
@@ -31,7 +31,7 @@ export default function StepMessage({
 
         {/* Message */}
         <div>
-          <label className="font-body text-xs tracking-widest uppercase text-ink-muted block mb-3">
+          <label className="font-body text-xs tracking-widest uppercase text-cream/60 block mb-3">
             Deine Nachricht
           </label>
           <textarea
@@ -42,7 +42,7 @@ export default function StepMessage({
             onChange={(e) => onChange({ message: e.target.value })}
             maxLength={500}
           />
-          <p className="font-body text-xs text-ink-light text-right mt-1">
+          <p className="font-body text-xs text-cream/50 text-right mt-1">
             {message.length}/500
           </p>
         </div>

@@ -213,14 +213,14 @@ export default function VisitenkartePage() {
       </div>
 
       {/* Hinweis */}
-      <div className="no-print" style={{ background: '#3a3530', padding: '14px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-        <p style={{ fontFamily: 'sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.6)', margin: 0, lineHeight: 1.7 }}>
-          <strong style={{ color: 'rgba(255,255,255,0.85)' }}>Druckanleitung:</strong> Vorder- und Rückseite separat drucken → Papier: <strong style={{ color: GOLD }}>91×61 mm</strong> (mit Beschnitt) bzw. <strong style={{ color: GOLD }}>85×55 mm</strong> Endformat · Seitenränder: keine · Skalierung: 100 % · <strong style={{ color: GOLD }}>beidseitig</strong>
+      <div className="no-print bg-brand" style={{ padding: '14px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <p style={{ fontFamily: 'sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.75)', margin: 0, lineHeight: 1.7 }}>
+          <strong style={{ color: 'rgba(255,255,255,0.9)' }}>Druckanleitung:</strong> Vorder- und Rückseite separat drucken → Papier: <strong style={{ color: GOLD }}>91×61 mm</strong> (mit Beschnitt) bzw. <strong style={{ color: GOLD }}>85×55 mm</strong> Endformat · Seitenränder: keine · Skalierung: 100 % · <strong style={{ color: GOLD }}>beidseitig</strong>
         </p>
       </div>
 
       {/* Vorschau (nur am Bildschirm) */}
-      <div className="no-print" style={{ background: '#3a3530', padding: '40px 32px', overflowX: 'auto' }}>
+      <div className="no-print bg-brand" style={{ padding: '40px 32px', overflowX: 'auto' }}>
         <Druckbogen />
       </div>
 

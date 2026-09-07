@@ -47,9 +47,9 @@ export default function GalleryPage() {
 
   if (locked) {
     return (
-      <div className="min-h-dvh bg-cream flex flex-col items-center justify-center px-8 text-center">
-        <p className="font-display italic text-3xl text-ink mb-3">Kommt bald</p>
-        <p className="font-body text-sm text-ink-muted max-w-xs">
+      <div className="min-h-dvh bg-brand flex flex-col items-center justify-center px-8 text-center">
+        <p className="font-display italic text-3xl text-cream mb-3">Kommt bald</p>
+        <p className="font-body text-sm text-cream/70 max-w-xs">
           Die Galerie wird zu einem besonderen Moment freigeschaltet.
         </p>
         <Link to="/eintrag" className="btn-primary max-w-[240px] mt-10">
@@ -72,16 +72,16 @@ export default function GalleryPage() {
     )
 
   return (
-    <div className="min-h-dvh bg-cream">
+    <div className="min-h-dvh bg-brand">
       {/* Header */}
-      <header className="sticky top-0 z-10 border-b" style={{ background: 'rgba(250,247,242,0.92)', backdropFilter: 'blur(12px)', borderColor: 'rgba(44,36,24,0.07)' }}>
+      <header className="sticky top-0 z-10 border-b" style={{ background: 'rgba(10,20,20,0.75)', backdropFilter: 'blur(12px)', borderColor: 'rgba(250,247,242,0.1)' }}>
         <div className="max-w-3xl mx-auto px-5 py-3 flex items-center justify-between">
-          <Link to="/" className="font-display italic text-gold text-lg">Abschiedsbuch</Link>
-          <h1 className="font-display text-lg text-ink tracking-wide">Galerie</h1>
+          <Link to="/" className="font-display italic text-gold-light text-lg">Abschiedsbuch</Link>
+          <h1 className="font-display text-lg text-cream tracking-wide">Galerie</h1>
           <Link
             to="/eintrag"
             className="font-body text-xs tracking-widest uppercase transition-colors"
-            style={{ color: '#009775' }}
+            style={{ color: '#3DBA9C' }}
           >
             + Eintrag
           </Link>
@@ -96,13 +96,13 @@ export default function GalleryPage() {
       <main className="max-w-3xl mx-auto px-5 py-5">
         {/* Zeile: Anzahl + Sortierung */}
         <div className="flex items-center justify-between mb-5">
-          <p className="font-body text-sm" style={{ color: '#B5A898' }}>
+          <p className="font-body text-sm" style={{ color: 'rgba(250,247,242,0.6)' }}>
             {loading ? '…' : `${filtered.length} ${filtered.length === 1 ? 'Eintrag' : 'Einträge'}`}
           </p>
           <button
             onClick={() => setSort(s => s === 'newest' ? 'oldest' : 'newest')}
             className="font-body text-xs transition-colors flex items-center gap-1"
-            style={{ color: '#8B7D6E' }}
+            style={{ color: 'rgba(250,247,242,0.6)' }}
           >
             {sort === 'newest' ? '↓ Neueste' : '↑ Älteste'}
           </button>
@@ -120,7 +120,7 @@ export default function GalleryPage() {
 
         {!loading && !error && filtered.length === 0 && (
           <div className="text-center py-24">
-            <p className="font-display italic text-2xl text-ink/30 mb-4">Noch keine Einträge</p>
+            <p className="font-display italic text-2xl text-cream/40 mb-4">Noch keine Einträge</p>
             <Link to="/eintrag" className="btn-primary max-w-[240px] mx-auto block">
               Erster sein
             </Link>

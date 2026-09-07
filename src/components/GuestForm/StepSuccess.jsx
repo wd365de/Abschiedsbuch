@@ -10,7 +10,7 @@ export default function StepSuccess({ name }) {
       particleCount: 120,
       spread: 80,
       origin: { y: 0.55 },
-      colors: ['#C9A84C', '#DCBA6E', '#B87068', '#FAF7F2', '#2C2418'],
+      colors: ['#009775', '#3DBA9C', '#B87068', '#FAF7F2', '#2C2418'],
     })
     // Zweite Salve nach kurzer Pause
     setTimeout(() => {
@@ -19,14 +19,14 @@ export default function StepSuccess({ name }) {
         spread: 100,
         origin: { y: 0.45 },
         angle: 60,
-        colors: ['#C9A84C', '#D49A93', '#FAF7F2'],
+        colors: ['#009775', '#3DBA9C', '#FAF7F2'],
       })
       confetti({
         particleCount: 80,
         spread: 100,
         origin: { y: 0.45 },
         angle: 120,
-        colors: ['#C9A84C', '#D49A93', '#FAF7F2'],
+        colors: ['#009775', '#3DBA9C', '#FAF7F2'],
       })
     }, 400)
   }, [])
@@ -38,14 +38,14 @@ export default function StepSuccess({ name }) {
       </div>
 
       <h2
-        className="font-display text-4xl font-light text-ink mb-3 animate-fade-up"
+        className="font-display text-4xl font-light text-cream mb-3 animate-fade-up"
         style={{ animationDelay: '0.25s' }}
       >
         Danke{name ? `, ${name}` : ''}!
       </h2>
 
       <p
-        className="font-body text-ink-muted leading-relaxed mb-10 max-w-[300px] animate-fade-up"
+        className="font-body text-cream/70 leading-relaxed mb-10 max-w-[300px] animate-fade-up"
         style={{ animationDelay: '0.35s' }}
       >
         Dein Eintrag ist gespeichert. {NAME} wird sich sehr

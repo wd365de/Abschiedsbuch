@@ -152,7 +152,7 @@ export default function AdminDashboard({ onLogout }) {
   }
 
   return (
-    <div className="min-h-dvh bg-cream-dark">
+    <div className="min-h-dvh bg-brand">
       {/* Header */}
       <header className="bg-ink text-cream px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
@@ -245,7 +245,7 @@ export default function AdminDashboard({ onLogout }) {
             <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
           </div>
         ) : filtered.length === 0 ? (
-          <p className="text-center font-body text-ink-muted py-16">Keine Einträge gefunden.</p>
+          <p className="text-center font-body text-cream/70 py-16">Keine Einträge gefunden.</p>
         ) : (
           <div className="bg-white rounded-2xl border border-ink/5 overflow-hidden">
             <div className="overflow-x-auto">

@@ -66,12 +66,12 @@ export default function GuestPage() {
   const TOTAL_STEPS = 4 // Kategorie, Foto, Nachricht, Vorschau
 
   return (
-    <div className="min-h-dvh bg-cream">
+    <div className="min-h-dvh bg-brand">
       {/* Header */}
       <header className="flex items-center justify-between px-6 pt-6 pb-4 max-w-lg mx-auto">
-        <Link to="/" className="font-display italic text-gold text-lg">Abschiedsbuch</Link>
+        <Link to="/" className="font-display italic text-gold-light text-lg">Abschiedsbuch</Link>
         {step <= TOTAL_STEPS && (
-          <span className="font-body text-xs text-ink-muted tracking-wider uppercase">
+          <span className="font-body text-xs text-cream/60 tracking-wider uppercase">
             Schritt {step} / {TOTAL_STEPS}
           </span>
         )}
@@ -85,7 +85,7 @@ export default function GuestPage() {
               <div
                 key={s}
                 className="h-[3px] flex-1 rounded-full transition-all duration-500"
-                style={{ background: s <= step ? '#C9A84C' : '#E8E0D5' }}
+                style={{ background: s <= step ? '#009775' : 'rgba(250,247,242,0.25)' }}
               />
             ))}
           </div>

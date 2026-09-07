@@ -35,6 +35,13 @@
 }
 
 @layer components {
+  .bg-brand {
+    background-image: linear-gradient(rgba(10,20,20,0.45), rgba(10,20,20,0.55)), url('/fraunhofer-hero.webp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
   .btn-primary {
     @apply w-full bg-ink text-cream font-body font-medium tracking-widest text-sm uppercase py-4 px-8
            transition-all duration-300 hover:bg-blush active:scale-[0.98]
@@ -42,19 +49,19 @@
   }
 
   .btn-secondary {
-    @apply w-full border border-ink/30 text-ink font-body font-medium tracking-widest text-sm uppercase py-4 px-8
-           transition-all duration-300 hover:border-gold hover:text-gold active:scale-[0.98];
+    @apply w-full border border-cream/50 text-cream font-body font-medium tracking-widest text-sm uppercase py-4 px-8
+           transition-all duration-300 hover:border-gold-light hover:text-gold-light active:scale-[0.98];
   }
 
   .btn-ghost {
-    @apply text-ink-muted font-body text-sm underline-offset-4 hover:underline
-           transition-colors duration-200 hover:text-ink;
+    @apply text-cream/60 font-body text-sm underline-offset-4 hover:underline
+           transition-colors duration-200 hover:text-cream;
   }
 
   .input-field {
-    @apply w-full bg-transparent border-0 border-b border-ink/20 pb-2 pt-1
-           font-body text-ink placeholder-ink-light text-base
-           focus:outline-none focus:border-gold transition-colors duration-300
+    @apply w-full bg-transparent border-0 border-b border-cream/30 pb-2 pt-1
+           font-body text-cream placeholder-cream/40 text-base
+           focus:outline-none focus:border-gold-light transition-colors duration-300
            autofill:bg-transparent;
   }
 
@@ -73,6 +80,6 @@
   }
 
   .page-container {
-    @apply min-h-dvh bg-cream px-6 py-10 max-w-lg mx-auto;
+    @apply min-h-dvh bg-brand px-6 py-10 max-w-lg mx-auto;
   }
 }

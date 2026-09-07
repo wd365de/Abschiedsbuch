@@ -68,10 +68,10 @@ export default function StepCategory({ selected, onChange, onNext }) {
       `}</style>
 
       {/* Überschrift zentriert */}
-      <h2 className="font-display text-4xl font-light text-ink leading-snug mb-2 text-center">
+      <h2 className="font-display text-4xl font-light text-cream leading-snug mb-2 text-center">
         Welche Art von Eintrag möchtest du hinterlassen?
       </h2>
-      <p className="font-body text-base text-ink-muted mb-4 text-center">
+      <p className="font-body text-base text-cream/70 mb-4 text-center">
         Wähle eine Kategorie, die zu deinem Beitrag passt.
       </p>
 

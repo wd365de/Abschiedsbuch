@@ -17,12 +17,12 @@ export default function QRCodePage() {
   }
 
   return (
-    <div className="min-h-dvh bg-cream flex flex-col">
+    <div className="min-h-dvh bg-brand flex flex-col">
       <div className="h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
 
       <header className="px-6 py-5 max-w-lg mx-auto w-full flex items-center justify-between">
-        <Link to="/" className="font-display italic text-gold text-lg">Abschiedsbuch</Link>
-        <Link to="/admin" className="font-body text-xs text-ink-muted hover:text-ink transition-colors tracking-wider uppercase">
+        <Link to="/" className="font-display italic text-gold-light text-lg">Abschiedsbuch</Link>
+        <Link to="/admin" className="font-body text-xs text-cream/60 hover:text-cream transition-colors tracking-wider uppercase">
           Admin
         </Link>
       </header>
@@ -30,10 +30,10 @@ export default function QRCodePage() {
       <main className="flex-1 flex flex-col items-center px-6 py-8 max-w-lg mx-auto w-full">
 
         {/* Title */}
-        <h1 className="font-display text-4xl font-light text-ink text-center mb-2 animate-fade-up">
+        <h1 className="font-display text-4xl font-light text-cream text-center mb-2 animate-fade-up">
           QR-Code
         </h1>
-        <p className="font-body text-sm text-ink-muted text-center mb-10 animate-fade-up">
+        <p className="font-body text-sm text-cream/70 text-center mb-10 animate-fade-up">
           Für Aushänge und Einladungen im Institut
         </p>
 
@@ -65,8 +65,8 @@ export default function QRCodePage() {
         </div>
 
         {/* Hint */}
-        <div className="bg-gold/10 border border-gold/30 rounded-xl px-5 py-4 w-full">
-          <p className="font-body text-sm text-ink leading-relaxed">
+        <div style={{ background: 'rgba(250,247,242,0.12)', border: '1px solid rgba(250,247,242,0.25)', backdropFilter: 'blur(8px)' }} className="rounded-xl px-5 py-4 w-full">
+          <p className="font-body text-sm text-cream/90 leading-relaxed">
             <strong className="font-medium">Tipp:</strong> Den QR-Code auf mindestens 4×4 cm drucken –
             dann können auch ältere Gäste ihn problemlos scannen.
           </p>

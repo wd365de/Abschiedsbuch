@@ -57,7 +57,7 @@ export default function PraesentationPage() {
 
   if (loading) {
     return (
-      <div className="min-h-dvh bg-ink flex items-center justify-center">
+      <div className="min-h-dvh bg-brand flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
       </div>
     )
@@ -65,7 +65,7 @@ export default function PraesentationPage() {
 
   if (locked) {
     return (
-      <div className="min-h-dvh bg-ink flex flex-col items-center justify-center px-8 text-center">
+      <div className="min-h-dvh bg-brand flex flex-col items-center justify-center px-8 text-center">
         <p className="font-display italic text-3xl text-cream mb-3">Kommt bald</p>
         <p className="font-body text-sm text-cream/50 max-w-xs">
           Die Präsentation wird zum Übergabe-Moment freigeschaltet.
@@ -76,7 +76,7 @@ export default function PraesentationPage() {
 
   if (entries.length === 0) {
     return (
-      <div className="min-h-dvh bg-ink flex flex-col items-center justify-center px-8 text-center">
+      <div className="min-h-dvh bg-brand flex flex-col items-center justify-center px-8 text-center">
         <p className="font-display italic text-2xl text-cream/40">Noch keine Einträge</p>
         <Link to="/" className="font-body text-xs text-gold mt-6 tracking-widest uppercase">← Zurück</Link>
       </div>
@@ -87,7 +87,7 @@ export default function PraesentationPage() {
 
   return (
     <div
-      className="min-h-dvh bg-ink flex flex-col select-none"
+      className="min-h-dvh bg-brand flex flex-col select-none"
       onClick={() => setPaused((p) => !p)}
     >
       {/* Fortschritt */}
