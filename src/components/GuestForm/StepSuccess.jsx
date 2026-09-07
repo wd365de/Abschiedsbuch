@@ -34,7 +34,7 @@ export default function StepSuccess({ name }) {
   return (
     <div className="page-container flex flex-col items-center justify-center min-h-[80dvh] text-center animate-fade-up">
       <div className="text-5xl mb-6 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-        💍
+        💚
       </div>
 
       <h2
