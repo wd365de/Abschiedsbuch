@@ -1,10 +1,10 @@
-# Deployment-Anleitung – Hochzeits-Gästebuch
+# Deployment-Anleitung – Abschiedsbuch
 
 ## Schritt 1: Supabase einrichten
 
 1. Gehe zu [supabase.com](https://supabase.com) → "Start your project"
 2. Konto anlegen (kostenlos, GitHub-Login empfohlen)
-3. **"New project"** klicken, Name z. B. `gaestebuch`, Region `EU West`
+3. **"New project"** klicken, Name z. B. `abschiedsbuch`, Region `EU West`
 4. Warte ~2 Minuten bis das Projekt bereit ist
 
 ### 1a. Datenbank-Schema anlegen
@@ -34,7 +34,7 @@
 
 ```bash
 # 1. Repository klonen (oder Ordner ins Terminal ziehen)
-cd gaestebuch
+cd abschiedsbuch
 
 # 2. Abhängigkeiten installieren
 npm install
@@ -69,7 +69,9 @@ npm run dev
    - `VITE_SUPABASE_ANON_KEY`
 5. **Deploy** klicken
 
-Vercel gibt euch eine URL wie `gaestebuch.vercel.app` – fertig!
+Vercel gibt euch eine URL wie `abschiedsbuch.vercel.app` – fertig!
+
+> **Hinweis:** Bei Vercel-Team-Projekten ist standardmäßig "Deployment Protection" (Vercel-Login) aktiv. Für eine öffentlich zugängliche Seite unter **Settings → Deployment Protection → Vercel Authentication** auf "Disabled" stellen.
 
 ---
 
@@ -78,9 +80,9 @@ Vercel gibt euch eine URL wie `gaestebuch.vercel.app` – fertig!
 ```bash
 git init
 git add .
-git commit -m "Initial commit: Hochzeits-Gästebuch"
+git commit -m "Initial commit: Abschiedsbuch"
 git branch -M main
-git remote add origin https://github.com/wd365de/G-stebuch.git
+git remote add origin https://github.com/wd365de/Abschiedsbuch.git
 git push -u origin main
 ```
 
@@ -115,4 +117,4 @@ Ab jetzt: jeder `git push` → Vercel deployed automatisch.
 - Mit clientseitiger Komprimierung (~400 KB/Foto): **reicht für ~2.500 Fotos**
 - Monatliche Bandbreite: 5 GB
 
-Bei größeren Hochzeiten (>200 Gäste) empfiehlt sich der Supabase Pro Plan ($25/Monat, 100 GB Storage).
+Bei sehr vielen Einträgen (>200 Personen) empfiehlt sich der Supabase Pro Plan ($25/Monat, 100 GB Storage).

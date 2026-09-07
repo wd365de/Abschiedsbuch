@@ -2,8 +2,7 @@ import { useRef } from 'react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { Link } from 'react-router-dom'
 
-// TODO: URL nach Vercel-Deploy anpassen
-const GUEST_URL = 'https://abschiedsbuch.vercel.app/eintrag'
+const GUEST_URL = 'https://abschiedsbuch-wd365des-projects.vercel.app/eintrag'
 
 export default function QRCodePage() {
   const qrRef = useRef(null)

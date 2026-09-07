@@ -2,9 +2,8 @@ import { QRCodeSVG } from 'qrcode.react'
 import { Link } from 'react-router-dom'
 import { NAME } from '../config'
 
-// TODO: URL nach Vercel-Deploy anpassen
-const TARGET_URL = 'https://abschiedsbuch.vercel.app/eintrag'
-const DISPLAY_URL = 'abschiedsbuch.vercel.app'
+const TARGET_URL = 'https://abschiedsbuch-wd365des-projects.vercel.app/eintrag'
+const DISPLAY_URL = 'abschiedsbuch-wd365des-projects.vercel.app'
 
 const GOLD  = '#009775'
 const INK   = '#2C2418'
