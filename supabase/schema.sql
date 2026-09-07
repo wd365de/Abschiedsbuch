@@ -15,25 +15,58 @@ create table if not exists public.entries (
   message     text        not null,
   category    text        not null check (category in ('dankbarkeit', 'erinnerungen', 'wuensche', 'humor')),
   photo_url   text,
+  approved    boolean     not null default false,
   created_at  timestamptz default now()
 );
 
 -- Row Level Security aktivieren
 alter table public.entries enable row level security;
 
--- Jeder kann Einträge lesen (öffentliche Galerie)
-create policy "Einträge sind öffentlich lesbar"
+-- Öffentlich sind nur freigegebene Einträge lesbar (Moderation vor Veröffentlichung)
+create policy "Freigegebene Einträge sind öffentlich lesbar"
   on public.entries for select
-  using (true);
+  using (approved = true);
 
--- Jeder kann Einträge anlegen (Gäste ohne Login)
+-- Admin sieht auch nicht freigegebene Einträge
+create policy "Admin kann alle Einträge lesen"
+  on public.entries for select
+  using (auth.role() = 'authenticated');
+
+-- Jeder kann Einträge anlegen (Gäste ohne Login) – landen zunächst unfreigegeben
 create policy "Gäste können Einträge anlegen"
   on public.entries for insert
   with check (true);
 
+-- Nur eingeloggte Admins können Einträge freigeben/bearbeiten
+create policy "Admin kann Einträge bearbeiten"
+  on public.entries for update
+  using (auth.role() = 'authenticated');
+
 -- Nur eingeloggte Admins können Einträge löschen
 create policy "Admin kann Einträge löschen"
   on public.entries for delete
+  using (auth.role() = 'authenticated');
+
+-- ============================================================
+-- Tabelle: settings (Key-Value, z.B. Galerie-Sichtbarkeit)
+-- ============================================================
+create table if not exists public.settings (
+  key   text primary key,
+  value jsonb not null
+);
+
+insert into public.settings (key, value)
+values ('gallery_visible', 'false'::jsonb)
+on conflict (key) do nothing;
+
+alter table public.settings enable row level security;
+
+create policy "Settings sind öffentlich lesbar"
+  on public.settings for select
+  using (true);
+
+create policy "Admin kann Settings ändern"
+  on public.settings for update
   using (auth.role() = 'authenticated');
 
 -- ============================================================

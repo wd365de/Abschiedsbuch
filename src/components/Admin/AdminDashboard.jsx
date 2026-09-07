@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
+import { getGalleryVisible, setGalleryVisible } from '../../lib/settings'
 import { downloadCSV, downloadZIP } from './AdminExport'
 import { Link } from 'react-router-dom'
 
@@ -23,7 +24,7 @@ function StorageBar({ usedBytes }) {
   const pct     = Math.min((usedBytes / STORAGE_LIMIT_BYTES) * 100, 100)
   const usedMB  = (usedBytes / 1_048_576).toFixed(1)
   const limitMB = (STORAGE_LIMIT_BYTES / 1_048_576).toFixed(0)
-  const color   = pct > 90 ? '#B87068' : pct > 70 ? '#C9A84C' : '#6BAA8B'
+  const color   = pct > 90 ? '#B87068' : pct > 70 ? '#009775' : '#6BAA8B'
   const label   = pct > 90 ? '⚠️ Fast voll!' : pct > 70 ? '⚠️ Aufmerksamkeit' : '✓ Genug Platz'
 
   return (
@@ -45,6 +46,32 @@ function StorageBar({ usedBytes }) {
   )
 }
 
+function GalleryToggle({ visible, onToggle, saving }) {
+  return (
+    <div className="bg-white rounded-2xl p-5 border border-ink/5 flex items-center justify-between mb-6">
+      <div>
+        <p className="font-body text-sm font-medium text-ink">Galerie-Sichtbarkeit</p>
+        <p className="font-body text-xs text-ink-muted mt-0.5">
+          {visible
+            ? 'Öffentlich sichtbar – jeder mit Link kann die Galerie ansehen.'
+            : 'Gesperrt – Gäste sehen "Kommt bald", bis ihr freischaltet.'}
+        </p>
+      </div>
+      <button
+        onClick={onToggle}
+        disabled={saving}
+        className="font-body text-xs px-4 py-2 rounded-full transition-colors disabled:opacity-50"
+        style={{
+          background: visible ? '#009775' : '#B87068',
+          color: '#FAF7F2',
+        }}
+      >
+        {saving ? '…' : visible ? 'Galerie sperren' : 'Galerie freigeben'}
+      </button>
+    </div>
+  )
+}
+
 export default function AdminDashboard({ onLogout }) {
   const [entries, setEntries]         = useState([])
   const [loading, setLoading]         = useState(true)
@@ -52,6 +79,9 @@ export default function AdminDashboard({ onLogout }) {
   const [zipProgress, setZipProgress] = useState(null)
   const [deleteId, setDeleteId]       = useState(null)
   const [storageUsed, setStorageUsed] = useState(null)
+  const [galleryVisible, setGalleryVisibleState] = useState(false)
+  const [galleryToggling, setGalleryToggling]     = useState(false)
+  const [approvingId, setApprovingId] = useState(null)
 
   const load = async () => {
     setLoading(true)
@@ -68,6 +98,8 @@ export default function AdminDashboard({ onLogout }) {
       const total = files.reduce((sum, f) => sum + (f.metadata?.size || 0), 0)
       setStorageUsed(total)
     }
+
+    setGalleryVisibleState(await getGalleryVisible())
   }
 
   useEffect(() => { load() }, [])
@@ -86,6 +118,23 @@ export default function AdminDashboard({ onLogout }) {
     setDeleteId(null)
   }
 
+  const handleApprove = async (entry) => {
+    setApprovingId(entry.id)
+    const { error } = await supabase.from('entries').update({ approved: !entry.approved }).eq('id', entry.id)
+    if (!error) {
+      setEntries((prev) => prev.map((e) => e.id === entry.id ? { ...e, approved: !e.approved } : e))
+    }
+    setApprovingId(null)
+  }
+
+  const handleGalleryToggle = async () => {
+    setGalleryToggling(true)
+    const next = !galleryVisible
+    const { error } = await setGalleryVisible(next)
+    if (!error) setGalleryVisibleState(next)
+    setGalleryToggling(false)
+  }
+
   const handleZIP = async () => {
     setZipProgress(0)
     await downloadZIP(filtered, (p) => setZipProgress(p))
@@ -97,8 +146,9 @@ export default function AdminDashboard({ onLogout }) {
     : entries.filter((e) => e.category === filter)
 
   const stats = {
-    total: entries.length,
-    fotos: entries.filter((e) => e.photo_url).length,
+    total:     entries.length,
+    fotos:     entries.filter((e) => e.photo_url).length,
+    ausstehend: entries.filter((e) => !e.approved).length,
   }
 
   return (
@@ -114,6 +164,9 @@ export default function AdminDashboard({ onLogout }) {
             <Link to="/galerie" className="font-body text-xs text-cream/60 hover:text-cream transition-colors">
               Galerie
             </Link>
+            <Link to="/praesentation" className="font-body text-xs text-cream/60 hover:text-cream transition-colors">
+              Präsentation
+            </Link>
             <button
               onClick={onLogout}
               className="font-body text-xs text-cream/60 hover:text-cream transition-colors"
@@ -126,10 +179,11 @@ export default function AdminDashboard({ onLogout }) {
 
       <main className="max-w-5xl mx-auto px-4 py-8">
         {/* Stats */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-3 gap-4 mb-4">
           {[
             { label: 'Einträge gesamt', value: stats.total },
             { label: 'Mit Foto',        value: stats.fotos },
+            { label: 'Ausstehend',      value: stats.ausstehend },
           ].map((s) => (
             <div key={s.label} className="bg-white rounded-2xl p-5 text-center border border-ink/5">
               <p className="font-display text-4xl font-light text-gold">{s.value}</p>
@@ -140,23 +194,25 @@ export default function AdminDashboard({ onLogout }) {
 
         {/* Storage Bar */}
         {storageUsed !== null && (
-          <div className="mb-8">
+          <div className="mb-6">
             <StorageBar usedBytes={storageUsed} />
           </div>
         )}
+
+        <GalleryToggle visible={galleryVisible} onToggle={handleGalleryToggle} saving={galleryToggling} />
 
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
           {/* Filter */}
           <div className="flex gap-2 flex-wrap flex-1">
-            {['alle', 'wuensche', 'erinnerungen', 'tipps', 'party'].map((f) => (
+            {['alle', 'dankbarkeit', 'erinnerungen', 'wuensche', 'humor'].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
                 className="font-body text-xs px-3 py-1.5 rounded-full border transition-colors"
                 style={{
-                  borderColor:     filter === f ? '#C9A84C' : '#D8CFC4',
-                  backgroundColor: filter === f ? '#C9A84C' : 'white',
+                  borderColor:     filter === f ? '#009775' : '#D8CFC4',
+                  backgroundColor: filter === f ? '#009775' : 'white',
                   color:           filter === f ? '#FAF7F2' : '#8B7D6E',
                 }}
               >
@@ -196,7 +252,7 @@ export default function AdminDashboard({ onLogout }) {
               <table className="w-full text-left">
                 <thead>
                   <tr className="border-b border-ink/5">
-                    {['Datum', 'Name', 'Kategorie', 'Nachricht', 'Foto', 'Fotobuch', ''].map((h) => (
+                    {['Datum', 'Name', 'Kategorie', 'Nachricht', 'Foto', 'Status', ''].map((h) => (
                       <th key={h} className="font-body text-xs uppercase tracking-wider text-ink-muted px-4 py-3 whitespace-nowrap">
                         {h}
                       </th>
@@ -233,8 +289,18 @@ export default function AdminDashboard({ onLogout }) {
                             <span className="text-ink-light text-xs">–</span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-center font-body text-sm">
-                          {entry.fotobuch ? '✅' : '–'}
+                        <td className="px-4 py-3 text-center">
+                          <button
+                            onClick={() => handleApprove(entry)}
+                            disabled={approvingId === entry.id}
+                            className="font-body text-xs px-2.5 py-1 rounded-full transition-colors disabled:opacity-50"
+                            style={{
+                              background: entry.approved ? 'rgba(0,151,117,0.12)' : 'rgba(184,112,104,0.12)',
+                              color: entry.approved ? '#009775' : '#B87068',
+                            }}
+                          >
+                            {approvingId === entry.id ? '…' : entry.approved ? '✓ Freigegeben' : 'Freigeben'}
+                          </button>
                         </td>
                         <td className="px-4 py-3 text-right">
                           <button

@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 import { NAME, INSTITUTE, ROLE } from '../config'
 
 const CONFIG = {
@@ -9,10 +11,26 @@ const CONFIG = {
 }
 
 export default function Home() {
+  const [count, setCount] = useState(null)
+
+  useEffect(() => {
+    supabase
+      .from('entries')
+      .select('*', { count: 'exact', head: true })
+      .then(({ count }) => setCount(count ?? 0))
+  }, [])
+
   return (
     <div className="min-h-dvh bg-cream flex flex-col overflow-hidden">
-      {/* Top ornament bar */}
-      <div className="h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+      {/* Hero-Banner */}
+      <div
+        className="w-full bg-cover bg-center flex-shrink-0"
+        style={{
+          backgroundImage: "url('/fraunhofer-hero.webp')",
+          aspectRatio: '2000 / 1126',
+          maxHeight: '55vh',
+        }}
+      />
 
       <main className="flex-1 flex flex-col items-center justify-center px-8 py-16 text-center">
 
@@ -42,7 +60,7 @@ export default function Home() {
 
         {/* Subtitle */}
         <p
-          className="font-body font-light text-ink-muted text-base leading-relaxed max-w-[320px] mb-8 animate-fade-up"
+          className="font-body font-light text-ink-muted text-base md:text-lg leading-relaxed max-w-[320px] md:max-w-xl mb-8 animate-fade-up"
           style={{ animationDelay: '0.3s' }}
         >
           {CONFIG.subtitle}
@@ -50,7 +68,7 @@ export default function Home() {
 
         {/* Photo book hint */}
         <div
-          className="flex items-start gap-3 bg-gold/10 border border-gold/30 rounded-2xl px-5 py-4 max-w-[320px] mb-10 text-left animate-fade-up"
+          className="flex items-start gap-3 bg-gold/10 border border-gold/30 rounded-2xl px-5 py-4 max-w-[320px] md:max-w-md mb-10 text-left animate-fade-up"
           style={{ animationDelay: '0.35s' }}
         >
           <span className="text-xl leading-none mt-0.5">📖</span>
@@ -61,16 +79,26 @@ export default function Home() {
 
         {/* CTAs */}
         <div
-          className="flex flex-col gap-3 w-full max-w-[320px] animate-fade-up"
+          className="flex flex-col sm:flex-row gap-3 w-full max-w-[320px] sm:max-w-none justify-center animate-fade-up"
           style={{ animationDelay: '0.4s' }}
         >
-          <Link to="/eintrag" className="btn-primary text-center">
+          <Link to="/eintrag" className="btn-primary text-center sm:w-56">
             Eintrag hinterlassen
           </Link>
-          <Link to="/galerie" className="btn-secondary text-center">
+          <Link to="/galerie" className="btn-secondary text-center sm:w-56">
             Galerie ansehen
           </Link>
         </div>
+
+        {/* Fortschritt */}
+        {count !== null && count > 0 && (
+          <p
+            className="font-body text-xs text-ink-light mt-8 animate-fade-in"
+            style={{ animationDelay: '0.5s' }}
+          >
+            Bereits {count} {count === 1 ? 'Kolleg*in hat' : 'Kolleg*innen haben'} beigetragen
+          </p>
+        )}
 
       </main>
 

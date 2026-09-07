@@ -6,6 +6,7 @@ import AdminPage from './pages/AdminPage'
 import QRCodePage from './pages/QRCodePage'
 import FotobuchPreview from './pages/FotobuchPreview'
 import VisitenkartePage from './pages/VisitenkartePage'
+import PraesentationPage from './pages/PraesentationPage'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/qrcode"  element={<QRCodePage />} />
         <Route path="/fotobuch" element={<FotobuchPreview />} />
         <Route path="/visitenkarte"    element={<VisitenkartePage />} />
+        <Route path="/praesentation"   element={<PraesentationPage />} />
       </Routes>
     </BrowserRouter>
   )

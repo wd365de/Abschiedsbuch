@@ -1,13 +1,13 @@
 import JSZip from 'jszip'
 
 function toCSV(entries) {
-  const header = ['ID', 'Name', 'Kategorie', 'Nachricht', 'Fotobuch', 'Datum', 'Foto-URL']
+  const header = ['ID', 'Name', 'Kategorie', 'Nachricht', 'Freigegeben', 'Datum', 'Foto-URL']
   const rows = entries.map((e) => [
     e.id,
     `"${e.name.replace(/"/g, '""')}"`,
     e.category,
     `"${e.message.replace(/"/g, '""')}"`,
-    e.fotobuch ? 'Ja' : 'Nein',
+    e.approved ? 'Ja' : 'Nein',
     new Date(e.created_at).toLocaleString('de-DE'),
     e.photo_url || '',
   ])
@@ -20,7 +20,7 @@ export function downloadCSV(entries) {
   const url  = URL.createObjectURL(blob)
   const a    = document.createElement('a')
   a.href     = url
-  a.download = `gaestebuch-export-${new Date().toISOString().slice(0, 10)}.csv`
+  a.download = `abschiedsbuch-export-${new Date().toISOString().slice(0, 10)}.csv`
   a.click()
   URL.revokeObjectURL(url)
 }
@@ -54,7 +54,7 @@ export async function downloadZIP(entries, onProgress) {
   const url      = URL.createObjectURL(content)
   const a        = document.createElement('a')
   a.href         = url
-  a.download     = `gaestebuch-fotos-${new Date().toISOString().slice(0, 10)}.zip`
+  a.download     = `abschiedsbuch-fotos-${new Date().toISOString().slice(0, 10)}.zip`
   a.click()
   URL.revokeObjectURL(url)
 }

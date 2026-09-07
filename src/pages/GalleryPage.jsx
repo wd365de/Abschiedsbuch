@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { getGalleryVisible } from '../lib/settings'
 import GalleryFilter from '../components/Gallery/GalleryFilter'
 import GalleryGrid from '../components/Gallery/GalleryGrid'
 
@@ -10,13 +11,28 @@ export default function GalleryPage() {
   const [sort, setSort]         = useState('newest')
   const [loading, setLoading]   = useState(true)
   const [error, setError]       = useState(null)
+  const [locked, setLocked]     = useState(false)
 
   useEffect(() => {
     async function load() {
       setLoading(true)
+
+      const { data: { session } } = await supabase.auth.getSession()
+      const isAdmin = !!session
+
+      if (!isAdmin) {
+        const visible = await getGalleryVisible()
+        if (!visible) {
+          setLocked(true)
+          setLoading(false)
+          return
+        }
+      }
+
       const { data, error } = await supabase
         .from('entries')
         .select('*')
+        .eq('approved', true)
         .order('created_at', { ascending: false })
 
       if (error) {
@@ -28,6 +44,20 @@ export default function GalleryPage() {
     }
     load()
   }, [])
+
+  if (locked) {
+    return (
+      <div className="min-h-dvh bg-cream flex flex-col items-center justify-center px-8 text-center">
+        <p className="font-display italic text-3xl text-ink mb-3">Kommt bald</p>
+        <p className="font-body text-sm text-ink-muted max-w-xs">
+          Die Galerie wird zu einem besonderen Moment freigeschaltet.
+        </p>
+        <Link to="/eintrag" className="btn-primary max-w-[240px] mt-10">
+          Eigenen Eintrag hinterlassen
+        </Link>
+      </div>
+    )
+  }
 
   const counts = entries.reduce((acc, e) => {
     acc[e.category] = (acc[e.category] || 0) + 1
@@ -46,12 +76,12 @@ export default function GalleryPage() {
       {/* Header */}
       <header className="sticky top-0 z-10 border-b" style={{ background: 'rgba(250,247,242,0.92)', backdropFilter: 'blur(12px)', borderColor: 'rgba(44,36,24,0.07)' }}>
         <div className="max-w-3xl mx-auto px-5 py-3 flex items-center justify-between">
-          <Link to="/" className="font-display italic text-gold text-lg">N &amp; A</Link>
-          <h1 className="font-display text-lg text-ink tracking-wide">Gästebuch</h1>
+          <Link to="/" className="font-display italic text-gold text-lg">Abschiedsbuch</Link>
+          <h1 className="font-display text-lg text-ink tracking-wide">Galerie</h1>
           <Link
             to="/eintrag"
             className="font-body text-xs tracking-widest uppercase transition-colors"
-            style={{ color: '#C9A84C' }}
+            style={{ color: '#009775' }}
           >
             + Eintrag
           </Link>

@@ -1,9 +1,9 @@
 const FILTERS = [
   { id: 'alle',         label: 'Alle' },
-  { id: 'wuensche',     label: 'Wünsche' },
+  { id: 'dankbarkeit',  label: 'Dankbarkeit' },
   { id: 'erinnerungen', label: 'Erinnerungen' },
-  { id: 'tipps',        label: 'Tipps' },
-  { id: 'party',        label: 'Highlight' },
+  { id: 'wuensche',     label: 'Wünsche' },
+  { id: 'humor',        label: 'Humor' },
 ]
 
 export default function GalleryFilter({ active, onChange, counts = {} }) {
@@ -27,9 +27,9 @@ export default function GalleryFilter({ active, onChange, counts = {} }) {
               borderRadius: 99,
               fontSize: 13,
               fontFamily: 'inherit',
-              border: isActive ? '1.5px solid #C9A84C' : '1.5px solid rgba(44,36,24,0.12)',
+              border: isActive ? '1.5px solid #009775' : '1.5px solid rgba(44,36,24,0.12)',
               background: isActive
-                ? 'linear-gradient(135deg, #C9A84C, #E0BC6A)'
+                ? 'linear-gradient(135deg, #009775, #3DBA9C)'
                 : 'rgba(255,255,255,0.7)',
               color: isActive ? '#FAF7F2' : '#8B7D6E',
               boxShadow: isActive ? '0 2px 10px rgba(201,168,76,0.30)' : 'none',
@@ -40,7 +40,7 @@ export default function GalleryFilter({ active, onChange, counts = {} }) {
             {count > 0 && (
               <span style={{
                 background: isActive ? 'rgba(255,255,255,0.25)' : 'rgba(201,168,76,0.12)',
-                color:      isActive ? 'rgba(250,247,242,0.9)' : '#C9A84C',
+                color:      isActive ? 'rgba(250,247,242,0.9)' : '#009775',
                 borderRadius: 99,
                 padding: '1px 6px',
                 fontSize: 11,

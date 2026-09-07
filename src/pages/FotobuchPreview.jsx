@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { pdf } from '@react-pdf/renderer'
 import { FotobuchDocument } from '../lib/fotobuchPDF'
 import { NAME, INSTITUTE, ROLE } from '../config'
+import AdminLogin from '../components/Admin/AdminLogin'
 
 const CATEGORIES = [
   { id: 'dankbarkeit',  emoji: '💛', label: 'Dankbarkeit',   color: '#009775', bg: '#E5F5F1' },
@@ -288,17 +289,25 @@ function EntriesPage({ pageEntries, cat, pageIndex }) {
 }
 
 export default function FotobuchPreview() {
+  const [session,     setSession]     = useState(undefined) // undefined = loading
   const [entries,     setEntries]     = useState([])
   const [loading,     setLoading]     = useState(true)
   const [format,      setFormat]      = useState('a4')
   const [pdfLoading,  setPdfLoading]  = useState(false)
 
   useEffect(() => {
-    supabase.from('entries').select('*').order('created_at').then(({ data: e }) => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, sess) => setSession(sess))
+    return () => subscription.unsubscribe()
+  }, [])
+
+  useEffect(() => {
+    if (!session) return
+    supabase.from('entries').select('*').eq('approved', true).order('created_at').then(({ data: e }) => {
       setEntries(e || [])
       setLoading(false)
     })
-  }, [])
+  }, [session])
 
   const handlePDF = async () => {
     setPdfLoading(true)
@@ -313,6 +322,18 @@ export default function FotobuchPreview() {
     } finally {
       setPdfLoading(false)
     }
+  }
+
+  if (session === undefined) {
+    return (
+      <div className="min-h-dvh bg-ink flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
+      </div>
+    )
+  }
+
+  if (!session) {
+    return <AdminLogin />
   }
 
   if (loading) {
