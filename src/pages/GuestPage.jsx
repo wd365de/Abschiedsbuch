@@ -66,9 +66,9 @@ export default function GuestPage() {
   const TOTAL_STEPS = 4 // Kategorie, Foto, Nachricht, Vorschau
 
   return (
-    <div className="min-h-dvh bg-brand">
+    <div className="h-dvh bg-brand flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 pt-6 pb-4 max-w-lg mx-auto">
+      <header className="flex items-center justify-between px-6 pt-6 pb-4 max-w-lg mx-auto w-full flex-shrink-0">
         <Link to="/" className="font-display italic text-gold-light text-lg">Abschiedsbuch</Link>
         {step <= TOTAL_STEPS && (
           <span className="font-body text-xs text-cream/60 tracking-wider uppercase">
@@ -79,7 +79,7 @@ export default function GuestPage() {
 
       {/* Progress bar */}
       {step <= TOTAL_STEPS && (
-        <div className="px-6 pb-6 max-w-lg mx-auto">
+        <div className="px-6 pb-2 max-w-lg mx-auto w-full flex-shrink-0">
           <div className="flex gap-1.5">
             {[1, 2, 3, 4].map((s) => (
               <div

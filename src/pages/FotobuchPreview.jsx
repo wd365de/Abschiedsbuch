@@ -7,10 +7,10 @@ import { NAME, INSTITUTE, ROLE } from '../config'
 import AdminLogin from '../components/Admin/AdminLogin'
 
 const CATEGORIES = [
-  { id: 'dankbarkeit',  emoji: '💛', label: 'Dankbarkeit',   color: '#009775', bg: '#E5F5F1' },
-  { id: 'erinnerungen', emoji: '📸', label: 'Erinnerungen',  color: '#6BAA8B', bg: '#F0F6F3' },
-  { id: 'wuensche',     emoji: '🌟', label: 'Wünsche',       color: '#B87068', bg: '#FAF0EE' },
-  { id: 'humor',        emoji: '😊', label: 'Humor',         color: '#6B7A8B', bg: '#F0F1F4' },
+  { id: 'dankbarkeit',  label: 'Dankbarkeit',   color: '#009775', bg: '#F2F0EA' },
+  { id: 'erinnerungen', label: 'Erinnerungen',  color: '#009775', bg: '#F2F0EA' },
+  { id: 'wuensche',     label: 'Wünsche',       color: '#009775', bg: '#F2F0EA' },
+  { id: 'humor',        label: 'Humor',         color: '#009775', bg: '#F2F0EA' },
 ]
 
 function formatDate(iso) {
@@ -78,7 +78,6 @@ function CategoryPage({ cat }) {
   return (
     <A4Page bg={cat.bg}>
       <div style={{ height: '269mm', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-        <div style={{ fontSize: '64px', marginBottom: '20px', lineHeight: 1 }}>{cat.emoji}</div>
         <h2 style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '52px', fontWeight: 300, color: '#2C2418', lineHeight: 1.1, margin: '0 0 16px' }}>
           {cat.label}
         </h2>
@@ -97,23 +96,21 @@ function prng(seed, min = 0, max = 1) {
 }
 
 // ── Hintergrund-Dekor ─────────────────────────────────────────
-const DECO = ['♥','✦','◆','✿','♡','❋','★','·','❤','〜','◇','✼','∿','♪']
+const DECO = ['·','◇','✦']
 
 function BackgroundDeco({ pageIndex, color }) {
   return (
     <>
-      {Array.from({ length: 28 }, (_, i) => {
+      {Array.from({ length: 10 }, (_, i) => {
         const x   = prng(`${pageIndex}${i}x`, 0, 100)
         const y   = prng(`${pageIndex}${i}y`, 0, 100)
-        const sz  = prng(`${pageIndex}${i}s`, 9, 22)
-        const op  = prng(`${pageIndex}${i}o`, 0.05, 0.20)
-        const rot = prng(`${pageIndex}${i}r`, -60, 60)
+        const sz  = prng(`${pageIndex}${i}s`, 7, 12)
+        const op  = prng(`${pageIndex}${i}o`, 0.06, 0.12)
         const sym = DECO[Math.floor(prng(`${pageIndex}${i}m`, 0, DECO.length - 0.01))]
         return (
           <div key={i} style={{
             position: 'absolute', left: `${x}%`, top: `${y}%`,
             fontSize: `${sz}px`, color, opacity: op,
-            transform: `rotate(${rot}deg)`,
             pointerEvents: 'none', userSelect: 'none', lineHeight: 1, zIndex: 1,
           }}>{sym}</div>
         )

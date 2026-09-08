@@ -5,15 +5,15 @@ export default function StepMessage({
   onChange, onNext, onBack,
 }) {
   return (
-    <div className="page-container animate-fade-up">
+    <div className="page-container animate-fade-up flex flex-col justify-center">
       <h2 className="font-display text-3xl font-light text-cream leading-snug mb-2">
         Deine Worte
       </h2>
-      <p className="font-body text-sm text-cream/70 mb-10">
+      <p className="font-body text-sm text-cream/70 mb-8">
         Schreib 2–3 Sätze – von Herzen.
       </p>
 
-      <div className="flex flex-col gap-8 mb-10">
+      <div className="flex flex-col gap-6 mb-8">
         {/* Name */}
         <div>
           <label className="font-body text-xs tracking-widest uppercase text-cream/60 block mb-3">

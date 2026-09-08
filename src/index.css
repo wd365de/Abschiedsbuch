@@ -36,7 +36,8 @@
 
 @layer components {
   .bg-brand {
-    background-image: linear-gradient(rgba(10,20,20,0.45), rgba(10,20,20,0.55)), url('/fraunhofer-hero.webp');
+    background-color: #0B1614;
+    background-image: linear-gradient(rgba(8,16,15,0.82), rgba(8,16,15,0.82)), url('/fraunhofer-hero.webp');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -80,6 +81,6 @@
   }
 
   .page-container {
-    @apply min-h-dvh bg-brand px-6 py-10 max-w-lg mx-auto;
+    @apply flex-1 min-h-0 overflow-y-auto flex flex-col justify-center px-6 py-6 max-w-lg mx-auto w-full;
   }
 }

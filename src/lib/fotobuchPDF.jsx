@@ -17,10 +17,10 @@ const C = {
 }
 
 const CATEGORIES = [
-  { id: 'dankbarkeit',   emoji: '💛', label: 'Dankbarkeit',   color: C.gold    },
-  { id: 'erinnerungen',  emoji: '📸', label: 'Erinnerungen',  color: '#6BAA8B' },
-  { id: 'wuensche',      emoji: '🌟', label: 'Wünsche',       color: C.blush   },
-  { id: 'humor',         emoji: '😊', label: 'Humor',         color: '#6B7A8B' },
+  { id: 'dankbarkeit',   label: 'Dankbarkeit',   color: C.gold },
+  { id: 'erinnerungen',  label: 'Erinnerungen',  color: C.gold },
+  { id: 'wuensche',      label: 'Wünsche',       color: C.gold },
+  { id: 'humor',         label: 'Humor',         color: C.gold },
 ]
 
 function formatDate(iso) {
@@ -98,7 +98,6 @@ function CategoryDivider({ cat, S }) {
   return (
     <View style={[{ flex: 1 }, S.center]}>
       <View style={S.frame} />
-      <Text style={{ fontSize: 36, marginBottom: 16 }}>{cat.emoji}</Text>
       <Text style={{ fontSize: 36, color: C.ink, fontFamily: 'Helvetica-Oblique', marginBottom: 12 }}>
         {cat.label}
       </Text>

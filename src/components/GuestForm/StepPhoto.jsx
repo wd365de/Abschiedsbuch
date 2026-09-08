@@ -23,7 +23,7 @@ export default function StepPhoto({ photo, photoPreview, onChange, onNext, onBac
   }
 
   return (
-    <div className="page-container animate-fade-up">
+    <div className="page-container animate-fade-up flex flex-col justify-center">
       <h2 className="font-display text-3xl font-light text-cream leading-snug mb-2">
         Habt ihr einen schönen Moment eingefangen?
       </h2>
@@ -33,9 +33,7 @@ export default function StepPhoto({ photo, photoPreview, onChange, onNext, onBac
 
       {/* Upload area */}
       {!photoPreview ? (
-        <div className="mb-6">
-          <div className="text-5xl mb-6 text-center">📷</div>
-
+        <div className="mb-6 mt-4">
           <div className="flex flex-col gap-3">
             {/* Camera (mobile) */}
             <button

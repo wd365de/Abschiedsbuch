@@ -1,33 +1,33 @@
-const CATEGORY_META = {
-  'dankbarkeit':     { label: 'Dankbarkeit',            color: '#009775', bg: '#E5F5F1' },
-  'erinnerungen':    { label: 'Erinnerungen',            color: '#7A8B6B', bg: '#F2F4EF' },
-  'wuensche':        { label: 'Wünsche für die Zukunft', color: '#B87068', bg: '#FAF0EE' },
-  'humor':           { label: 'Humor & Leichtigkeit',    color: '#6B7A8B', bg: '#F0F1F4' },
+const CATEGORY_LABELS = {
+  'dankbarkeit':  'Dankbarkeit',
+  'erinnerungen': 'Erinnerungen',
+  'wuensche':     'Wünsche für die Zukunft',
+  'humor':        'Humor & Leichtigkeit',
 }
 
 export default function StepPreview({ formData, onSubmit, onBack, loading, error }) {
-  const meta = CATEGORY_META[formData.category] || { label: formData.category, color: '#009775', bg: '#E5F5F1' }
+  const label = CATEGORY_LABELS[formData.category] || formData.category
 
   return (
-    <div className="page-container animate-fade-up">
+    <div className="page-container animate-fade-up flex flex-col justify-center">
       <h2 className="font-display text-3xl font-light text-cream leading-snug mb-2">
         Alles richtig?
       </h2>
-      <p className="font-body text-sm text-cream/70 mb-8">
+      <p className="font-body text-sm text-cream/70 mb-6">
         Schaut euren Eintrag noch einmal durch – danach wird er gespeichert.
       </p>
 
       {/* Vorschau-Karte */}
-      <div className="rounded-2xl overflow-hidden border border-ink/8 mb-8 shadow-sm">
+      <div className="rounded-lg overflow-hidden border border-ink/8 mb-6 shadow-sm">
 
         {/* Foto */}
         {formData.photoPreview && (
-          <div className="bg-cream-dark flex items-center justify-center" style={{ maxHeight: '260px', overflow: 'hidden' }}>
+          <div className="bg-cream-dark flex items-center justify-center" style={{ maxHeight: '220px', overflow: 'hidden' }}>
             <img
               src={formData.photoPreview}
               alt="Vorschau"
               className="w-full object-contain"
-              style={{ maxHeight: '260px' }}
+              style={{ maxHeight: '220px' }}
             />
           </div>
         )}
@@ -36,9 +36,9 @@ export default function StepPreview({ formData, onSubmit, onBack, loading, error
           {/* Kategorie */}
           <span
             className="inline-block font-body text-xs px-3 py-1 rounded-full mb-4"
-            style={{ backgroundColor: meta.color + '18', color: meta.color }}
+            style={{ backgroundColor: 'rgba(0,151,117,0.1)', color: '#009775' }}
           >
-            {meta.label}
+            {label}
           </span>
 
           {/* Nachricht */}

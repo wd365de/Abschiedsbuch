@@ -5,10 +5,10 @@ import { downloadCSV, downloadZIP } from './AdminExport'
 import { Link } from 'react-router-dom'
 
 const CATEGORY_META = {
-  'dankbarkeit':     { emoji: '💛', label: 'Dankbarkeit' },
-  'erinnerungen':    { emoji: '📸', label: 'Erinnerungen' },
-  'wuensche':        { emoji: '🌟', label: 'Wünsche' },
-  'humor':           { emoji: '😊', label: 'Humor' },
+  'dankbarkeit':     { label: 'Dankbarkeit' },
+  'erinnerungen':    { label: 'Erinnerungen' },
+  'wuensche':        { label: 'Wünsche' },
+  'humor':           { label: 'Humor' },
 }
 
 function formatDate(iso) {
@@ -216,7 +216,7 @@ export default function AdminDashboard({ onLogout }) {
                   color:           filter === f ? '#FAF7F2' : '#8B7D6E',
                 }}
               >
-                {f === 'alle' ? 'Alle' : (CATEGORY_META[f]?.emoji + ' ' + CATEGORY_META[f]?.label)}
+                {f === 'alle' ? 'Alle' : CATEGORY_META[f]?.label}
               </button>
             ))}
           </div>
@@ -271,7 +271,7 @@ export default function AdminDashboard({ onLogout }) {
                           {entry.name}
                         </td>
                         <td className="px-4 py-3 font-body text-xs text-ink-muted whitespace-nowrap">
-                          {meta ? `${meta.emoji} ${meta.label}` : entry.category}
+                          {meta ? meta.label : entry.category}
                         </td>
                         <td className="px-4 py-3 font-body text-sm text-ink max-w-xs">
                           <p className="line-clamp-2">{entry.message}</p>
