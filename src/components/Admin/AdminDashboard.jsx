@@ -9,6 +9,7 @@ const CATEGORY_META = {
   'erinnerungen':    { label: 'Erinnerungen' },
   'wuensche':        { label: 'Wünsche' },
   'humor':           { label: 'Humor' },
+  'vermaechtnis':    { label: 'Vermächtnis' },
 }
 
 function formatDate(iso) {
@@ -205,7 +206,7 @@ export default function AdminDashboard({ onLogout }) {
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
           {/* Filter */}
           <div className="flex gap-2 flex-wrap flex-1">
-            {['alle', 'dankbarkeit', 'erinnerungen', 'wuensche', 'humor'].map((f) => (
+            {['alle', 'dankbarkeit', 'erinnerungen', 'wuensche', 'humor', 'vermaechtnis'].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}

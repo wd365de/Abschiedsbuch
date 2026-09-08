@@ -21,6 +21,7 @@ const CATEGORIES = [
   { id: 'erinnerungen',  label: 'Erinnerungen',  color: C.gold },
   { id: 'wuensche',      label: 'Wünsche',       color: C.gold },
   { id: 'humor',         label: 'Humor',         color: C.gold },
+  { id: 'vermaechtnis',  label: 'Vermächtnis',   color: C.gold },
 ]
 
 function formatDate(iso) {

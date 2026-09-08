@@ -7,10 +7,11 @@ import { NAME, INSTITUTE, ROLE } from '../config'
 import AdminLogin from '../components/Admin/AdminLogin'
 
 const CATEGORIES = [
-  { id: 'dankbarkeit',  label: 'Dankbarkeit',   color: '#009775', bg: '#F2F0EA' },
-  { id: 'erinnerungen', label: 'Erinnerungen',  color: '#009775', bg: '#F2F0EA' },
-  { id: 'wuensche',     label: 'Wünsche',       color: '#009775', bg: '#F2F0EA' },
-  { id: 'humor',        label: 'Humor',         color: '#009775', bg: '#F2F0EA' },
+  { id: 'dankbarkeit',   label: 'Dankbarkeit',   color: '#009775', bg: '#F2F0EA' },
+  { id: 'erinnerungen',  label: 'Erinnerungen',  color: '#009775', bg: '#F2F0EA' },
+  { id: 'wuensche',      label: 'Wünsche',       color: '#009775', bg: '#F2F0EA' },
+  { id: 'humor',         label: 'Humor',         color: '#009775', bg: '#F2F0EA' },
+  { id: 'vermaechtnis',  label: 'Vermächtnis',   color: '#009775', bg: '#F2F0EA' },
 ]
 
 function formatDate(iso) {

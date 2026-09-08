@@ -1,8 +1,9 @@
 const CATEGORY_LABELS = {
-  'dankbarkeit':  'Dankbarkeit',
-  'erinnerungen': 'Erinnerungen',
-  'wuensche':     'Wünsche für die Zukunft',
-  'humor':        'Humor & Leichtigkeit',
+  'dankbarkeit':   'Dankbarkeit',
+  'erinnerungen':  'Erinnerungen',
+  'wuensche':      'Wünsche für die Zukunft',
+  'humor':         'Humor & Leichtigkeit',
+  'vermaechtnis':  'Vermächtnis',
 }
 
 export default function StepPreview({ formData, onSubmit, onBack, loading, error }) {
@@ -48,7 +49,9 @@ export default function StepPreview({ formData, onSubmit, onBack, loading, error
 
           {/* Footer */}
           <div className="border-t border-ink/8 pt-4">
-            <p className="font-display italic text-lg text-ink">{formData.name}</p>
+            <p className="font-display italic text-lg text-ink">
+              {formData.anonymous ? 'Anonym' : formData.name}
+            </p>
           </div>
         </div>
       </div>

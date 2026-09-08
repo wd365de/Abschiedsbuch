@@ -1,9 +1,10 @@
 const FILTERS = [
-  { id: 'alle',         label: 'Alle' },
-  { id: 'dankbarkeit',  label: 'Dankbarkeit' },
-  { id: 'erinnerungen', label: 'Erinnerungen' },
-  { id: 'wuensche',     label: 'Wünsche' },
-  { id: 'humor',        label: 'Humor' },
+  { id: 'alle',          label: 'Alle' },
+  { id: 'dankbarkeit',   label: 'Dankbarkeit' },
+  { id: 'erinnerungen',  label: 'Erinnerungen' },
+  { id: 'wuensche',      label: 'Wünsche' },
+  { id: 'humor',         label: 'Humor' },
+  { id: 'vermaechtnis',  label: 'Vermächtnis' },
 ]
 
 export default function GalleryFilter({ active, onChange, counts = {} }) {

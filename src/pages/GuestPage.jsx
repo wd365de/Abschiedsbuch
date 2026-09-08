@@ -14,6 +14,7 @@ const INITIAL = {
   photoPreview: null,
   name:         '',
   message:      '',
+  anonymous:    false,
 }
 
 export default function GuestPage() {
@@ -46,10 +47,11 @@ export default function GuestPage() {
       }
 
       const { error: insertErr } = await supabase.from('entries').insert([{
-        name:     formData.name.trim(),
-        message:  formData.message.trim(),
-        category: formData.category,
+        name:      formData.anonymous ? 'Anonym' : formData.name.trim(),
+        message:   formData.message.trim(),
+        category:  formData.category,
         photo_url,
+        anonymous: formData.anonymous,
       }])
 
       if (insertErr) throw insertErr
@@ -112,6 +114,7 @@ export default function GuestPage() {
         <StepMessage
           name={formData.name}
           message={formData.message}
+          anonymous={formData.anonymous}
           onChange={update}
           onNext={() => {
             setError(null)
@@ -130,7 +133,7 @@ export default function GuestPage() {
         />
       )}
       {step === 5 && (
-        <StepSuccess name={formData.name} />
+        <StepSuccess name={formData.anonymous ? '' : formData.name} />
       )}
     </div>
   )
