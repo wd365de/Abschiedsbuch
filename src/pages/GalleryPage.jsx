@@ -75,7 +75,7 @@ export default function GalleryPage() {
     <div className="min-h-dvh bg-brand">
       {/* Header */}
       <header className="sticky top-0 z-10 border-b" style={{ background: 'rgba(10,20,20,0.75)', backdropFilter: 'blur(12px)', borderColor: 'rgba(250,247,242,0.1)' }}>
-        <div className="max-w-3xl mx-auto px-5 py-3 flex items-center justify-between">
+        <div className="max-w-3xl lg:max-w-6xl mx-auto px-5 lg:px-8 py-3 flex items-center justify-between">
           <Link to="/" className="font-display italic text-gold-light text-lg">Abschiedsbuch</Link>
           <h1 className="font-display text-lg text-cream tracking-wide">Galerie</h1>
           <Link
@@ -88,12 +88,12 @@ export default function GalleryPage() {
         </div>
 
         {/* Sticky Filter-Leiste */}
-        <div className="max-w-3xl mx-auto px-5 pb-3">
+        <div className="max-w-3xl lg:max-w-6xl mx-auto px-5 lg:px-8 pb-3">
           <GalleryFilter active={filter} onChange={setFilter} counts={counts} />
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-5 py-5">
+      <main className="max-w-3xl lg:max-w-6xl mx-auto px-5 lg:px-8 py-5">
         {/* Zeile: Anzahl + Sortierung */}
         <div className="flex items-center justify-between mb-5">
           <p className="font-body text-sm" style={{ color: 'rgba(250,247,242,0.6)' }}>

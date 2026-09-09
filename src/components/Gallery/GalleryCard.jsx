@@ -52,55 +52,62 @@ export default function GalleryCard({ entry }) {
         </div>
       </button>
 
-      {/* Vollbild-Modal – via Portal direkt in document.body */}
+      {/* Modal – via Portal direkt in document.body. Mobil: Vollbild. Ab sm: zentrierter Dialog. */}
       {open && createPortal(
         <div
-          className="fixed inset-0 z-50 flex flex-col"
-          style={{ background: 'rgba(250,247,242,0.98)', backdropFilter: 'blur(16px)' }}
+          className="fixed inset-0 z-50 flex items-center justify-center sm:p-6"
+          style={{ background: 'rgba(11,22,20,0.85)', backdropFilter: 'blur(16px)' }}
+          onClick={() => setOpen(false)}
         >
-          {/* Schließen-Button */}
-          <button
-            onClick={() => setOpen(false)}
-            className="absolute top-4 right-4 z-10 flex items-center justify-center"
-            style={{
-              width: 40, height: 40, borderRadius: '50%',
-              background: 'rgba(44,36,24,0.08)',
-              color: '#2C2418', fontSize: 18,
-              border: '1px solid rgba(44,36,24,0.12)',
-            }}
-            aria-label="Schließen"
-          >
-            ✕
-          </button>
-
-          {/* Foto – volle Breite, so viel Höhe wie möglich */}
-          {entry.photo_url ? (
-            <div className="flex-1 overflow-hidden" style={{ minHeight: 0 }}>
-              <img
-                src={entry.photo_url}
-                alt={`Foto von ${entry.name}`}
-                className="w-full h-full object-contain"
-              />
-            </div>
-          ) : (
-            <div className="flex-1" />
-          )}
-
-          {/* Text-Bereich unten */}
           <div
-            className="flex-shrink-0 px-6 py-5 overflow-y-auto"
-            style={{
-              maxHeight: '40dvh',
-              borderTop: '1px solid rgba(44,36,24,0.08)',
-              background: 'rgba(250,247,242,0.98)',
-            }}
+            className="relative flex flex-col w-full h-full sm:h-auto sm:max-h-[88vh] sm:max-w-2xl sm:rounded-2xl sm:overflow-hidden sm:shadow-2xl"
+            style={{ background: 'rgba(250,247,242,0.98)' }}
+            onClick={(e) => e.stopPropagation()}
           >
-            <p className="font-body text-base text-ink leading-relaxed mb-4" style={{ lineHeight: 1.7 }}>
-              {entry.message}
-            </p>
-            <div className="flex items-center justify-between">
-              <p className="font-display italic text-lg" style={{ color: '#2C2418' }}>{entry.name}</p>
-              <p className="font-body text-sm" style={{ color: '#B5A898' }}>{formatDate(entry.created_at)}</p>
+            {/* Schließen-Button */}
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-4 right-4 z-10 flex items-center justify-center"
+              style={{
+                width: 40, height: 40, borderRadius: '50%',
+                background: 'rgba(44,36,24,0.08)',
+                color: '#2C2418', fontSize: 18,
+                border: '1px solid rgba(44,36,24,0.12)',
+              }}
+              aria-label="Schließen"
+            >
+              ✕
+            </button>
+
+            {/* Foto – volle Breite, so viel Höhe wie möglich */}
+            {entry.photo_url ? (
+              <div className="flex-1 overflow-hidden" style={{ minHeight: 0 }}>
+                <img
+                  src={entry.photo_url}
+                  alt={`Foto von ${entry.name}`}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            ) : (
+              <div className="flex-1" />
+            )}
+
+            {/* Text-Bereich unten */}
+            <div
+              className="flex-shrink-0 px-6 py-5 overflow-y-auto"
+              style={{
+                maxHeight: '40dvh',
+                borderTop: '1px solid rgba(44,36,24,0.08)',
+                background: 'rgba(250,247,242,0.98)',
+              }}
+            >
+              <p className="font-body text-base text-ink leading-relaxed mb-4" style={{ lineHeight: 1.7 }}>
+                {entry.message}
+              </p>
+              <div className="flex items-center justify-between">
+                <p className="font-display italic text-lg" style={{ color: '#2C2418' }}>{entry.name}</p>
+                <p className="font-body text-sm" style={{ color: '#B5A898' }}>{formatDate(entry.created_at)}</p>
+              </div>
             </div>
           </div>
         </div>,

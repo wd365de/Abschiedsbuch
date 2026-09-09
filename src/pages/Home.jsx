@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import { NAME, INSTITUTE, ROLE } from '../config'
+import { NAME_FULL, INSTITUTE, ROLE } from '../config'
 
 const CONFIG = {
-  name: NAME,
+  name: NAME_FULL,
   date: '',
   subtitle: `Hinterlasst eure Worte, Wünsche und schönsten Erinnerungen an die gemeinsame Zeit am ${INSTITUTE}.`,
   photoBookText: `Eure Fotos und Nachrichten werden zu einem gedruckten Abschiedsbuch für den ${ROLE} zusammengestellt.`,
