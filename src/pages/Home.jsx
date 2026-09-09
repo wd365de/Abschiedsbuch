@@ -21,7 +21,25 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="h-dvh flex flex-col bg-brand overflow-hidden">
+    <div className="h-dvh flex flex-col bg-brand overflow-hidden relative">
+
+      {/* Portraitfoto als Polaroid – ab Desktop links neben dem Inhalt */}
+      <div className="hidden lg:block absolute z-10 left-[3%] xl:left-[6%] top-1/2 -translate-y-1/2 rotate-[-4deg] w-[190px] xl:w-[230px] animate-fade-in" style={{ animationDelay: '0.5s' }}>
+        <div className="relative bg-cream p-2.5 pb-6 shadow-[0_18px_50px_rgba(0,0,0,0.5),0_4px_14px_rgba(0,0,0,0.3)]">
+          <div className="absolute -top-3 left-[70px] w-14 h-5 -rotate-[5deg] shadow-[0_1px_4px_rgba(0,0,0,0.25)]" style={{ background: 'rgba(61,186,156,0.55)' }} />
+          <div className="w-full aspect-square overflow-hidden bg-ink/10">
+            <img
+              src="/norbert-krug.jpg"
+              alt={NAME_FULL}
+              className="w-full h-full object-cover object-[center_22%]"
+            />
+          </div>
+          <p className="text-center font-display italic text-sm text-ink mt-2.5">
+            Norbert Krug
+          </p>
+        </div>
+      </div>
+
       <main className="flex-1 flex flex-col items-center justify-center px-8 text-center">
 
         {/* Date chip */}
