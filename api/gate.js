@@ -8,7 +8,7 @@ const ALLOWED_IPS = ['153.96.224.80']
 // koennen das nicht zuverlaessig verhindern. Deshalb wird die HTML-Huelle
 // hier aus einer Function heraus serviert, die grundsaetzlich nicht
 // gecacht wird und bei jedem Aufruf die IP prueft.
-const html = readFileSync(path.join(process.cwd(), 'dist', 'index.html'), 'utf-8')
+const html = readFileSync(path.join(process.cwd(), 'server', 'index-shell.html'), 'utf-8')
 
 export default function handler(req, res) {
   const forwardedFor = req.headers['x-forwarded-for'] || ''

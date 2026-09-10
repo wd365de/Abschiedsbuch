@@ -1,8 +1,9 @@
 {
+  "buildCommand": "npm run build && node scripts/prepare-vercel-output.mjs",
   "rewrites": [{ "source": "/((?!assets/|api/).*)", "destination": "/api/gate" }],
   "functions": {
     "api/gate.js": {
-      "includeFiles": "dist/index.html"
+      "includeFiles": "server/index-shell.html"
     }
   },
   "crons": [
