@@ -10,8 +10,12 @@ export default function middleware(request) {
     return
   }
 
+  // Der letzte Eintrag in x-forwarded-for ist die von Vercels Edge selbst
+  // gesehene Client-IP und kann anders als vorherige Eintraege nicht vom
+  // Client gefaelscht werden.
   const forwardedFor = request.headers.get('x-forwarded-for') || ''
-  const ip = forwardedFor.split(',')[0].trim()
+  const parts = forwardedFor.split(',').map((part) => part.trim()).filter(Boolean)
+  const ip = parts[parts.length - 1] || ''
 
   if (ALLOWED_IPS.includes(ip)) {
     return
@@ -24,5 +28,6 @@ export default function middleware(request) {
 }
 
 export const config = {
-  runtime: 'edge',
+  runtime: 'nodejs',
+  matcher: ['/((?!api/keepalive).*)'],
 }
