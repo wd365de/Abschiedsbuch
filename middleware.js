@@ -16,6 +16,7 @@ export default function middleware(request) {
   const forwardedFor = request.headers.get('x-forwarded-for') || ''
   const parts = forwardedFor.split(',').map((part) => part.trim()).filter(Boolean)
   const ip = parts[parts.length - 1] || ''
+  console.log('[ip-gate]', pathname, JSON.stringify(forwardedFor), '->', ip)
 
   if (ALLOWED_IPS.includes(ip)) {
     return
