@@ -105,6 +105,15 @@ export default function Home() {
           </p>
         )}
 
+        {/* Fotobuch-Link (Admin / ausscheidende Person) */}
+        <Link
+          to="/fotobuch"
+          className="font-body text-xs text-cream/40 underline underline-offset-4 mt-3 hover:text-cream/70 transition-colors animate-fade-in"
+          style={{ animationDelay: '0.55s' }}
+        >
+          Fotobuch ansehen
+        </Link>
+
       </main>
     </div>
   )
