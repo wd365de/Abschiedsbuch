@@ -1,11 +1,10 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
-  "headers": [
-    {
-      "source": "/((?!assets/).*)",
-      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+  "rewrites": [{ "source": "/((?!assets/|api/).*)", "destination": "/api/gate" }],
+  "functions": {
+    "api/gate.js": {
+      "includeFiles": "dist/index.html"
     }
-  ],
+  },
   "crons": [
     {
       "path": "/api/keepalive",
@@ -13,4 +12,3 @@
     }
   ]
 }
-
