@@ -24,10 +24,10 @@ export default function StepPhoto({ photo, photoPreview, onChange, onNext, onBac
 
   return (
     <div className="page-container animate-fade-up flex flex-col justify-center">
-      <h2 className="font-display text-3xl font-light text-cream leading-snug mb-2">
+      <h2 className="font-display text-3xl md:text-4xl font-light text-cream text-shadow-soft leading-snug mb-2">
         Habt ihr einen schönen Moment eingefangen?
       </h2>
-      <p className="font-body text-sm text-cream/70 mb-8">
+      <p className="font-body text-sm md:text-base text-cream/85 text-shadow-soft mb-8">
         Optional – ihr könnt diesen Schritt auch überspringen.
       </p>
 
@@ -96,7 +96,7 @@ export default function StepPhoto({ photo, photoPreview, onChange, onNext, onBac
         </button>
         {!photo && (
           <button
-            className="text-center py-1 font-body text-xs text-cream/50 hover:text-cream/80 transition-colors duration-200"
+            className="text-center py-1 font-body text-sm text-cream/70 text-shadow-soft hover:text-cream transition-colors duration-200"
             onClick={onNext}
           >
             Ohne Foto fortfahren

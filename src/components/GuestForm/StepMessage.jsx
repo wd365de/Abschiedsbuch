@@ -18,10 +18,10 @@ export default function StepMessage({
 
   return (
     <div className="page-container animate-fade-up flex flex-col justify-center">
-      <h2 className="font-display text-3xl font-light text-cream leading-snug mb-2">
+      <h2 className="font-display text-3xl md:text-4xl font-light text-cream text-shadow-soft leading-snug mb-2">
         Deine Worte
       </h2>
-      <p className="font-body text-sm text-cream/70 mb-6">
+      <p className="font-body text-sm md:text-base text-cream/85 text-shadow-soft mb-6">
         Schreib 2–3 Sätze – von Herzen.
       </p>
 
@@ -29,7 +29,7 @@ export default function StepMessage({
         {/* Name */}
         {!anonymous && (
           <div>
-            <label className="font-body text-xs tracking-widest uppercase text-cream/60 block mb-3">
+            <label className="font-body text-sm tracking-widest uppercase text-cream/80 text-shadow-soft block mb-3">
               Dein Name
             </label>
             <input
@@ -49,42 +49,44 @@ export default function StepMessage({
             type="checkbox"
             checked={anonymous}
             onChange={(e) => onChange({ anonymous: e.target.checked })}
-            style={{ width: 16, height: 16, accentColor: '#009775' }}
+            style={{ width: 18, height: 18, accentColor: '#009775' }}
           />
-          <span className="font-body text-xs text-cream/60">
+          <span className="font-body text-sm text-cream/85 text-shadow-soft">
             Anonym beitragen – dein Name wird nicht angezeigt
           </span>
         </label>
 
         {/* Message */}
         <div>
-          <label className="font-body text-xs tracking-widest uppercase text-cream/60 block mb-3">
+          <label className="font-body text-sm tracking-widest uppercase text-cream/80 text-shadow-soft block mb-3">
             Deine Nachricht
           </label>
           <textarea
-            className="input-field resize-none text-base leading-relaxed"
+            className="input-field resize-none text-base md:text-lg leading-relaxed"
             placeholder={`Was möchtest du ${NAME} auf den Weg geben?`}
             rows={4}
             value={message}
             onChange={(e) => onChange({ message: e.target.value })}
             maxLength={500}
           />
-          <p className="font-body text-xs text-cream/50 text-right mt-1">
+          <p className="font-body text-sm text-cream/65 text-right mt-1">
             {message.length}/500
           </p>
 
           {/* Schreibhilfe */}
           {!message.trim() && (
-            <div className="flex flex-wrap gap-1.5 mt-2">
+            <div className="flex flex-wrap gap-2 mt-3">
               {PROMPTS.map((p) => (
                 <button
                   key={p}
                   type="button"
                   onClick={() => insertPrompt(p)}
-                  className="font-body text-xs px-2.5 py-1 rounded-full transition-colors"
+                  className="font-body text-sm px-3 py-1.5 rounded-full transition-colors"
                   style={{
-                    border: '1px solid rgba(250,247,242,0.18)',
-                    color: 'rgba(250,247,242,0.55)',
+                    border: '1px solid rgba(250,247,242,0.24)',
+                    color: 'rgba(250,247,242,0.8)',
+                    background: 'rgba(15,24,32,0.35)',
+                    backdropFilter: 'blur(6px)',
                   }}
                 >
                   {p}

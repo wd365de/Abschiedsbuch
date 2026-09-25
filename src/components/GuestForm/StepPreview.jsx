@@ -9,10 +9,10 @@ export default function StepPreview({ formData, onSubmit, onBack, loading, error
 
   return (
     <div className="page-container animate-fade-up flex flex-col justify-center">
-      <h2 className="font-display text-3xl font-light text-cream leading-snug mb-2">
+      <h2 className="font-display text-3xl md:text-4xl font-light text-cream text-shadow-soft leading-snug mb-2">
         Alles richtig?
       </h2>
-      <p className="font-body text-sm text-cream/70 mb-6">
+      <p className="font-body text-sm md:text-base text-cream/85 text-shadow-soft mb-6">
         Schaut euren Eintrag noch einmal durch – danach wird er gespeichert.
       </p>
 
@@ -34,20 +34,20 @@ export default function StepPreview({ formData, onSubmit, onBack, loading, error
         <div className="bg-white p-5">
           {/* Kategorie */}
           <span
-            className="inline-block font-body text-xs px-3 py-1 rounded-full mb-4"
+            className="inline-block font-body text-sm px-3 py-1 rounded-full mb-4"
             style={{ backgroundColor: 'rgba(0,151,117,0.1)', color: '#009775' }}
           >
             {label}
           </span>
 
           {/* Nachricht */}
-          <p className="font-body text-sm text-ink leading-relaxed mb-5">
+          <p className="font-body text-base md:text-lg text-ink leading-relaxed mb-5">
             {formData.message}
           </p>
 
           {/* Footer */}
           <div className="border-t border-ink/8 pt-4">
-            <p className="font-display italic text-lg text-ink">
+            <p className="font-display italic text-xl text-ink">
               {formData.anonymous ? 'Anonym' : formData.name}
             </p>
           </div>
@@ -56,7 +56,7 @@ export default function StepPreview({ formData, onSubmit, onBack, loading, error
 
       {error && (
         <div className="bg-blush/10 border border-blush/30 rounded-xl px-4 py-3 mb-6">
-          <p className="font-body text-sm text-blush">{error}</p>
+          <p className="font-body text-sm md:text-base text-blush">{error}</p>
         </div>
       )}
 

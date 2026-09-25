@@ -16,14 +16,14 @@ export default function StepSuccess({ name }) {
       </div>
 
       <h2
-        className="font-display text-4xl font-light text-cream mb-3 animate-fade-up"
+        className="font-display text-4xl md:text-5xl font-light text-cream text-shadow-soft mb-3 animate-fade-up"
         style={{ animationDelay: '0.25s' }}
       >
         Danke{name ? `, ${name}` : ''}!
       </h2>
 
       <p
-        className="font-body text-cream/70 leading-relaxed mb-10 max-w-[300px] animate-fade-up"
+        className="font-body text-base md:text-lg text-cream/85 text-shadow-soft leading-relaxed mb-10 max-w-[340px] animate-fade-up"
         style={{ animationDelay: '0.35s' }}
       >
         Dein Eintrag ist gespeichert. {NAME} wird sich sehr
