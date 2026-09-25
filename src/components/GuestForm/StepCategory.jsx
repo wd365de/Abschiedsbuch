@@ -1,30 +1,18 @@
-import { NAME, INSTITUTE } from '../../config'
-
 const CATEGORIES = [
   {
-    id:          'dankbarkeit',
-    title:       'Dankbarkeit',
-    description: `Wofür möchtest du ${NAME} danken?`,
+    id:          'gruesse',
+    title:       'Grüße',
+    description: 'Worte zum Abschied — gern einzeln oder als Team, Gruppe, Abteilung.',
   },
   {
     id:          'erinnerungen',
     title:       'Erinnerungen',
-    description: `Was ist deine schönste Erinnerung mit ${NAME} am ${INSTITUTE}?`,
+    description: 'Alte Fotos und Erinnerungsbilder, gern mit Zeitangabe oder passender Anekdote.',
   },
   {
-    id:          'wuensche',
-    title:       'Wünsche für die Zukunft',
-    description: `Was wünschst du ${NAME} für die Zeit nach dem Institut?`,
-  },
-  {
-    id:          'humor',
-    title:       'Humor & Leichtigkeit',
-    description: 'Hast du eine lustige Anekdote aus der gemeinsamen Zeit auf Lager?',
-  },
-  {
-    id:          'vermaechtnis',
-    title:       'Vermächtnis',
-    description: `Was hast du von ${NAME} gelernt – oder welchen Satz hast du oft von ihm gehört?`,
+    id:          'abschiedsfeier',
+    title:       'Abschiedsfeier',
+    description: 'Aktuelle Fotos von den Abschiedsfestivitäten (Kuratoriumssitzung + Winter-Info im Dezember).',
   },
 ]
 
@@ -37,7 +25,7 @@ export default function StepCategory({ selected, onChange, onNext }) {
         Welche Art von Eintrag möchtest du hinterlassen?
       </h2>
       <p className="font-body text-xs text-cream/60 mb-4 text-center">
-        Wähle eine Kategorie, die zu deinem Beitrag passt.
+        Wähle eine Kategorie, die zu deinem Beitrag passt. In allen Kategorien kann mit und ohne Foto beigetragen werden.
       </p>
 
       <div className="flex flex-col gap-2 mb-6">

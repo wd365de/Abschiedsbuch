@@ -1,9 +1,7 @@
 const CATEGORY_LABELS = {
-  'dankbarkeit':   'Dankbarkeit',
-  'erinnerungen':  'Erinnerungen',
-  'wuensche':      'Wünsche für die Zukunft',
-  'humor':         'Humor & Leichtigkeit',
-  'vermaechtnis':  'Vermächtnis',
+  'gruesse':        'Grüße',
+  'erinnerungen':   'Erinnerungen',
+  'abschiedsfeier': 'Abschiedsfeier',
 }
 
 export default function StepPreview({ formData, onSubmit, onBack, loading, error }) {

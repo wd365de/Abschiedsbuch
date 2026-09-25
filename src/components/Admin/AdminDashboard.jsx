@@ -5,11 +5,15 @@ import { downloadCSV, downloadZIP } from './AdminExport'
 import { Link } from 'react-router-dom'
 
 const CATEGORY_META = {
-  'dankbarkeit':     { label: 'Dankbarkeit' },
+  // Neue Kategorien
+  'gruesse':         { label: 'Grüße' },
   'erinnerungen':    { label: 'Erinnerungen' },
-  'wuensche':        { label: 'Wünsche' },
-  'humor':           { label: 'Humor' },
-  'vermaechtnis':    { label: 'Vermächtnis' },
+  'abschiedsfeier':  { label: 'Abschiedsfeier' },
+  // Alte Kategorien (Seed-Daten, werden vor Go-Live entfernt)
+  'dankbarkeit':     { label: 'Dankbarkeit (alt)' },
+  'wuensche':        { label: 'Wünsche (alt)' },
+  'humor':           { label: 'Humor (alt)' },
+  'vermaechtnis':    { label: 'Vermächtnis (alt)' },
 }
 
 function formatDate(iso) {
@@ -206,7 +210,7 @@ export default function AdminDashboard({ onLogout }) {
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
           {/* Filter */}
           <div className="flex gap-2 flex-wrap flex-1">
-            {['alle', 'dankbarkeit', 'erinnerungen', 'wuensche', 'humor', 'vermaechtnis'].map((f) => (
+            {['alle', 'gruesse', 'erinnerungen', 'abschiedsfeier', 'dankbarkeit', 'wuensche', 'humor', 'vermaechtnis'].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}

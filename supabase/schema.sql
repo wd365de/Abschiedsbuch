@@ -13,7 +13,7 @@ create table if not exists public.entries (
   id          uuid        default uuid_generate_v4() primary key,
   name        text        not null,
   message     text        not null,
-  category    text        not null check (category in ('dankbarkeit', 'erinnerungen', 'wuensche', 'humor', 'vermaechtnis')),
+  category    text        not null check (category in ('gruesse', 'erinnerungen', 'abschiedsfeier')),
   photo_url   text,
   approved    boolean     not null default false,
   anonymous   boolean     not null default false,

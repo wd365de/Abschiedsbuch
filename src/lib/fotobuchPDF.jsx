@@ -2,7 +2,7 @@ import {
   Document, Page, View, Text, Image,
   StyleSheet, Font,
 } from '@react-pdf/renderer'
-import { NAME, INSTITUTE, ROLE } from '../config'
+import { NAME, NAME_FULL, TAGLINE, INSTITUTE, ROLE } from '../config'
 
 // Farben
 const C = {
@@ -17,11 +17,9 @@ const C = {
 }
 
 const CATEGORIES = [
-  { id: 'dankbarkeit',   label: 'Dankbarkeit',   color: C.gold },
-  { id: 'erinnerungen',  label: 'Erinnerungen',  color: C.gold },
-  { id: 'wuensche',      label: 'Wünsche',       color: C.gold },
-  { id: 'humor',         label: 'Humor',         color: C.gold },
-  { id: 'vermaechtnis',  label: 'Vermächtnis',   color: C.gold },
+  { id: 'gruesse',        label: 'Grüße',         color: C.gold },
+  { id: 'erinnerungen',   label: 'Erinnerungen',  color: C.gold },
+  { id: 'abschiedsfeier', label: 'Abschiedsfeier', color: C.gold },
 ]
 
 function formatDate(iso) {
@@ -76,11 +74,14 @@ function Cover({ S }) {
         <Text style={S.ruleStar}>✦</Text>
         <View style={S.ruleLine} />
       </View>
-      <Text style={{ fontSize: 40, color: C.ink, fontFamily: 'Helvetica-Oblique', marginTop: 12, textAlign: 'center' }}>
-        {NAME}
+      <Text style={{ fontSize: 32, color: C.ink, fontFamily: 'Helvetica-Oblique', marginTop: 12, textAlign: 'center' }}>
+        {NAME_FULL}
       </Text>
       <Text style={{ fontSize: 14, color: C.gold, fontFamily: 'Helvetica-Oblique', marginVertical: 12, textAlign: 'center' }}>
-        {ROLE} · {INSTITUTE}
+        {TAGLINE}
+      </Text>
+      <Text style={{ fontSize: 10, color: C.inkMuted, marginBottom: 8, textAlign: 'center', letterSpacing: 2 }}>
+        {ROLE.toUpperCase()} · {INSTITUTE.toUpperCase()}
       </Text>
       <View style={S.rule}>
         <View style={S.ruleLine} />
