@@ -21,14 +21,14 @@ export default function StepCategory({ selected, onChange, onNext }) {
     <div className="page-container animate-fade-up flex flex-col justify-center">
 
       {/* Überschrift zentriert */}
-      <h2 className="font-display text-2xl font-light text-cream text-shadow-soft leading-snug mb-1 text-center">
+      <h2 className="font-display text-3xl md:text-4xl font-light text-cream text-shadow-soft leading-snug mb-2 text-center">
         Welche Art von Eintrag möchtest du hinterlassen?
       </h2>
-      <p className="font-body text-xs text-cream/80 text-shadow-soft mb-4 text-center">
+      <p className="font-body text-sm md:text-base text-cream/85 text-shadow-soft mb-6 text-center">
         Wähle eine Kategorie, die zu deinem Beitrag passt. In allen Kategorien kann mit und ohne Foto beigetragen werden.
       </p>
 
-      <div className="flex flex-col gap-2 mb-6">
+      <div className="flex flex-col gap-3 mb-6">
         {CATEGORIES.map((cat) => {
           const isSelected = selected === cat.id
           return (
@@ -38,18 +38,18 @@ export default function StepCategory({ selected, onChange, onNext }) {
               className={`text-left transition-all duration-200 ${isSelected ? 'card-glass-selected' : 'card-glass'}`}
               style={{
                 borderRadius: 10,
-                padding: '12px 16px',
+                padding: '16px 20px',
               }}
             >
               <div className="flex items-center gap-4">
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p
-                    className="font-body font-medium text-sm"
+                    className="font-body font-medium text-base md:text-lg"
                     style={{ margin: 0, color: '#FAF7F2' }}
                   >
                     {cat.title}
                   </p>
-                  <p className="font-body text-xs mt-0.5" style={{ margin: 0, color: 'rgba(250,247,242,0.75)' }}>
+                  <p className="font-body text-sm md:text-base mt-1" style={{ margin: 0, color: 'rgba(250,247,242,0.8)' }}>
                     {cat.description}
                   </p>
                 </div>
