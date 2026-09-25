@@ -21,10 +21,10 @@ export default function StepCategory({ selected, onChange, onNext }) {
     <div className="page-container animate-fade-up flex flex-col justify-center">
 
       {/* Überschrift zentriert */}
-      <h2 className="font-display text-2xl font-light text-cream leading-snug mb-1 text-center">
+      <h2 className="font-display text-2xl font-light text-cream text-shadow-soft leading-snug mb-1 text-center">
         Welche Art von Eintrag möchtest du hinterlassen?
       </h2>
-      <p className="font-body text-xs text-cream/60 mb-4 text-center">
+      <p className="font-body text-xs text-cream/80 text-shadow-soft mb-4 text-center">
         Wähle eine Kategorie, die zu deinem Beitrag passt. In allen Kategorien kann mit und ohne Foto beigetragen werden.
       </p>
 
@@ -35,16 +35,10 @@ export default function StepCategory({ selected, onChange, onNext }) {
             <button
               key={cat.id}
               onClick={() => onChange(cat.id)}
-              className="text-left transition-all duration-200"
+              className={`text-left transition-all duration-200 ${isSelected ? 'card-glass-selected' : 'card-glass'}`}
               style={{
                 borderRadius: 10,
-                padding: '10px 16px',
-                border: isSelected
-                  ? '1px solid #009775'
-                  : '1px solid rgba(250,247,242,0.14)',
-                background: isSelected
-                  ? 'rgba(0,151,117,0.16)'
-                  : 'rgba(250,247,242,0.04)',
+                padding: '12px 16px',
               }}
             >
               <div className="flex items-center gap-4">
@@ -55,7 +49,7 @@ export default function StepCategory({ selected, onChange, onNext }) {
                   >
                     {cat.title}
                   </p>
-                  <p className="font-body text-xs mt-0.5" style={{ margin: 0, color: 'rgba(250,247,242,0.55)' }}>
+                  <p className="font-body text-xs mt-0.5" style={{ margin: 0, color: 'rgba(250,247,242,0.75)' }}>
                     {cat.description}
                   </p>
                 </div>
