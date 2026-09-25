@@ -36,8 +36,10 @@
 
 @layer components {
   .bg-brand {
-    background-color: #0B1614;
-    background-image: linear-gradient(rgba(8,16,15,0.82), rgba(8,16,15,0.82)), url('/fraunhofer-hero.webp');
+    background-color: #14202A;
+    background-image:
+      linear-gradient(180deg, rgba(20,32,42,0.72) 0%, rgba(20,32,42,0.82) 60%, rgba(20,32,42,0.92) 100%),
+      url('/fraunhofer-luftbild.webp');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

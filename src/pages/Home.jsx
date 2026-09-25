@@ -23,20 +23,6 @@ export default function Home() {
   return (
     <div className="h-dvh flex flex-col bg-brand overflow-hidden relative">
 
-      {/* Luftbild-Hintergrund mit dunklem Overlay für Textkontrast */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/fraunhofer-luftbild.webp"
-          alt=""
-          aria-hidden="true"
-          className="w-full h-full object-cover"
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(180deg, rgba(20,32,42,0.72) 0%, rgba(20,32,42,0.82) 60%, rgba(20,32,42,0.92) 100%)' }}
-        />
-      </div>
-
       {/* Krug-Foto als Polaroid – ab Desktop links neben dem Inhalt */}
       <div className="hidden lg:block absolute z-10 left-[5%] xl:left-[8%] top-1/2 -translate-y-1/2 rotate-[-3deg] w-[320px] xl:w-[380px] animate-fade-in" style={{ animationDelay: '0.5s' }}>
         <div className="relative bg-cream p-2.5 pb-6 shadow-[0_18px_50px_rgba(0,0,0,0.6),0_4px_14px_rgba(0,0,0,0.35)]">
