@@ -59,7 +59,8 @@ export default function GuestPage() {
       setStep(5) // Erfolg
     } catch (err) {
       console.error(err)
-      setError('Etwas ist schiefgelaufen. Bitte versuche es erneut.')
+      const detail = err?.message ? ` (${err.message})` : ''
+      setError(`Der Beitrag konnte nicht gespeichert werden. Bitte in ein paar Minuten erneut versuchen — falls der Fehler bleibt, melde dich bei uns.${detail}`)
     } finally {
       setLoading(false)
     }
