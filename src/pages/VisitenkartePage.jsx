@@ -61,7 +61,7 @@ function Vorderseite() {
         margin: '0 0 1.5mm',
         width: '100%',
       }}>
-        Abschiedsbuch für {NAME}
+        Abschiedsbuch für Herrn Krug
       </p>
 
       {/* Divider */}

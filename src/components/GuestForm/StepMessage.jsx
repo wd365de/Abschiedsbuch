@@ -63,7 +63,7 @@ export default function StepMessage({
           </label>
           <textarea
             className="input-field resize-none text-base md:text-lg leading-relaxed"
-            placeholder={`Was möchtest du ${NAME} auf den Weg geben?`}
+            placeholder={`Was möchtest du Herrn Krug auf den Weg geben?`}
             rows={4}
             value={message}
             onChange={(e) => onChange({ message: e.target.value })}

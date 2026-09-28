@@ -6,7 +6,7 @@ import { NAME_FULL, TAGLINE, NAME } from '../config'
 const CONFIG = {
   name: NAME_FULL,
   tagline: TAGLINE,
-  subtitle: `Hinterlasst hier eure Worte, Wünsche und Erinnerungen für ${NAME}.`,
+  subtitle: `Hinterlasst hier eure Worte, Wünsche und Erinnerungen für Herrn Krug.`,
   photoBookText: 'Eure Fotos und Nachrichten werden zu einem gedruckten Abschiedsbuch zusammengestellt.',
 }
 
