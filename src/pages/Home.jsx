@@ -40,7 +40,24 @@ export default function Home() {
         </div>
       </div>
 
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 text-center">
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-6 text-center overflow-y-auto">
+
+        {/* Krug-Foto als Polaroid – Mobile-Variante, ueber dem Panel zentriert */}
+        <div className="lg:hidden mb-6 rotate-[-3deg] w-[220px] animate-fade-in" style={{ animationDelay: '0.4s' }}>
+          <div className="relative bg-cream p-2 pb-5 shadow-[0_12px_35px_rgba(0,0,0,0.55),0_3px_10px_rgba(0,0,0,0.3)]">
+            <div className="absolute -top-2.5 left-[80px] w-12 h-4 -rotate-[5deg] shadow-[0_1px_3px_rgba(0,0,0,0.25)]" style={{ background: 'rgba(61,186,156,0.55)' }} />
+            <div className="w-full aspect-[3/2] overflow-hidden bg-ink/10">
+              <img
+                src="/krug-hero.webp"
+                alt={NAME_FULL}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <p className="text-center font-display italic text-xs text-ink mt-2">
+              Norbert Krug
+            </p>
+          </div>
+        </div>
 
         {/* Frosted-Glass-Panel als Textcontainer */}
         <section className="hero-glass w-full max-w-xl md:max-w-2xl px-6 py-10 md:px-12 md:py-12 flex flex-col items-center">
@@ -92,24 +109,29 @@ export default function Home() {
 
         </section>
 
-        {/* Fortschritt (unter dem Panel, dezent) */}
-        {count !== null && count > 0 && (
-          <p
-            className="font-body text-xs text-cream/70 text-shadow-soft mt-6 animate-fade-in"
-            style={{ animationDelay: '0.5s' }}
-          >
-            Bereits {count} {count === 1 ? 'Kolleg*in hat' : 'Kolleg*innen haben'} beigetragen
-          </p>
-        )}
-
-        {/* Fotobuch-Link (Admin / ausscheidende Person) */}
-        <Link
-          to="/fotobuch"
-          className="font-body text-xs text-cream/70 text-shadow-soft underline underline-offset-4 mt-3 hover:text-cream transition-colors animate-fade-in"
-          style={{ animationDelay: '0.55s' }}
+        {/* Fortschritt + Fotobuch-Link in eigenem Glass-Pill fuer Lesbarkeit */}
+        <div
+          className="mt-5 px-5 py-2.5 rounded-full flex flex-col sm:flex-row items-center gap-x-4 gap-y-1 animate-fade-in"
+          style={{
+            background: 'rgba(15,24,32,0.55)',
+            backdropFilter: 'blur(10px) saturate(115%)',
+            WebkitBackdropFilter: 'blur(10px) saturate(115%)',
+            border: '1px solid rgba(250,247,242,0.14)',
+            animationDelay: '0.5s',
+          }}
         >
-          Fotobuch ansehen
-        </Link>
+          {count !== null && count > 0 && (
+            <span className="font-body text-sm text-cream">
+              Bereits {count} {count === 1 ? 'Kolleg*in hat' : 'Kolleg*innen haben'} beigetragen
+            </span>
+          )}
+          <Link
+            to="/fotobuch"
+            className="font-body text-sm text-cream underline underline-offset-4 hover:text-gold-light transition-colors"
+          >
+            Fotobuch ansehen
+          </Link>
+        </div>
 
       </main>
     </div>
