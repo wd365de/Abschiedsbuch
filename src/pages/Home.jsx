@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import { NAME_FULL, TAGLINE, NAME } from '../config'
+import { NAME_FULL, TAGLINE } from '../config'
 
 const CONFIG = {
   name: NAME_FULL,
@@ -40,57 +40,62 @@ export default function Home() {
         </div>
       </div>
 
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-8 text-center">
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 text-center">
 
-        {/* Titel */}
-        <div className="animate-fade-up" style={{ animationDelay: '0.1s' }}>
-          <h1 className="font-display font-light text-[clamp(2rem,7vw,4rem)] leading-tight text-cream mb-3">
-            {CONFIG.name}
-          </h1>
-          <p className="font-display italic text-[clamp(1rem,3vw,1.5rem)] text-gold-light">
-            {CONFIG.tagline}
-          </p>
-        </div>
+        {/* Frosted-Glass-Panel als Textcontainer */}
+        <section className="hero-glass w-full max-w-xl md:max-w-2xl px-6 py-10 md:px-12 md:py-12 flex flex-col items-center">
 
-        {/* Divider */}
-        <div className="h-px w-full max-w-[220px] my-6 animate-fade-in" style={{ animationDelay: '0.25s', background: 'rgba(250,247,242,0.25)' }} />
+          {/* Titel */}
+          <div className="animate-fade-up" style={{ animationDelay: '0.1s' }}>
+            <h1 className="font-display font-light text-[clamp(2rem,7vw,4rem)] leading-tight text-cream mb-3">
+              {CONFIG.name}
+            </h1>
+            <p className="font-display italic text-[clamp(1rem,3vw,1.5rem)] text-gold-light">
+              {CONFIG.tagline}
+            </p>
+          </div>
 
-        {/* Beschreibung */}
-        <p
-          className="font-body font-light text-cream/85 text-sm md:text-base leading-relaxed max-w-[340px] md:max-w-lg mb-4 animate-fade-up"
-          style={{ animationDelay: '0.3s' }}
-        >
-          {CONFIG.subtitle}
-        </p>
+          {/* Divider */}
+          <div className="h-px w-full max-w-[220px] my-6 animate-fade-in" style={{ animationDelay: '0.25s', background: 'rgba(250,247,242,0.3)' }} />
 
-        <p
-          className="font-body text-xs md:text-sm text-cream/55 leading-relaxed max-w-[340px] md:max-w-md mb-8 animate-fade-up"
-          style={{ animationDelay: '0.35s' }}
-        >
-          {CONFIG.photoBookText}
-        </p>
-
-        {/* CTAs */}
-        <div
-          className="flex flex-col sm:flex-row gap-3 w-full max-w-[320px] sm:max-w-none justify-center animate-fade-up"
-          style={{ animationDelay: '0.4s' }}
-        >
-          <Link to="/eintrag" className="btn-primary text-center sm:w-56">
-            Eintrag hinterlassen
-          </Link>
-          <Link
-            to="/galerie"
-            className="text-center sm:w-56 font-body font-medium tracking-widest text-sm uppercase py-4 px-8 transition-all duration-300 active:scale-[0.98]"
-            style={{ border: '1px solid rgba(250,247,242,0.5)', color: '#FAF7F2' }}
+          {/* Beschreibung */}
+          <p
+            className="font-body font-light text-cream/95 text-sm md:text-base leading-relaxed max-w-[340px] md:max-w-lg mb-4 animate-fade-up"
+            style={{ animationDelay: '0.3s' }}
           >
-            Galerie ansehen
-          </Link>
-        </div>
+            {CONFIG.subtitle}
+          </p>
 
-        {/* Fortschritt */}
+          <p
+            className="font-body text-xs md:text-sm text-cream/75 leading-relaxed max-w-[340px] md:max-w-md mb-8 animate-fade-up"
+            style={{ animationDelay: '0.35s' }}
+          >
+            {CONFIG.photoBookText}
+          </p>
+
+          {/* CTAs */}
+          <div
+            className="flex flex-col sm:flex-row gap-3 w-full max-w-[320px] sm:max-w-none justify-center animate-fade-up"
+            style={{ animationDelay: '0.4s' }}
+          >
+            <Link to="/eintrag" className="btn-primary text-center sm:w-56">
+              Eintrag hinterlassen
+            </Link>
+            <Link
+              to="/galerie"
+              className="text-center sm:w-56 font-body font-medium tracking-widest text-sm uppercase py-4 px-8 transition-all duration-300 active:scale-[0.98]"
+              style={{ border: '1px solid rgba(250,247,242,0.5)', color: '#FAF7F2' }}
+            >
+              Galerie ansehen
+            </Link>
+          </div>
+
+        </section>
+
+        {/* Fortschritt (unter dem Panel, dezent) */}
         {count !== null && count > 0 && (
           <p
-            className="font-body text-xs text-cream/45 mt-6 animate-fade-in"
+            className="font-body text-xs text-cream/70 text-shadow-soft mt-6 animate-fade-in"
             style={{ animationDelay: '0.5s' }}
           >
             Bereits {count} {count === 1 ? 'Kolleg*in hat' : 'Kolleg*innen haben'} beigetragen
@@ -100,7 +105,7 @@ export default function Home() {
         {/* Fotobuch-Link (Admin / ausscheidende Person) */}
         <Link
           to="/fotobuch"
-          className="font-body text-xs text-cream/45 underline underline-offset-4 mt-3 hover:text-cream/80 transition-colors animate-fade-in"
+          className="font-body text-xs text-cream/70 text-shadow-soft underline underline-offset-4 mt-3 hover:text-cream transition-colors animate-fade-in"
           style={{ animationDelay: '0.55s' }}
         >
           Fotobuch ansehen

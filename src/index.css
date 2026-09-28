@@ -86,6 +86,17 @@
     @apply flex-1 min-h-0 overflow-y-auto flex flex-col justify-center px-6 py-6 max-w-lg mx-auto w-full;
   }
 
+  /* Dezenter Frosted-glass Container fuer Hero-Textbloecke.
+     Weicher als .card-glass, damit das Luftbild an den Raendern
+     sichtbar bleibt und der Text zentral Kontrast bekommt. */
+  .hero-glass {
+    background: rgba(15, 24, 32, 0.42);
+    backdrop-filter: blur(14px) saturate(115%);
+    -webkit-backdrop-filter: blur(14px) saturate(115%);
+    border: 1px solid rgba(250, 247, 242, 0.10);
+    border-radius: 18px;
+  }
+
   /* Frosted-glass Panel fuer Auswahl-Karten und Info-Blocks
      vor dem Luftbild-Hintergrund. Kontrast + weiche Unschaerfe. */
   .card-glass {
