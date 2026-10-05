@@ -31,8 +31,8 @@ export default function Home() {
           className="w-full h-full object-cover object-left"
         />
 
-        {/* Krug-Polaroid in Bildhälfte – nur Desktop */}
-        <div className="hidden lg:block absolute right-[7%] xl:right-[10%] top-1/2 -translate-y-1/2 rotate-[-3deg] w-[300px] xl:w-[360px] animate-fade-in" style={{ animationDelay: '0.5s' }}>
+        {/* Krug-Polaroid in Bildhälfte – nur Desktop, linksbündig am Rand zur Textspalte */}
+        <div className="hidden lg:block absolute left-[5%] xl:left-[7%] top-1/2 -translate-y-1/2 rotate-[-3deg] w-[300px] xl:w-[360px] animate-fade-in" style={{ animationDelay: '0.5s' }}>
           <div className="relative bg-cream p-2.5 pb-6 shadow-[0_18px_50px_rgba(0,0,0,0.6),0_4px_14px_rgba(0,0,0,0.35)]">
             <div className="absolute -top-3 left-[110px] xl:left-[140px] w-14 h-5 -rotate-[5deg] shadow-[0_1px_4px_rgba(0,0,0,0.25)]" style={{ background: 'rgba(61,186,156,0.55)' }} />
             <div className="w-full aspect-[3/2] overflow-hidden bg-ink/10">
