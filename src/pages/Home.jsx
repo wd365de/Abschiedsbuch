@@ -50,8 +50,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Krug-Polaroid – Mobile: ueberlappt am unteren Rand des Luftbildes */}
-        <div className="lg:hidden absolute left-5 bottom-0 translate-y-1/2 rotate-[-3deg] w-[180px] animate-fade-in z-20" style={{ animationDelay: '0.3s' }}>
+        {/* Krug-Polaroid – Mobile: unten links auf dem Luftbild */}
+        <div className="lg:hidden absolute left-5 bottom-4 rotate-[-3deg] w-[180px] animate-fade-in z-20" style={{ animationDelay: '0.3s' }}>
           <div className="relative bg-cream p-2 pb-4 shadow-[0_10px_28px_rgba(0,0,0,0.55),0_3px_8px_rgba(0,0,0,0.3)]">
             <div className="absolute -top-2 left-[65px] w-10 h-3 -rotate-[5deg] shadow-[0_1px_3px_rgba(0,0,0,0.25)]" style={{ background: 'rgba(61,186,156,0.55)' }} />
             <div className="w-full aspect-[3/2] overflow-hidden bg-ink/10">
@@ -69,7 +69,7 @@ export default function Home() {
       </div>
 
       {/* Textspalte — Mobile: unten; Desktop: linke 1/3 */}
-      <main className="relative flex-1 lg:w-1/3 flex flex-col items-center justify-center px-6 pt-20 pb-8 lg:py-8 text-center overflow-y-auto bg-ink">
+      <main className="relative flex-1 lg:w-1/3 flex flex-col items-center justify-center px-6 py-8 text-center overflow-y-auto bg-ink">
 
         {/* Titel */}
         <div className="animate-fade-up" style={{ animationDelay: '0.1s' }}>
