@@ -25,8 +25,8 @@ export default {
         },
       },
       fontFamily: {
-        display: ['"Cormorant Garamond"', 'serif'],
-        body: ['"DM Sans"', 'sans-serif'],
+        display: ['"DM Sans"', 'Arial', 'sans-serif'],
+        body: ['"DM Sans"', 'Arial', 'sans-serif'],
       },
       animation: {
         'fade-up': 'fadeUp 0.5s ease both',

@@ -3,6 +3,6 @@
 // NAME: auf allen weiteren Seiten und in Formulartexten (kurz & persönlich)
 export const NAME_FULL = 'Prof. Dr. Norbert Krug'
 export const NAME = 'Herr Krug'
-export const TAGLINE = 'Pioneer for sustainable Health'
+export const TAGLINE = 'Pioneer for Sustainable Health'
 export const INSTITUTE = 'Fraunhofer ITEM'
 export const ROLE = 'Institutsleiter'

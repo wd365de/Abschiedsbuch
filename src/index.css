@@ -37,10 +37,6 @@
 @layer components {
   .bg-brand {
     background-color: #14202A;
-    background-image: url('/fraunhofer-luftbild.webp');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
   }
 
   .btn-primary {

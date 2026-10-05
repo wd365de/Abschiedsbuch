@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase'
 import { Link } from 'react-router-dom'
 import { pdf } from '@react-pdf/renderer'
 import { FotobuchDocument } from '../lib/fotobuchPDF'
-import { NAME, INSTITUTE, ROLE } from '../config'
+import { NAME, NAME_FULL, TAGLINE, INSTITUTE, ROLE } from '../config'
 import AdminLogin from '../components/Admin/AdminLogin'
 
 const CATEGORIES = [
@@ -50,10 +50,11 @@ function CoverPage() {
           Abschiedsbuch
         </p>
         <Rule color="#009775" />
-        <h1 style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '56px', fontWeight: 300, color: '#2C2418', lineHeight: 1.1, margin: '20px 0 0', textAlign: 'center' }}>{NAME}</h1>
-        <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '16px', fontStyle: 'italic', color: '#009775', margin: '8px 0 20px' }}>{ROLE} · {INSTITUTE}</p>
+        <h1 style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: '44px', fontWeight: 400, color: '#2C2418', lineHeight: 1.15, margin: '20px 0 0', textAlign: 'center' }}>{NAME_FULL}</h1>
+        <p style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: '16px', fontWeight: 500, color: '#009775', margin: '12px 0 20px', letterSpacing: '0.5px' }}>{TAGLINE}</p>
+        <p style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: '11px', color: '#8B7D6E', margin: '0 0 20px', letterSpacing: '3px', textTransform: 'uppercase' }}>{ROLE} · {INSTITUTE}</p>
         <Rule color="#009775" />
-        <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic', fontSize: '15px', color: '#B5A898', maxWidth: '130mm', lineHeight: 1.9, marginTop: '40px' }}>
+        <p style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontStyle: 'italic', fontSize: '15px', color: '#B5A898', maxWidth: '130mm', lineHeight: 1.9, marginTop: '40px' }}>
           „Der Ruhestand ist nicht das Ende, sondern der Anfang eines neuen Kapitels voller Möglichkeiten."
         </p>
       </div>
@@ -77,7 +78,7 @@ function CategoryPage({ cat }) {
   return (
     <A4Page bg={cat.bg}>
       <div style={{ height: '269mm', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '52px', fontWeight: 300, color: '#2C2418', lineHeight: 1.1, margin: '0 0 16px' }}>
+        <h2 style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: '52px', fontWeight: 300, color: '#2C2418', lineHeight: 1.1, margin: '0 0 16px' }}>
           {cat.label}
         </h2>
         <Rule color={cat.color} />
@@ -156,7 +157,7 @@ function Polaroid({ entry, cat, posStyle }) {
       </div>
       <div style={{ textAlign: 'center', paddingTop: '4px', paddingLeft: '2px', paddingRight: '2px' }}>
         <p style={{
-          fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic',
+          fontFamily: '"DM Sans",Arial,sans-serif', fontStyle: 'italic',
           fontSize: '10px', color: '#2C2418', margin: '0 0 3px', lineHeight: 1.4,
           display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
         }}>„{entry.message}"</p>
@@ -185,13 +186,13 @@ function NoteCard({ entry, cat, posStyle }) {
     }}>
       <Tape color={cat.color} angle={tapeAng} />
       <p style={{
-        fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'italic',
+        fontFamily: '"DM Sans",Arial,sans-serif', fontStyle: 'italic',
         fontSize: '12.5px', lineHeight: 1.85, color: '#2C2418', margin: '0 0 9px',
         display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical', overflow: 'hidden',
       }}>„{entry.message}"</p>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
         <div style={{ height: '0.5px', flex: 1, background: `linear-gradient(to right, transparent, ${cat.color}60)` }} />
-        <span style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: '13px', color: '#2C2418' }}>
+        <span style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: '13px', color: '#2C2418' }}>
           {entry.name}
         </span>
         <div style={{ height: '0.5px', flex: 1, background: `linear-gradient(to left, transparent, ${cat.color}60)` }} />
@@ -416,7 +417,7 @@ export default function FotobuchPreview() {
       </div>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
         @media print {
           body { margin: 0; background: white !important; }
           div[style*="sticky"]  { display: none !important; }

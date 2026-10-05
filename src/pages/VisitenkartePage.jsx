@@ -52,7 +52,7 @@ function Vorderseite() {
 
       {/* Überschrift */}
       <p style={{
-        fontFamily: '"Cormorant Garamond",Georgia,serif',
+        fontFamily: '"DM Sans",Arial,sans-serif',
         fontStyle: 'italic',
         fontSize: 29,
         fontWeight: 700,
@@ -69,7 +69,7 @@ function Vorderseite() {
 
       {/* Fließtext */}
       <p style={{
-        fontFamily: '"Cormorant Garamond",Georgia,serif',
+        fontFamily: '"DM Sans",Arial,sans-serif',
         fontSize: 13.5,
         fontWeight: 400,
         color: INK,
@@ -103,7 +103,7 @@ function Rueckseite() {
       gap: '1.5mm',
     }}>
       {/* Überschrift – nicht kursiv für bessere Lesbarkeit */}
-      <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'normal', fontWeight: 700, fontSize: 17, color: GOLD, letterSpacing: 0.5, margin: 0, lineHeight: 1.2, textAlign: 'center', width: '100%' }}>
+      <p style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontStyle: 'normal', fontWeight: 700, fontSize: 17, color: GOLD, letterSpacing: 0.5, margin: 0, lineHeight: 1.2, textAlign: 'center', width: '100%' }}>
         QR-Code zum Abschiedsbuch
       </p>
 
@@ -120,12 +120,12 @@ function Rueckseite() {
       </div>
 
       {/* URL klar und groß */}
-      <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontStyle: 'normal', fontSize: 14, color: LIGHT, margin: 0, letterSpacing: 0.5 }}>
+      <p style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontStyle: 'normal', fontSize: 14, color: LIGHT, margin: 0, letterSpacing: 0.5 }}>
         {DISPLAY_URL}
       </p>
 
       {/* Scan-Anleitung */}
-      <p style={{ fontFamily: '"Cormorant Garamond",Georgia,serif', fontSize: 14, fontWeight: 700, color: LIGHT, margin: 0, lineHeight: 1.3, letterSpacing: 0.2 }}>
+      <p style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: 14, fontWeight: 700, color: LIGHT, margin: 0, lineHeight: 1.3, letterSpacing: 0.2 }}>
         Kamera öffnen <span style={{ color: GOLD, fontWeight: 400 }}>→</span> Code anvisieren <span style={{ color: GOLD, fontWeight: 400 }}>→</span> Link antippen
       </p>
     </div>
@@ -180,7 +180,7 @@ export default function VisitenkartePage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
         @media print {
           @page { size: 91mm 61mm; margin: 0; }
           body { margin: 0; background: white; }
