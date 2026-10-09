@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.5.1",
+    "@sparticuz/chromium-min": "^153.0.0",
     "@supabase/supabase-js": "^2.39.0",
     "canvas-confetti": "^1.9.4",
     "jszip": "^3.10.1",
+    "puppeteer-core": "^25.13.0",
     "qrcode": "^1.5.4",
     "qrcode.react": "^4.2.0",
     "react": "^18.2.0",

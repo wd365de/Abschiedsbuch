@@ -18,6 +18,7 @@ export default function App() {
         <Route path="/admin"   element={<AdminPage />} />
         <Route path="/qrcode"  element={<QRCodePage />} />
         <Route path="/fotobuch" element={<FotobuchPreview />} />
+        <Route path="/fotobuch-print" element={<FotobuchPreview printMode />} />
         <Route path="/visitenkarte"    element={<VisitenkartePage />} />
         <Route path="/praesentation"   element={<PraesentationPage />} />
       </Routes>

@@ -387,43 +387,73 @@ function EntriesPage({ pageEntries, cat, pageIndex }) {
   )
 }
 
-export default function FotobuchPreview() {
-  const [session,     setSession]     = useState(undefined) // undefined = loading
+export default function FotobuchPreview({ printMode = false }) {
+  const [session,     setSession]     = useState(printMode ? null : undefined) // im printMode kein Auth
   const [entries,     setEntries]     = useState([])
   const [loading,     setLoading]     = useState(true)
   const [format,      setFormat]      = useState('a4')
   const [pdfLoading,  setPdfLoading]  = useState(false)
 
   useEffect(() => {
+    if (printMode) return // Kein Admin-Login in der Print-Variante
     supabase.auth.getSession().then(({ data }) => setSession(data.session))
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, sess) => setSession(sess))
     return () => subscription.unsubscribe()
-  }, [])
+  }, [printMode])
 
   useEffect(() => {
-    if (!session) return
+    if (!printMode && !session) return
     supabase.from('entries').select('*').eq('approved', true).order('created_at').then(({ data: e }) => {
       setEntries(e || [])
       setLoading(false)
     })
-  }, [session])
+  }, [session, printMode])
+
+  // Signalisiert Puppeteer, dass alle Bilder geladen sind
+  useEffect(() => {
+    if (!printMode || loading) return
+    const imgs = Array.from(document.querySelectorAll('img'))
+    if (imgs.length === 0) { window.__fotobuchReady = true; return }
+    let left = imgs.length
+    const done = () => { if (--left <= 0) window.__fotobuchReady = true }
+    imgs.forEach((img) => {
+      if (img.complete) done()
+      else {
+        img.addEventListener('load',  done, { once: true })
+        img.addEventListener('error', done, { once: true })
+      }
+    })
+    // Fallback: nach 20s auf jeden Fall ready setzen
+    const t = setTimeout(() => { window.__fotobuchReady = true }, 20000)
+    return () => clearTimeout(t)
+  }, [printMode, loading, entries])
 
   const handlePDF = async () => {
     setPdfLoading(true)
     try {
-      const blob = await pdf(<FotobuchDocument entries={entries} format={format} />).toBlob()
+      // Server-seitige PDF-Generierung via Puppeteer-Function.
+      // Fuer die URL wird kein Secret gebraucht — die Function selbst
+      // haelt das PDF_SECRET fuer den internen Fetch der Print-Seite.
+      const res = await fetch(`/api/pdf?format=${format}`)
+      if (!res.ok) {
+        const txt = await res.text().catch(() => '')
+        throw new Error(`PDF-Download fehlgeschlagen (${res.status}): ${txt.slice(0, 200)}`)
+      }
+      const blob = await res.blob()
       const url  = URL.createObjectURL(blob)
       const a    = document.createElement('a')
       a.href     = url
       a.download = `abschiedsbuch-${format}.pdf`
       a.click()
       URL.revokeObjectURL(url)
+    } catch (err) {
+      alert(err.message || 'PDF-Download fehlgeschlagen.')
     } finally {
       setPdfLoading(false)
     }
   }
 
-  if (session === undefined) {
+  if (!printMode && session === undefined) {
     return (
       <div className="min-h-dvh bg-ink flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
@@ -431,7 +461,7 @@ export default function FotobuchPreview() {
     )
   }
 
-  if (!session) {
+  if (!printMode && !session) {
     return <AdminLogin />
   }
 
@@ -453,9 +483,16 @@ export default function FotobuchPreview() {
     }
   })
   return (
-    <div className="bg-brand" style={{ minHeight: '100vh', paddingBottom: '60px' }}>
-      {/* Toolbar */}
-      <div style={{
+    <div
+      className={printMode ? '' : 'bg-brand'}
+      style={{
+        minHeight: '100vh',
+        paddingBottom: printMode ? 0 : '60px',
+        background: printMode ? 'white' : undefined,
+      }}
+    >
+      {/* Toolbar — nicht im Print-Modus */}
+      {!printMode && <div style={{
         position: 'sticky', top: 0, zIndex: 100, background: '#2C2418',
         padding: '12px 24px', display: 'flex', alignItems: 'center',
         justifyContent: 'space-between', boxShadow: '0 2px 12px rgba(0,0,0,0.4)',
@@ -500,9 +537,9 @@ export default function FotobuchPreview() {
             ← Admin
           </Link>
         </div>
-      </div>
+      </div>}
 
-      <div style={{ paddingTop: '32px' }}>
+      <div style={{ paddingTop: printMode ? 0 : '32px' }}>
         <CoverPage />
         {CATEGORIES.map(cat => {
           const catEntries = entries.filter(e => e.category === cat.id)

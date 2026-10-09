@@ -150,6 +150,18 @@ export default async function middleware(request) {
   // Falls kein Passwort gesetzt ist: Middleware deaktiviert (Fallback).
   if (!password) return
 
+  // Print-Route fuer die interne PDF-Pipeline:
+  // nur mit gueltigem Shared-Secret-Token aufrufbar (umgeht den
+  // Password-Cookie, weil Puppeteer keinen Cookie mitbringt).
+  if (url.pathname === '/fotobuch-print') {
+    const pdfSecret = globalThis.process?.env?.PDF_SECRET || ''
+    const t = url.searchParams.get('token') || ''
+    if (pdfSecret && safeEqual(t, pdfSecret)) {
+      return // durchlassen
+    }
+    return new Response('Not Found', { status: 404 })
+  }
+
   // Auth-Endpoint: Passwort prüfen und Cookie setzen
   if (url.pathname === '/__auth' && request.method === 'POST') {
     let form
