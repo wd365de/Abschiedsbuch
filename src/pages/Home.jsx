@@ -116,23 +116,15 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* Fortschritt + Fotobuch-Link */}
-        <div
-          className="mt-6 flex flex-col items-center gap-1 animate-fade-in"
-          style={{ animationDelay: '0.5s' }}
-        >
-          {count !== null && count > 0 && (
-            <span className="font-body text-xs text-cream/70">
-              Bereits {count} {count === 1 ? 'Kolleg*in hat' : 'Kolleg*innen haben'} beigetragen
-            </span>
-          )}
-          <Link
-            to="/fotobuch"
-            className="font-body text-xs text-cream/70 underline underline-offset-4 hover:text-gold-light transition-colors"
+        {/* Fortschritt (dezent unter den Buttons) */}
+        {count !== null && count > 0 && (
+          <p
+            className="mt-6 font-body text-xs text-cream/70 animate-fade-in"
+            style={{ animationDelay: '0.5s' }}
           >
-            Fotobuch ansehen
-          </Link>
-        </div>
+            Bereits {count} {count === 1 ? 'Kolleg*in hat' : 'Kolleg*innen haben'} beigetragen
+          </p>
+        )}
 
       </main>
     </div>
