@@ -1,10 +1,14 @@
 // Vercel Edge Middleware: Passwortschutz für die ganze Seite.
-// Prüft Cookie "abschiedsbuch_access". Fehlt der oder ist ungültig,
-// wird eine Login-Seite ausgespielt. Bei korrektem Passwort setzt
-// die POST-Handling-Zweig das Cookie mit 24h Gültigkeit.
+// Prüft ein HMAC-signiertes Cookie "abschiedsbuch_access". Fehlt
+// das Cookie, ist die Signatur ungültig oder abgelaufen, wird eine
+// Login-Seite ausgespielt. Bei korrektem Passwort setzt die
+// POST-Handling-Zweig ein frisches Token mit 24h Gültigkeit.
 //
 // Erwartete Env-Variable (im Vercel-Dashboard setzen):
 //   ACCESS_PASSWORD   z.B. "item"
+//
+// Das Passwort wird gleichzeitig als HMAC-Secret genutzt — damit sind
+// die Tokens nicht forgeable ohne Kenntnis des Passworts.
 //
 // matcher lässt /api/keepalive (Cron), Favicon und Robots unberührt.
 
@@ -13,7 +17,6 @@ export const config = {
 }
 
 const COOKIE_NAME = 'abschiedsbuch_access'
-const COOKIE_VALUE = 'ok'
 const COOKIE_MAX_AGE = 60 * 60 * 24 // 24 Stunden
 
 function loginPage({ target = '/', error = false } = {}) {
@@ -63,9 +66,53 @@ function htmlResponse(html, status = 200) {
   })
 }
 
-function cookieHeader() {
+// Base64url ohne Padding
+function b64u(bytes) {
+  let s = ''
+  for (const b of bytes) s += String.fromCharCode(b)
+  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+async function hmac(secret, msg) {
+  const enc = new TextEncoder()
+  const key = await crypto.subtle.importKey(
+    'raw', enc.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false, ['sign'],
+  )
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(msg))
+  return b64u(new Uint8Array(sig))
+}
+
+// Timing-safe Vergleich zweier gleich langer Strings
+function safeEqual(a, b) {
+  if (a.length !== b.length) return false
+  let out = 0
+  for (let i = 0; i < a.length; i++) out |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  return out === 0
+}
+
+async function makeToken(secret) {
+  const exp = String(Date.now() + COOKIE_MAX_AGE * 1000)
+  const sig = await hmac(secret, exp)
+  return `${exp}.${sig}`
+}
+
+async function verifyToken(token, secret) {
+  if (!token || typeof token !== 'string') return false
+  const i = token.indexOf('.')
+  if (i < 1) return false
+  const exp = token.slice(0, i)
+  const sig = token.slice(i + 1)
+  if (!/^\d+$/.test(exp)) return false
+  if (Number(exp) < Date.now()) return false
+  const expected = await hmac(secret, exp)
+  return safeEqual(expected, sig)
+}
+
+function cookieHeader(token) {
   const attrs = [
-    `${COOKIE_NAME}=${COOKIE_VALUE}`,
+    `${COOKIE_NAME}=${encodeURIComponent(token)}`,
     `Max-Age=${COOKIE_MAX_AGE}`,
     'Path=/',
     'HttpOnly',
@@ -84,6 +131,18 @@ function readCookie(request, name) {
   return null
 }
 
+// Verhindert Open-Redirect: Ziel muss ein lokaler Pfad sein. Insbesondere
+// //evil.com und /\evil.com (protokollrelative Weiterleitungen) werden
+// abgewiesen.
+function sanitizeRedirect(target) {
+  if (!target || typeof target !== 'string') return '/'
+  if (!target.startsWith('/')) return '/'
+  if (target.startsWith('//') || target.startsWith('/\\')) return '/'
+  // Keine eingebetteten Steuerzeichen / CRLF-Injection via Location-Header
+  if (/[\r\n]/.test(target)) return '/'
+  return target
+}
+
 export default async function middleware(request) {
   const url = new URL(request.url)
   const password = globalThis.process?.env?.ACCESS_PASSWORD || ''
@@ -96,28 +155,29 @@ export default async function middleware(request) {
     let form
     try { form = await request.formData() } catch { form = new FormData() }
     const given = String(form.get('passwort') || '')
-    const target = String(form.get('redirect') || '/') || '/'
-    const safeTarget = target.startsWith('/') ? target : '/'
+    const target = sanitizeRedirect(String(form.get('redirect') || '/'))
 
-    if (given === password) {
+    if (safeEqual(given, password)) {
+      const token = await makeToken(password)
       return new Response(null, {
         status: 303,
         headers: {
-          location: safeTarget,
-          'set-cookie': cookieHeader(),
+          location: target,
+          'set-cookie': cookieHeader(token),
           'cache-control': 'no-store',
         },
       })
     }
-    return htmlResponse(loginPage({ target: safeTarget, error: true }), 401)
+    return htmlResponse(loginPage({ target, error: true }), 401)
   }
 
   // Cookie prüfen
-  if (readCookie(request, COOKIE_NAME) === COOKIE_VALUE) {
+  const token = readCookie(request, COOKIE_NAME)
+  if (token && await verifyToken(token, password)) {
     return // durchlassen
   }
 
   // Login-Seite
-  const target = url.pathname + url.search
+  const target = sanitizeRedirect(url.pathname + url.search)
   return htmlResponse(loginPage({ target }))
 }
