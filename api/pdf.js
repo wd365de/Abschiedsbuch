@@ -3,11 +3,15 @@
 // streamt das Ergebnis als PDF zurück.
 //
 // Erwartete Env-Variablen (im Vercel-Dashboard setzen):
-//   PDF_SECRET      zufaelliger String, z.B. 32 hex. Wird intern
-//                   als x-pdf-token an die Print-Route gesendet.
+//   PDF_SECRET      zufaelliger String, z.B. 32 hex. Wird nur bei
+//                   Requests zur eigenen Origin als x-pdf-token-Header
+//                   gesendet; nicht an Dritt-Hosts.
 //   APP_ORIGIN      optional, z.B. "https://abschiedsbuch.vercel.app".
 //                   Fallback: https://${VERCEL_PROJECT_PRODUCTION_URL}.
 //                   Request-Host wird NICHT verwendet (SSRF-Schutz).
+//   SUPABASE_URL    optional, Fallback VITE_SUPABASE_URL. Daraus wird
+//                   der exakte Supabase-Hostname extrahiert; nur dieser
+//                   darf von Puppeteer geladen werden (keine Wildcard).
 //
 // Die eigentliche Aufrufer-Authentisierung erfolgt ueber die Edge-
 // Middleware (Passwort-Cookie). Diese Function selbst muss den
@@ -27,9 +31,8 @@ const CHROMIUM_PACK_URL =
   'https://github.com/Sparticuz/chromium/releases/download/v153.0.0/chromium-v153.0.0-pack.x64.tar'
 
 // Hostnamen, deren Ressourcen Puppeteer waehrend des Rendering laden
-// darf. Alles andere wird abgebrochen (verhindert, dass z.B. ein
-// kompromittierter Supabase-URL Fremddaten einschleust).
-const ALLOWED_HOSTS = new Set([
+// darf. Alles andere wird abgebrochen.
+const ALLOWED_STATIC_HOSTS = new Set([
   'fonts.googleapis.com',
   'fonts.gstatic.com',
 ])
@@ -46,19 +49,28 @@ function resolveAppOrigin() {
   return null
 }
 
-function isAllowedUrl(rawUrl, appOrigin) {
+function resolveSupabaseHost() {
+  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
+  if (!url) return null
+  try { return new URL(url).hostname } catch { return null }
+}
+
+function isAllowedUrl(rawUrl, appOrigin, supabaseHost) {
   try {
     const u = new URL(rawUrl)
     if (u.protocol === 'data:' || u.protocol === 'blob:') return true
     if (u.origin === appOrigin) return true
-    if (ALLOWED_HOSTS.has(u.hostname)) return true
-    // Supabase project domains (Datenbank + Storage)
-    if (u.hostname.endsWith('.supabase.co')) return true
-    if (u.hostname.endsWith('.supabase.in')) return true
+    if (ALLOWED_STATIC_HOSTS.has(u.hostname)) return true
+    // Nur der exakte Supabase-Projekt-Host, keine *.supabase.co-Wildcard
+    if (supabaseHost && u.hostname === supabaseHost) return true
     return false
   } catch {
     return false
   }
+}
+
+function isSameOrigin(rawUrl, appOrigin) {
+  try { return new URL(rawUrl).origin === appOrigin } catch { return false }
 }
 
 export default async function handler(req, res) {
@@ -72,6 +84,7 @@ export default async function handler(req, res) {
     res.status(500).send('APP_ORIGIN (oder VERCEL_PROJECT_PRODUCTION_URL) ist nicht gesetzt.')
     return
   }
+  const supabaseHost = resolveSupabaseHost()
 
   const format = req.query?.format === 'quadrat' ? 'quadrat' : 'a4'
   const printUrl = new URL('/fotobuch-print', appOrigin)
@@ -94,15 +107,24 @@ export default async function handler(req, res) {
     page.on('pageerror', (e) => console.error('page error:', e.message))
     page.on('requestfailed', (r) => console.error('request failed:', r.url(), r.failure()?.errorText))
 
-    // Token wird NUR als Header mitgeschickt, nicht in der URL, damit
-    // er nicht in Access-Logs oder Referrer-Headers landet.
-    await page.setExtraHTTPHeaders({ 'x-pdf-token': secret })
-
-    // Request-Allowlist: nur eigene Origin + Supabase + Google Fonts.
+    // Request-Allowlist: nur eigene Origin + exakter Supabase-Host +
+    // Google Fonts. Das PDF-Secret wird dabei ausschliesslich an
+    // Same-Origin-Requests angehaengt, damit es nicht in Fremd-Logs
+    // (Supabase, Google) landet.
     await page.setRequestInterception(true)
     page.on('request', (r) => {
-      if (isAllowedUrl(r.url(), appOrigin)) r.continue()
-      else r.abort()
+      const u = r.url()
+      if (!isAllowedUrl(u, appOrigin, supabaseHost)) {
+        r.abort()
+        return
+      }
+      const headers = { ...r.headers() }
+      if (isSameOrigin(u, appOrigin)) {
+        headers['x-pdf-token'] = secret
+      } else {
+        delete headers['x-pdf-token']
+      }
+      r.continue({ headers })
     })
 
     await page.goto(printUrl.toString(), { waitUntil: 'networkidle0', timeout: 45000 })
