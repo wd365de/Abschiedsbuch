@@ -95,7 +95,9 @@ export default async function handler(req, res) {
     return
   }
 
-  const debug = req.query?.debug === '1'
+  // Debug-Modus muss zusaetzlich zur Query-Parameter per Env explizit
+  // aktiviert sein, damit er nicht versehentlich in Prod Infos leakt.
+  const debug = req.query?.debug === '1' && process.env.DEBUG_PDF === '1'
   const pageErrors = []
   const failedRequests = []
   const abortedRequests = []
