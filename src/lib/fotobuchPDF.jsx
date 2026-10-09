@@ -167,12 +167,19 @@ function Footer({ S }) {
   )
 }
 
-// Lange Nachrichten (> 180 Zeichen) kommen als Einzel-Hero-Eintrag
+// Lange Nachrichten (> 250 Zeichen) kommen als Einzel-Hero-Eintrag
 // auf eine eigene Seite, damit der Text nicht abgeschnitten wird.
-const LONG_MESSAGE_THRESHOLD = 180
+const LONG_MESSAGE_THRESHOLD = 250
 
 function isLong(e) {
   return (e.message || '').length > LONG_MESSAGE_THRESHOLD
+}
+
+// Bildhoehe in Hero-Modus abhaengig von Textlaenge.
+// 250 Zeichen → 160pt, 500 → 220pt, 800 → 280pt, 1000+ → 320pt
+function heroImageHeight(chars) {
+  const h = 140 + Math.max(0, chars - 200) * 0.2
+  return Math.min(320, Math.max(140, h))
 }
 
 // Einträge gruppieren
@@ -196,12 +203,13 @@ function groupIntoPages(entries) {
 
 // Hero-Variante: ganze Seite fuer einen Beitrag mit langer Nachricht
 function HeroEntry({ entry, cat, S }) {
+  const h = heroImageHeight((entry.message || '').length)
   return (
     <View style={{ flex: 1, paddingTop: 20 }}>
       {entry.photo_url && (
         <Image
           src={entry.photo_url}
-          style={{ width: '100%', height: 280, objectFit: 'contain', backgroundColor: C.creamDark, borderRadius: 3, marginBottom: 16 }}
+          style={{ width: '100%', height: h, objectFit: 'contain', backgroundColor: C.creamDark, borderRadius: 3, marginBottom: 16 }}
         />
       )}
       <Text style={{ fontSize: 11, letterSpacing: 2.5, color: cat.color, marginBottom: 10, fontFamily: 'Helvetica-Bold', textAlign: 'center' }}>

@@ -149,7 +149,7 @@ function Polaroid({ entry, cat, posStyle }) {
         <p style={{
           fontFamily: '"DM Sans",Arial,sans-serif', fontStyle: 'italic',
           fontSize: '10px', color: '#2C2418', margin: '0 0 3px', lineHeight: 1.4,
-          display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+          display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow: 'hidden',
         }}>„{entry.message}"</p>
         <p style={{ fontFamily: 'Georgia,serif', fontSize: '8.5px', color: cat.color, margin: 0, letterSpacing: '0.5px' }}>
           — {entry.name}
@@ -196,18 +196,29 @@ function NoteCard({ entry, cat, posStyle }) {
 
 // ── Hero-Varianten fuer lange Beitraege ───────────────────────
 // Beitraege mit langer Nachricht bekommen eine eigene A4-Seite mit
-// grossem Polaroid/Zettel und vollstaendigem Text.
-const LONG_MESSAGE_THRESHOLD = 180
+// Polaroid/Zettel und vollstaendigem Text. Groesse des Bildes richtet
+// sich nach der Textlaenge — kurze Hero-Texte bekommen ein schmaleres
+// Bild, lange Texte ein breiteres.
+const LONG_MESSAGE_THRESHOLD = 250
+
+// Polaroid-Breite in mm, abhaengig von Textlaenge.
+// 250 Zeichen → 90mm, 500 → 115mm, 800 → 140mm, 1000+ → 150mm
+function heroPolaroidWidthMm(chars) {
+  const w = 85 + Math.max(0, chars - 200) * 0.08
+  return Math.min(150, Math.max(85, w))
+}
 
 function HeroPolaroid({ entry, cat }) {
   const rot     = prng(entry.id,       -3, 3)
   const tapeAng = prng(entry.id + 't', -30, 30)
+  const chars   = (entry.message || '').length
+  const widthMm = heroPolaroidWidthMm(chars)
   return (
     <div style={{
-      position: 'relative', margin: '0 auto', marginTop: '4mm',
+      position: 'relative', margin: '4mm auto 0',
       background: 'white', padding: '10px 10px 20px 10px',
       boxShadow: '0 10px 30px rgba(0,0,0,0.28), 0 3px 8px rgba(0,0,0,0.14)',
-      transform: `rotate(${rot}deg)`, width: '150mm', boxSizing: 'border-box',
+      transform: `rotate(${rot}deg)`, width: `${widthMm}mm`, boxSizing: 'border-box',
     }}>
       <Tape color={cat.color} angle={tapeAng} top="-10px" left="60px" />
       <div style={{ width: '100%', aspectRatio: '4/3', background: '#F0EBE1', overflow: 'hidden' }}>
