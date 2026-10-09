@@ -95,19 +95,8 @@ export default async function handler(req, res) {
     return
   }
 
-  // Debug-Modus muss zusaetzlich zur Query-Parameter per Env explizit
-  // aktiviert sein, damit er nicht versehentlich in Prod Infos leakt.
-  const debug = req.query?.debug === '1' && process.env.DEBUG_PDF === '1'
-  const pageErrors = []
-  const failedRequests = []
-  const abortedRequests = []
-  const allRequests = []
-  const consoleMsgs = []
-  const responseStatuses = []
-
   let browser
   try {
-    console.log('PDF: appOrigin=', appOrigin, 'supabaseHost=', supabaseHost, 'format=', format)
     browser = await puppeteer.launch({
       args: chromium.args,
       executablePath: await chromium.executablePath(CHROMIUM_PACK_URL),
@@ -115,10 +104,8 @@ export default async function handler(req, res) {
       defaultViewport: { width: 1240, height: 1754, deviceScaleFactor: 2 },
     })
     const page = await browser.newPage()
-    page.on('pageerror', (e) => { pageErrors.push(e.message); console.error('page error:', e.message) })
-    page.on('requestfailed', (r) => { failedRequests.push({ url: r.url(), err: r.failure()?.errorText }); console.error('request failed:', r.url(), r.failure()?.errorText) })
-    page.on('console', (msg) => { consoleMsgs.push(`[${msg.type()}] ${msg.text()}`); console.log('page console:', msg.type(), msg.text()) })
-    page.on('response', (r) => { responseStatuses.push(`${r.status()} ${r.url()}`) })
+    page.on('pageerror', (e) => console.error('page error:', e.message))
+    page.on('requestfailed', (r) => console.error('request failed:', r.url(), r.failure()?.errorText))
 
     // Request-Allowlist: nur eigene Origin + exakter Supabase-Host +
     // Google Fonts. Das PDF-Secret wird dabei ausschliesslich an
@@ -127,9 +114,7 @@ export default async function handler(req, res) {
     await page.setRequestInterception(true)
     page.on('request', (r) => {
       const u = r.url()
-      allRequests.push(u)
       if (!isAllowedUrl(u, appOrigin, supabaseHost)) {
-        abortedRequests.push(u)
         r.abort()
         return
       }
@@ -143,44 +128,7 @@ export default async function handler(req, res) {
     })
 
     await page.goto(printUrl.toString(), { waitUntil: 'networkidle0', timeout: 45000 })
-
-    // Warten, bis die Fotobuch-Komponente signalisiert, dass alle
-    // Bilder geladen sind. Im Debug-Modus soll der Timeout nicht
-    // crashen - wir wollen die Diagnose auch bei haengender Seite.
-    let readyTimeout = null
-    try {
-      await page.waitForFunction(() => window.__fotobuchReady === true, { timeout: 30000 })
-    } catch (e) {
-      readyTimeout = e?.message || 'waitForFunction timeout'
-      if (!debug) throw e
-    }
-
-    if (debug) {
-      const html = await page.content()
-      const diag = await page.evaluate(() => ({
-        ready: window.__fotobuchReady === true,
-        bodyHtmlLen: document.body.innerHTML.length,
-        rootHtmlLen: document.getElementById('root')?.innerHTML?.length ?? -1,
-        href: location.href,
-        hasReact: !!window.React,
-        documentReady: document.readyState,
-      })).catch((e) => ({ evalError: e?.message || String(e) }))
-      res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-      res.status(200).send(
-        `=== appOrigin: ${appOrigin}\n` +
-        `=== supabaseHost: ${supabaseHost}\n` +
-        `=== readyTimeout: ${readyTimeout || '(none, ready)'}\n` +
-        `=== diag: ${JSON.stringify(diag)}\n` +
-        `=== pageErrors (${pageErrors.length}):\n${pageErrors.join('\n')}\n` +
-        `=== consoleMsgs (${consoleMsgs.length}):\n${consoleMsgs.join('\n')}\n` +
-        `=== failedRequests (${failedRequests.length}):\n${failedRequests.map(x => `${x.url} :: ${x.err}`).join('\n')}\n` +
-        `=== abortedRequests (${abortedRequests.length}):\n${abortedRequests.slice(0, 30).join('\n')}\n` +
-        `=== allRequests (${allRequests.length}):\n${allRequests.slice(0, 40).join('\n')}\n` +
-        `=== responseStatuses (first 40):\n${responseStatuses.slice(0, 40).join('\n')}\n` +
-        `=== rootHTML (erste 2000):\n${(await page.evaluate(() => document.getElementById('root')?.innerHTML?.slice(0, 2000) || '(empty)').catch(() => '(eval failed)'))}`
-      )
-      return
-    }
+    await page.waitForFunction(() => window.__fotobuchReady === true, { timeout: 30000 })
 
     const pdfBytes = await page.pdf({
       format: 'A4',
