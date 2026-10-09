@@ -16,13 +16,6 @@ function formatDate(iso) {
   return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })
 }
 
-// 4 Einträge pro Seite
-function groupIntoPages(entries) {
-  const pages = []
-  for (let i = 0; i < entries.length; i += 4) pages.push(entries.slice(i, i + 4))
-  return pages
-}
-
 // A4 Seiten-Wrapper
 function A4Page({ children, bg = '#FAF7F2' }) {
   return (
@@ -199,6 +192,107 @@ function NoteCard({ entry, cat, posStyle }) {
       </p>
     </div>
   )
+}
+
+// ── Hero-Varianten fuer lange Beitraege ───────────────────────
+// Beitraege mit langer Nachricht bekommen eine eigene A4-Seite mit
+// grossem Polaroid/Zettel und vollstaendigem Text.
+const LONG_MESSAGE_THRESHOLD = 180
+
+function HeroPolaroid({ entry, cat }) {
+  const rot     = prng(entry.id,       -3, 3)
+  const tapeAng = prng(entry.id + 't', -30, 30)
+  return (
+    <div style={{
+      position: 'relative', margin: '0 auto', marginTop: '4mm',
+      background: 'white', padding: '10px 10px 20px 10px',
+      boxShadow: '0 10px 30px rgba(0,0,0,0.28), 0 3px 8px rgba(0,0,0,0.14)',
+      transform: `rotate(${rot}deg)`, width: '150mm', boxSizing: 'border-box',
+    }}>
+      <Tape color={cat.color} angle={tapeAng} top="-10px" left="60px" />
+      <div style={{ width: '100%', aspectRatio: '4/3', background: '#F0EBE1', overflow: 'hidden' }}>
+        <img src={entry.photo_url} alt=""
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />
+      </div>
+      <div style={{ textAlign: 'center', paddingTop: '12px', paddingLeft: '6px', paddingRight: '6px' }}>
+        <p style={{
+          fontFamily: '"DM Sans",Arial,sans-serif', fontStyle: 'italic',
+          fontSize: '12.5px', color: '#2C2418', margin: '0 0 8px', lineHeight: 1.7,
+        }}>„{entry.message}"</p>
+        <p style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: '12px', color: cat.color, margin: 0, letterSpacing: '0.5px' }}>
+          — {entry.name}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function HeroNoteCard({ entry, cat }) {
+  const rot     = prng(entry.id,       -2, 2)
+  const tapeAng = prng(entry.id + 't', -25, 25)
+  return (
+    <div style={{
+      position: 'relative', margin: '20mm auto 0',
+      background: cat.bg, border: `1px solid ${cat.color}35`,
+      padding: '28px 32px', boxShadow: '0 6px 20px rgba(0,0,0,0.14)',
+      transform: `rotate(${rot}deg)`, width: '160mm', boxSizing: 'border-box',
+    }}>
+      <Tape color={cat.color} angle={tapeAng} top="-10px" left="70px" />
+      <p style={{
+        fontFamily: '"DM Sans",Arial,sans-serif', fontStyle: 'italic',
+        fontSize: '14px', lineHeight: 1.85, color: '#2C2418', margin: '0 0 16px',
+      }}>„{entry.message}"</p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ height: '0.5px', flex: 1, background: `linear-gradient(to right, transparent, ${cat.color}60)` }} />
+        <span style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: '14px', color: '#2C2418' }}>
+          {entry.name}
+        </span>
+        <div style={{ height: '0.5px', flex: 1, background: `linear-gradient(to left, transparent, ${cat.color}60)` }} />
+      </div>
+    </div>
+  )
+}
+
+function HeroEntryPage({ entry, cat, pageIndex }) {
+  return (
+    <A4Page>
+      <BackgroundDeco pageIndex={pageIndex} color={cat.color} />
+      <div style={{ position: 'relative', zIndex: 5, textAlign: 'center', marginBottom: '2mm' }}>
+        <span style={{ fontFamily: 'Georgia,serif', fontSize: '8px', letterSpacing: '4px', textTransform: 'uppercase', color: cat.color + '80' }}>
+          {cat.emoji} {cat.label}
+        </span>
+      </div>
+      <div style={{ position: 'relative', zIndex: 3 }}>
+        {entry.photo_url
+          ? <HeroPolaroid entry={entry} cat={cat} />
+          : <HeroNoteCard entry={entry} cat={cat} />}
+      </div>
+      <div style={{ position: 'absolute', bottom: '10mm', left: '14mm', right: '14mm', textAlign: 'center', zIndex: 5 }}>
+        <p style={{ fontFamily: 'Georgia,serif', fontSize: '7px', color: cat.color + '50', letterSpacing: '3px', margin: 0 }}>
+          ✦ {NAME.toUpperCase()} · {INSTITUTE.toUpperCase()} ✦
+        </p>
+      </div>
+    </A4Page>
+  )
+}
+
+// Einträge in Seiten gruppieren: lange Nachrichten bekommen eine
+// eigene Seite (als 1er-Gruppe), kurze werden zu 4er-Gruppen gepackt.
+function groupIntoPages(entries) {
+  const pages = []
+  let buf = []
+  for (const e of entries) {
+    const isLong = (e.message || '').length > LONG_MESSAGE_THRESHOLD
+    if (isLong) {
+      if (buf.length) { pages.push(buf); buf = [] }
+      pages.push([e])
+    } else {
+      buf.push(e)
+      if (buf.length === 4) { pages.push(buf); buf = [] }
+    }
+  }
+  if (buf.length) pages.push(buf)
+  return pages
 }
 
 // ── 5 Seiten-Templates (4 Positionen je) ─────────────────────
@@ -405,9 +499,12 @@ export default function FotobuchPreview() {
           return (
             <div key={cat.id}>
               <CategoryPage cat={cat} />
-              {groupIntoPages(catEntries).map((page, idx) => (
-                <EntriesPage key={idx} pageEntries={page} cat={cat} pageIndex={idx} />
-              ))}
+              {groupIntoPages(catEntries).map((page, idx) => {
+                if (page.length === 1 && (page[0].message || '').length > LONG_MESSAGE_THRESHOLD) {
+                  return <HeroEntryPage key={idx} entry={page[0]} cat={cat} pageIndex={idx} />
+                }
+                return <EntriesPage key={idx} pageEntries={page} cat={cat} pageIndex={idx} />
+              })}
             </div>
           )
         })}

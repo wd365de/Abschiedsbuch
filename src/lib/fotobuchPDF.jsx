@@ -167,17 +167,55 @@ function Footer({ S }) {
   )
 }
 
+// Lange Nachrichten (> 180 Zeichen) kommen als Einzel-Hero-Eintrag
+// auf eine eigene Seite, damit der Text nicht abgeschnitten wird.
+const LONG_MESSAGE_THRESHOLD = 180
+
+function isLong(e) {
+  return (e.message || '').length > LONG_MESSAGE_THRESHOLD
+}
+
 // Einträge gruppieren
 function groupIntoPages(entries) {
   const pages = []
-  let i = 0
-  while (i < entries.length) {
-    const hasPhoto = entries[i].photo_url || (entries[i + 1]?.photo_url)
-    const size = hasPhoto ? 2 : 3
-    pages.push(entries.slice(i, i + size))
-    i += size
+  let buf = []
+  for (const e of entries) {
+    if (isLong(e)) {
+      if (buf.length) { pages.push(buf); buf = [] }
+      pages.push([e]) // Hero-Marker: nur 1 Entry
+    } else {
+      buf.push(e)
+      const hasPhoto = buf.some(x => x.photo_url)
+      const maxOnPage = hasPhoto ? 2 : 3
+      if (buf.length >= maxOnPage) { pages.push(buf); buf = [] }
+    }
   }
+  if (buf.length) pages.push(buf)
   return pages
+}
+
+// Hero-Variante: ganze Seite fuer einen Beitrag mit langer Nachricht
+function HeroEntry({ entry, cat, S }) {
+  return (
+    <View style={{ flex: 1, paddingTop: 20 }}>
+      {entry.photo_url && (
+        <Image
+          src={entry.photo_url}
+          style={{ width: '100%', height: 280, objectFit: 'contain', backgroundColor: C.creamDark, borderRadius: 3, marginBottom: 16 }}
+        />
+      )}
+      <Text style={{ fontSize: 11, letterSpacing: 2.5, color: cat.color, marginBottom: 10, fontFamily: 'Helvetica-Bold', textAlign: 'center' }}>
+        {cat.label.toUpperCase()}
+      </Text>
+      <Text style={{ fontSize: 12, color: C.ink, fontFamily: 'Helvetica-Oblique', lineHeight: 1.7, marginBottom: 16, textAlign: 'left' }}>
+        "{entry.message}"
+      </Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 0.5, borderTopColor: cat.color + '44', paddingTop: 8 }}>
+        <Text style={{ fontSize: 13, color: C.ink, fontFamily: 'Helvetica-Oblique' }}>{entry.name}</Text>
+        <Text style={{ fontSize: 9, color: C.inkMuted, alignSelf: 'center' }}>{formatDate(entry.created_at)}</Text>
+      </View>
+    </View>
+  )
 }
 
 // Haupt-Dokument
@@ -209,20 +247,28 @@ export function FotobuchDocument({ entries, format }) {
             <CategoryDivider cat={cat} S={S} />
           </Page>,
           // Eintragsseiten
-          ...pages.map((pageEntries, idx) => (
-            <Page key={`${cat.id}-${idx}`} size={pageSize} style={S.page}>
-              <View style={S.frame} />
-              <Text style={{ fontSize: 7, letterSpacing: 3, color: cat.color, textAlign: 'center', marginBottom: 16 }}>
-                {cat.label.toUpperCase()}
-              </Text>
-              {pageEntries.map((entry, i) =>
-                entry.photo_url
-                  ? <EntryWithPhoto key={entry.id} entry={entry} cat={cat} S={S} isLast={i === pageEntries.length - 1} />
-                  : <EntryText      key={entry.id} entry={entry} cat={cat} S={S} isLast={i === pageEntries.length - 1} />
-              )}
-              <Footer S={S} />
-            </Page>
-          )),
+          ...pages.map((pageEntries, idx) => {
+            const heroMode = pageEntries.length === 1 && isLong(pageEntries[0])
+            return (
+              <Page key={`${cat.id}-${idx}`} size={pageSize} style={S.page}>
+                <View style={S.frame} />
+                {!heroMode && (
+                  <Text style={{ fontSize: 7, letterSpacing: 3, color: cat.color, textAlign: 'center', marginBottom: 16 }}>
+                    {cat.label.toUpperCase()}
+                  </Text>
+                )}
+                {heroMode
+                  ? <HeroEntry entry={pageEntries[0]} cat={cat} S={S} />
+                  : pageEntries.map((entry, i) =>
+                      entry.photo_url
+                        ? <EntryWithPhoto key={entry.id} entry={entry} cat={cat} S={S} isLast={i === pageEntries.length - 1} />
+                        : <EntryText      key={entry.id} entry={entry} cat={cat} S={S} isLast={i === pageEntries.length - 1} />
+                    )
+                }
+                <Footer S={S} />
+              </Page>
+            )
+          }),
         ]
       })}
     </Document>
