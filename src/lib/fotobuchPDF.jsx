@@ -88,9 +88,6 @@ function Cover({ S }) {
         <Text style={S.ruleStar}>✦</Text>
         <View style={S.ruleLine} />
       </View>
-      <Text style={{ fontSize: 11, color: C.inkLight, fontFamily: 'Helvetica-Oblique', textAlign: 'center', maxWidth: 280, lineHeight: 1.8, marginTop: 40 }}>
-        "Der Ruhestand ist nicht das Ende, sondern der Anfang eines neuen Kapitels voller Möglichkeiten."
-      </Text>
     </View>
   )
 }

@@ -12,7 +12,7 @@ const CATEGORIES = [
   {
     id:          'abschiedsfeier',
     title:       'Abschiedsfeier',
-    description: 'Aktuelle Fotos von den Abschiedsfestivitäten (Kuratoriumssitzung + Winter-Info im Dezember).',
+    description: 'Aktuelle Fotos von den Abschiedsfestivitäten (Kuratoriumssitzung + Winter-Info im November).',
   },
 ]
 

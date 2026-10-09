@@ -54,9 +54,6 @@ function CoverPage() {
         <p style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: '16px', fontWeight: 500, color: '#009775', margin: '12px 0 20px', letterSpacing: '0.5px' }}>{TAGLINE}</p>
         <p style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: '11px', color: '#8B7D6E', margin: '0 0 20px', letterSpacing: '3px', textTransform: 'uppercase' }}>{ROLE} · {INSTITUTE}</p>
         <Rule color="#009775" />
-        <p style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontStyle: 'italic', fontSize: '15px', color: '#B5A898', maxWidth: '130mm', lineHeight: 1.9, marginTop: '40px' }}>
-          „Der Ruhestand ist nicht das Ende, sondern der Anfang eines neuen Kapitels voller Möglichkeiten."
-        </p>
       </div>
     </A4Page>
   )
