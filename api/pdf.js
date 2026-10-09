@@ -101,6 +101,9 @@ export default async function handler(req, res) {
   const pageErrors = []
   const failedRequests = []
   const abortedRequests = []
+  const allRequests = []
+  const consoleMsgs = []
+  const responseStatuses = []
 
   let browser
   try {
@@ -114,7 +117,8 @@ export default async function handler(req, res) {
     const page = await browser.newPage()
     page.on('pageerror', (e) => { pageErrors.push(e.message); console.error('page error:', e.message) })
     page.on('requestfailed', (r) => { failedRequests.push({ url: r.url(), err: r.failure()?.errorText }); console.error('request failed:', r.url(), r.failure()?.errorText) })
-    page.on('console', (msg) => console.log('page console:', msg.type(), msg.text()))
+    page.on('console', (msg) => { consoleMsgs.push(`[${msg.type()}] ${msg.text()}`); console.log('page console:', msg.type(), msg.text()) })
+    page.on('response', (r) => { responseStatuses.push(`${r.status()} ${r.url()}`) })
 
     // Request-Allowlist: nur eigene Origin + exakter Supabase-Host +
     // Google Fonts. Das PDF-Secret wird dabei ausschliesslich an
@@ -123,6 +127,7 @@ export default async function handler(req, res) {
     await page.setRequestInterception(true)
     page.on('request', (r) => {
       const u = r.url()
+      allRequests.push(u)
       if (!isAllowedUrl(u, appOrigin, supabaseHost)) {
         abortedRequests.push(u)
         r.abort()
@@ -152,17 +157,27 @@ export default async function handler(req, res) {
 
     if (debug) {
       const html = await page.content()
-      const ready = await page.evaluate(() => window.__fotobuchReady === true).catch(() => 'eval-failed')
+      const diag = await page.evaluate(() => ({
+        ready: window.__fotobuchReady === true,
+        bodyHtmlLen: document.body.innerHTML.length,
+        rootHtmlLen: document.getElementById('root')?.innerHTML?.length ?? -1,
+        href: location.href,
+        hasReact: !!window.React,
+        documentReady: document.readyState,
+      })).catch((e) => ({ evalError: e?.message || String(e) }))
       res.setHeader('Content-Type', 'text/plain; charset=utf-8')
       res.status(200).send(
         `=== appOrigin: ${appOrigin}\n` +
         `=== supabaseHost: ${supabaseHost}\n` +
         `=== readyTimeout: ${readyTimeout || '(none, ready)'}\n` +
-        `=== __fotobuchReady: ${ready}\n` +
+        `=== diag: ${JSON.stringify(diag)}\n` +
         `=== pageErrors (${pageErrors.length}):\n${pageErrors.join('\n')}\n` +
+        `=== consoleMsgs (${consoleMsgs.length}):\n${consoleMsgs.join('\n')}\n` +
         `=== failedRequests (${failedRequests.length}):\n${failedRequests.map(x => `${x.url} :: ${x.err}`).join('\n')}\n` +
         `=== abortedRequests (${abortedRequests.length}):\n${abortedRequests.slice(0, 30).join('\n')}\n` +
-        `=== HTML (erste 4000 Zeichen):\n${html.slice(0, 4000)}`
+        `=== allRequests (${allRequests.length}):\n${allRequests.slice(0, 40).join('\n')}\n` +
+        `=== responseStatuses (first 40):\n${responseStatuses.slice(0, 40).join('\n')}\n` +
+        `=== rootHTML (erste 2000):\n${(await page.evaluate(() => document.getElementById('root')?.innerHTML?.slice(0, 2000) || '(empty)').catch(() => '(eval failed)'))}`
       )
       return
     }
