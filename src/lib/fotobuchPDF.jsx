@@ -97,7 +97,7 @@ function CategoryDivider({ cat, S }) {
   return (
     <View style={[{ flex: 1 }, S.center]}>
       <View style={S.frame} />
-      <Text style={{ fontSize: 36, color: C.ink, fontFamily: 'Helvetica-Oblique', marginBottom: 12 }}>
+      <Text style={{ fontSize: 60, color: C.ink, fontFamily: 'Helvetica', marginBottom: 16 }}>
         {cat.label}
       </Text>
       <View style={S.rule}>
@@ -118,7 +118,7 @@ function EntryWithPhoto({ entry, cat, S, isLast }) {
         style={{ width: '100%', height: 160, objectFit: 'contain', backgroundColor: C.creamDark, borderRadius: 3 }}
       />
       <View style={{ marginTop: 8 }}>
-        <Text style={{ fontSize: 7, letterSpacing: 2, color: cat.color, marginBottom: 4 }}>
+        <Text style={{ fontSize: 11, letterSpacing: 2.5, color: cat.color, marginBottom: 6, fontFamily: 'Helvetica-Bold' }}>
           {cat.label.toUpperCase()}
         </Text>
         <Text style={{ fontSize: 11, color: C.ink, fontFamily: 'Helvetica-Oblique', lineHeight: 1.7, marginBottom: 8 }}>
@@ -143,7 +143,7 @@ function EntryText({ entry, cat, S, isLast }) {
       borderBottomColor: cat.color + '33',
       alignItems: 'center',
     }}>
-      <Text style={{ fontSize: 7, letterSpacing: 2, color: cat.color, marginBottom: 8 }}>
+      <Text style={{ fontSize: 11, letterSpacing: 2.5, color: cat.color, marginBottom: 10, fontFamily: 'Helvetica-Bold' }}>
         {cat.label.toUpperCase()}
       </Text>
       <Text style={{ fontSize: 13, color: C.ink, fontFamily: 'Helvetica-Oblique', lineHeight: 1.8, marginBottom: 10, textAlign: 'center', maxWidth: 380 }}>

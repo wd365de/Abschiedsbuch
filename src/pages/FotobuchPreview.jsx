@@ -75,7 +75,7 @@ function CategoryPage({ cat }) {
   return (
     <A4Page bg={cat.bg}>
       <div style={{ height: '269mm', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: '52px', fontWeight: 300, color: '#2C2418', lineHeight: 1.1, margin: '0 0 16px' }}>
+        <h2 style={{ fontFamily: '"DM Sans",Arial,sans-serif', fontSize: '80px', fontWeight: 400, color: '#2C2418', lineHeight: 1.05, margin: '0 0 20px', letterSpacing: '-0.5px' }}>
           {cat.label}
         </h2>
         <Rule color={cat.color} />

@@ -79,6 +79,10 @@ export default function StepPreview({ formData, onSubmit, onBack, loading, error
           Zurück bearbeiten
         </button>
       </div>
+
+      <p className="font-body text-xs text-cream/60 text-center mt-4 leading-relaxed">
+        Nachträgliche Änderungswünsche? Bitte an die IuK-Abteilung wenden.
+      </p>
     </div>
   )
 }
