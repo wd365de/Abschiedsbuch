@@ -95,8 +95,14 @@ export default async function handler(req, res) {
     return
   }
 
+  const debug = req.query?.debug === '1'
+  const pageErrors = []
+  const failedRequests = []
+  const abortedRequests = []
+
   let browser
   try {
+    console.log('PDF: appOrigin=', appOrigin, 'supabaseHost=', supabaseHost, 'format=', format)
     browser = await puppeteer.launch({
       args: chromium.args,
       executablePath: await chromium.executablePath(CHROMIUM_PACK_URL),
@@ -104,8 +110,9 @@ export default async function handler(req, res) {
       defaultViewport: { width: 1240, height: 1754, deviceScaleFactor: 2 },
     })
     const page = await browser.newPage()
-    page.on('pageerror', (e) => console.error('page error:', e.message))
-    page.on('requestfailed', (r) => console.error('request failed:', r.url(), r.failure()?.errorText))
+    page.on('pageerror', (e) => { pageErrors.push(e.message); console.error('page error:', e.message) })
+    page.on('requestfailed', (r) => { failedRequests.push({ url: r.url(), err: r.failure()?.errorText }); console.error('request failed:', r.url(), r.failure()?.errorText) })
+    page.on('console', (msg) => console.log('page console:', msg.type(), msg.text()))
 
     // Request-Allowlist: nur eigene Origin + exakter Supabase-Host +
     // Google Fonts. Das PDF-Secret wird dabei ausschliesslich an
@@ -115,6 +122,7 @@ export default async function handler(req, res) {
     page.on('request', (r) => {
       const u = r.url()
       if (!isAllowedUrl(u, appOrigin, supabaseHost)) {
+        abortedRequests.push(u)
         r.abort()
         return
       }
@@ -132,6 +140,20 @@ export default async function handler(req, res) {
     // Warten, bis die Fotobuch-Komponente signalisiert, dass alle
     // Bilder geladen sind.
     await page.waitForFunction(() => window.__fotobuchReady === true, { timeout: 30000 })
+
+    if (debug) {
+      const html = await page.content()
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+      res.status(200).send(
+        `=== appOrigin: ${appOrigin}\n` +
+        `=== supabaseHost: ${supabaseHost}\n` +
+        `=== pageErrors (${pageErrors.length}):\n${pageErrors.join('\n')}\n` +
+        `=== failedRequests (${failedRequests.length}):\n${failedRequests.map(x => `${x.url} :: ${x.err}`).join('\n')}\n` +
+        `=== abortedRequests (${abortedRequests.length}):\n${abortedRequests.slice(0, 20).join('\n')}\n` +
+        `=== HTML (erste 4000 Zeichen):\n${html.slice(0, 4000)}`
+      )
+      return
+    }
 
     const pdfBuffer = await page.pdf({
       format: 'A4',

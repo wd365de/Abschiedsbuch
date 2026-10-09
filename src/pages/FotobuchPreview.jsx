@@ -409,7 +409,15 @@ export default function FotobuchPreview({ printMode = false }) {
     })
   }, [session, printMode])
 
-  // Signalisiert Puppeteer, dass alle Bilder geladen sind
+  // Harter Fallback: egal was passiert, nach 25s meldet sich die Seite
+  // als "ready", damit Puppeteer nicht am waitForFunction haengt.
+  useEffect(() => {
+    if (!printMode) return
+    const t = setTimeout(() => { window.__fotobuchReady = true }, 25000)
+    return () => clearTimeout(t)
+  }, [printMode])
+
+  // Normaler Pfad: sobald loading=false, auf alle Bilder warten.
   useEffect(() => {
     if (!printMode || loading) return
     const imgs = Array.from(document.querySelectorAll('img'))
@@ -423,9 +431,6 @@ export default function FotobuchPreview({ printMode = false }) {
         img.addEventListener('error', done, { once: true })
       }
     })
-    // Fallback: nach 20s auf jeden Fall ready setzen
-    const t = setTimeout(() => { window.__fotobuchReady = true }, 20000)
-    return () => clearTimeout(t)
   }, [printMode, loading, entries])
 
   const handlePDF = async () => {
