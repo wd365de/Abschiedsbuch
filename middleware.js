@@ -152,11 +152,12 @@ export default async function middleware(request) {
 
   // Print-Route fuer die interne PDF-Pipeline:
   // nur mit gueltigem Shared-Secret-Token aufrufbar (umgeht den
-  // Password-Cookie, weil Puppeteer keinen Cookie mitbringt).
+  // Password-Cookie, weil Puppeteer keinen Cookie mitbringt). Token
+  // kommt aus dem x-pdf-token-Header, damit er nicht in Logs landet.
   if (url.pathname === '/fotobuch-print') {
     const pdfSecret = globalThis.process?.env?.PDF_SECRET || ''
-    const t = url.searchParams.get('token') || ''
-    if (pdfSecret && safeEqual(t, pdfSecret)) {
+    const t = request.headers.get('x-pdf-token') || ''
+    if (pdfSecret && t && safeEqual(t, pdfSecret)) {
       return // durchlassen
     }
     return new Response('Not Found', { status: 404 })
