@@ -140,18 +140,28 @@ export default async function handler(req, res) {
     await page.goto(printUrl.toString(), { waitUntil: 'networkidle0', timeout: 45000 })
 
     // Warten, bis die Fotobuch-Komponente signalisiert, dass alle
-    // Bilder geladen sind.
-    await page.waitForFunction(() => window.__fotobuchReady === true, { timeout: 30000 })
+    // Bilder geladen sind. Im Debug-Modus soll der Timeout nicht
+    // crashen - wir wollen die Diagnose auch bei haengender Seite.
+    let readyTimeout = null
+    try {
+      await page.waitForFunction(() => window.__fotobuchReady === true, { timeout: 30000 })
+    } catch (e) {
+      readyTimeout = e?.message || 'waitForFunction timeout'
+      if (!debug) throw e
+    }
 
     if (debug) {
       const html = await page.content()
+      const ready = await page.evaluate(() => window.__fotobuchReady === true).catch(() => 'eval-failed')
       res.setHeader('Content-Type', 'text/plain; charset=utf-8')
       res.status(200).send(
         `=== appOrigin: ${appOrigin}\n` +
         `=== supabaseHost: ${supabaseHost}\n` +
+        `=== readyTimeout: ${readyTimeout || '(none, ready)'}\n` +
+        `=== __fotobuchReady: ${ready}\n` +
         `=== pageErrors (${pageErrors.length}):\n${pageErrors.join('\n')}\n` +
         `=== failedRequests (${failedRequests.length}):\n${failedRequests.map(x => `${x.url} :: ${x.err}`).join('\n')}\n` +
-        `=== abortedRequests (${abortedRequests.length}):\n${abortedRequests.slice(0, 20).join('\n')}\n` +
+        `=== abortedRequests (${abortedRequests.length}):\n${abortedRequests.slice(0, 30).join('\n')}\n` +
         `=== HTML (erste 4000 Zeichen):\n${html.slice(0, 4000)}`
       )
       return
