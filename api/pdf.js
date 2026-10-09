@@ -182,17 +182,21 @@ export default async function handler(req, res) {
       return
     }
 
-    const pdfBuffer = await page.pdf({
+    const pdfBytes = await page.pdf({
       format: 'A4',
       printBackground: true,
       preferCSSPageSize: true,
       margin: { top: 0, right: 0, bottom: 0, left: 0 },
     })
+    // page.pdf() liefert Uint8Array; ohne Buffer-Wrap wuerde Vercel
+    // das zu JSON {"0":37,"1":80,...} serialisieren.
+    const pdfBuffer = Buffer.isBuffer(pdfBytes) ? pdfBytes : Buffer.from(pdfBytes)
 
     res.setHeader('Content-Type', 'application/pdf')
     res.setHeader('Content-Disposition', `attachment; filename="abschiedsbuch-${format}.pdf"`)
+    res.setHeader('Content-Length', String(pdfBuffer.length))
     res.setHeader('Cache-Control', 'no-store')
-    res.status(200).send(pdfBuffer)
+    res.status(200).end(pdfBuffer)
   } catch (err) {
     console.error('PDF-Rendering-Fehler:', err)
     res.status(500).send(`PDF-Rendering-Fehler: ${err?.message || err}`)
