@@ -52,23 +52,17 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Polaroid – Mobile: mittig an der Unterkante des Bandes, über dem Namen */}
-        <div className="lg:hidden absolute left-1/2 -bottom-10 -translate-x-1/2 z-20 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-          <Polaroid className="w-[170px] rotate-[-2deg]" captionClass="text-[11px] mt-1.5" padClass="p-2 pb-4" />
-        </div>
       </div>
 
       {/* Textspalte — Mobile: unten; Desktop: linke 1/3 */}
-      <main className="relative z-10 flex-1 lg:w-1/3 flex flex-col items-center justify-start lg:justify-center px-6 pt-16 pb-8 lg:py-8 text-center overflow-y-auto lg:overflow-visible bg-ink">
+      <main className="relative z-10 flex-1 lg:w-1/3 flex flex-col items-center justify-start lg:justify-center px-6 pt-2 pb-8 lg:py-8 text-center overflow-y-auto lg:overflow-visible bg-ink">
 
-        {/* Polaroid – Desktop: über dem Namen, ragt leicht ins Luftbild */}
-        <div className="hidden lg:block mb-8 animate-fade-in lg:translate-x-[24%] xl:translate-x-[30%]" style={{ animationDelay: '0.2s' }}>
-          <Polaroid className="w-[260px] xl:w-[300px] rotate-[-2deg]" captionClass="text-sm mt-2.5" padClass="p-2.5 pb-6" />
-        </div>
+        {/* Porträt – mittig über dem Namen, Ränder laufen weich in den Hintergrund aus */}
+        <Portrait className="w-[230px] -mb-5 lg:-mb-8 lg:w-[340px] xl:w-[370px] animate-fade-in" />
 
         {/* Titel */}
         <div className="animate-fade-up" style={{ animationDelay: '0.1s' }}>
-          <h1 className="font-display font-medium text-[clamp(1.75rem,5vw,3rem)] leading-tight text-cream mb-3">
+          <h1 className="font-display font-medium text-[clamp(1.75rem,5vw,3rem)] leading-tight text-cream mb-3 relative" style={{ textShadow: "0 2px 18px rgba(44,36,24,0.9)" }}>
             {CONFIG.name}
           </h1>
           <p className="font-display font-medium text-[clamp(0.95rem,2.2vw,1.35rem)] text-gold-light tracking-wide">
@@ -119,20 +113,33 @@ export default function Home() {
   )
 }
 
-// Polaroid mit Herrn Krug
-function Polaroid({ className = '', captionClass = '', padClass = '' }) {
+// Porträt von Herrn Krug, freigestellt (transparenter Hintergrund).
+// Unten läuft es per Maske in den Ink-Hintergrund aus, damit der Name
+// direkt anschließt; ein dezenter Lichtschein dahinter gibt Tiefe.
+const PORTRAIT_MASK = [
+  'linear-gradient(to bottom, #000 50%, rgba(0,0,0,0.5) 78%, transparent 96%)',
+  'linear-gradient(to right, transparent 0%, #000 12%)',
+].join(', ')
+
+function Portrait({ className = '' }) {
   return (
-    <div className={`bg-cream ${padClass} shadow-[0_18px_50px_rgba(0,0,0,0.6),0_4px_14px_rgba(0,0,0,0.35)] ${className}`}>
-      <div className="w-full aspect-[3/2] overflow-hidden bg-ink/10">
-        <img
-          src="/krug-hero.webp"
-          alt={NAME_FULL}
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <p className={`text-center font-display italic text-ink ${captionClass}`}>
-        Norbert Krug
-      </p>
+    <div className={`relative ${className}`} style={{ animationDelay: '0.2s' }}>
+      <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse 48% 45% at 50% 35%, rgba(201,168,76,0.16) 0%, transparent 70%)' }}
+      />
+      <img
+        src="/krug-portrait.webp"
+        alt={NAME_FULL}
+        className="relative w-full h-auto"
+        style={{
+          WebkitMaskImage: PORTRAIT_MASK,
+          maskImage: PORTRAIT_MASK,
+          WebkitMaskComposite: 'source-in',
+          maskComposite: 'intersect',
+        }}
+      />
     </div>
   )
 }
