@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { QRCodeSVG } from 'qrcode.react'
 import { supabase } from '../lib/supabase'
 import { NAME_FULL, TAGLINE } from '../config'
 
@@ -39,6 +40,17 @@ export default function Home() {
           className="hidden lg:block absolute inset-y-0 left-0 w-[30%]"
           style={{ background: 'linear-gradient(to right, #2C2418 0%, rgba(44,36,24,0.6) 40%, transparent 100%)' }}
         />
+
+        {/* QR-Code – nur Desktop: Seite schnell aufs Handy holen */}
+        <div
+          className="hidden lg:flex absolute right-6 bottom-6 z-20 items-center gap-3 bg-cream/95 rounded-xl p-3 pr-4 shadow-[0_10px_30px_rgba(0,0,0,0.45)] animate-fade-in"
+          style={{ animationDelay: '0.6s' }}
+        >
+          <QRCodeSVG value={`${window.location.origin}/`} size={88} bgColor="transparent" fgColor="#2C2418" level="M" />
+          <p className="font-body text-xs text-ink leading-snug text-left max-w-[110px]">
+            Scannen und die Seite auf dem Handy öffnen
+          </p>
+        </div>
 
         {/* Polaroid – Mobile: mittig an der Unterkante des Bandes, über dem Namen */}
         <div className="lg:hidden absolute left-1/2 -bottom-10 -translate-x-1/2 z-20 animate-fade-in" style={{ animationDelay: '0.3s' }}>
@@ -107,7 +119,7 @@ export default function Home() {
   )
 }
 
-// Polaroid mit Herrn Krug (Bild wird ggf. noch ausgetauscht)
+// Polaroid mit Herrn Krug
 function Polaroid({ className = '', captionClass = '', padClass = '' }) {
   return (
     <div className={`bg-cream ${padClass} shadow-[0_18px_50px_rgba(0,0,0,0.6),0_4px_14px_rgba(0,0,0,0.35)] ${className}`}>
