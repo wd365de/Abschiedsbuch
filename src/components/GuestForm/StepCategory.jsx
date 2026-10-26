@@ -33,9 +33,11 @@ export default function StepCategory({ selected, onChange, onNext }) {
                   >
                     {cat.label}
                   </p>
-                  <p className="font-body text-sm md:text-base mt-1" style={{ margin: 0, color: 'rgba(250,247,242,0.8)' }}>
-                    {cat.description}
-                  </p>
+                  {cat.description && (
+                    <p className="font-body text-sm md:text-base mt-1" style={{ margin: 0, color: 'rgba(250,247,242,0.8)' }}>
+                      {cat.description}
+                    </p>
+                  )}
                 </div>
 
                 {/* Radio-Indikator */}

@@ -11,13 +11,13 @@ export const ROLE = 'Institutsleiter'
 export const CATEGORIES = [
   {
     id:          'privat',
-    label:       'Privat',
-    description: 'Persönliche Wünsche & Erinnerungen',
+    label:       'Persönliche Wünsche & Erinnerungen',
+    description: '',
   },
   {
     id:          'team',
-    label:       'Team',
-    description: 'Grüße & Wünsche aus den Teams',
+    label:       'Grüße & Wünsche aus den Teams',
+    description: '',
   },
   {
     id:          'sonstige',
