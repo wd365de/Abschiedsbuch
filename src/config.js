@@ -21,8 +21,8 @@ export const CATEGORIES = [
   },
   {
     id:          'sonstige',
-    label:       'Sonstige',
-    description: 'Abschiedsveranstaltung (wird erst nach dem 30. November befüllt)',
+    label:       'Abschiedsveranstaltung',
+    description: 'Wird erst nach dem 30. November befüllt',
   },
 ]
 

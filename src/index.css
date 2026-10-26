@@ -40,9 +40,10 @@
   }
 
   .btn-primary {
-    @apply w-full bg-ink text-cream font-body font-medium tracking-widest text-sm uppercase py-4 px-8
-           transition-all duration-300 hover:bg-blush active:scale-[0.98]
-           disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply w-full rounded-xl bg-gold text-cream font-body font-medium tracking-widest text-sm uppercase py-4 px-8
+           shadow-[0_8px_24px_rgba(0,151,117,0.3)]
+           transition-all duration-300 hover:bg-gold-light active:scale-[0.98]
+           disabled:opacity-40 disabled:shadow-none disabled:cursor-not-allowed disabled:hover:bg-gold;
   }
 
   .btn-secondary {

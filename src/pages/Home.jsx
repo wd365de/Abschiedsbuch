@@ -93,8 +93,14 @@ export default function Home() {
           className="flex flex-col gap-3 w-full max-w-[280px] animate-fade-up"
           style={{ animationDelay: '0.4s' }}
         >
-          <Link to="/eintrag" className="btn-primary text-center">
+          <Link
+            to="/eintrag"
+            className="group inline-flex items-center justify-center gap-3 rounded-full bg-gold text-cream font-body font-medium tracking-widest text-sm uppercase py-4 px-8
+                       shadow-[0_8px_28px_rgba(0,151,117,0.35)] ring-1 ring-gold-light/40
+                       transition-all duration-300 hover:bg-gold-light hover:shadow-[0_10px_36px_rgba(61,186,156,0.5)] hover:-translate-y-0.5 active:scale-[0.98]"
+          >
             Eintrag hinterlassen
+            <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
         </div>
 
