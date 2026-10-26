@@ -2,7 +2,7 @@ import {
   Document, Page, View, Text, Image,
   StyleSheet, Font,
 } from '@react-pdf/renderer'
-import { NAME, NAME_FULL, TAGLINE, INSTITUTE, ROLE } from '../config'
+import { NAME, NAME_FULL, TAGLINE, INSTITUTE, ROLE, CATEGORIES as CATEGORY_LIST } from '../config'
 
 // Farben
 const C = {
@@ -16,11 +16,7 @@ const C = {
   inkLight: '#B5A898',
 }
 
-const CATEGORIES = [
-  { id: 'gruesse',        label: 'Grüße',         color: C.gold },
-  { id: 'erinnerungen',   label: 'Erinnerungen',  color: C.gold },
-  { id: 'abschiedsfeier', label: 'Abschiedsfeier', color: C.gold },
-]
+const CATEGORIES = CATEGORY_LIST.map((c) => ({ ...c, color: C.gold }))
 
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString('de-DE', {

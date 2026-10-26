@@ -1,7 +1,8 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { KRUG_PATH } from './config'
 import Home from './pages/Home'
 import GuestPage from './pages/GuestPage'
-import GalleryPage from './pages/GalleryPage'
+import KrugPage from './pages/KrugPage'
 import AdminPage from './pages/AdminPage'
 import QRCodePage from './pages/QRCodePage'
 import FotobuchPreview from './pages/FotobuchPreview'
@@ -14,7 +15,8 @@ export default function App() {
       <Routes>
         <Route path="/"        element={<Home />} />
         <Route path="/eintrag" element={<GuestPage />} />
-        <Route path="/galerie" element={<GalleryPage />} />
+        <Route path={KRUG_PATH} element={<KrugPage />} />
+        <Route path="/galerie" element={<Navigate to={KRUG_PATH} replace />} />
         <Route path="/admin"   element={<AdminPage />} />
         <Route path="/qrcode"  element={<QRCodePage />} />
         <Route path="/fotobuch" element={<FotobuchPreview />} />

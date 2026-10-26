@@ -39,10 +39,7 @@ export default function StepSuccess({ name }) {
         className="flex flex-col gap-3 w-full max-w-[280px] animate-fade-up"
         style={{ animationDelay: '0.45s' }}
       >
-        <Link to="/galerie" className="btn-primary text-center">
-          Galerie ansehen
-        </Link>
-        <Link to="/eintrag" className="btn-secondary text-center">
+        <Link to="/eintrag" className="btn-primary text-center">
           Weiteren Eintrag schreiben
         </Link>
         <Link to="/" className="btn-ghost text-center py-2">

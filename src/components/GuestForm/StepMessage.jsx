@@ -7,7 +7,7 @@ const PROMPTS = [
 ]
 
 export default function StepMessage({
-  name, message, anonymous,
+  name, message, anonymous, category,
   onChange, onNext, onBack,
 }) {
   const insertPrompt = (prompt) => {
@@ -15,11 +15,12 @@ export default function StepMessage({
   }
 
   const nameValid = anonymous || name.trim()
+  const isTeam    = category === 'team'
 
   return (
     <div className="page-container animate-fade-up flex flex-col justify-center">
       <h2 className="font-display text-3xl md:text-4xl font-light text-cream text-shadow-soft leading-snug mb-2">
-        Deine Worte
+        Deine/Eure Worte
       </h2>
       <p className="font-body text-sm md:text-base text-cream/85 text-shadow-soft mb-6">
         Schreib 2–3 Sätze – von Herzen.
@@ -30,12 +31,12 @@ export default function StepMessage({
         {!anonymous && (
           <div>
             <label className="font-body text-sm tracking-widest uppercase text-cream/80 text-shadow-soft block mb-3">
-              Dein Name
+              {isTeam ? 'Dein Team' : 'Dein Name'}
             </label>
             <input
               type="text"
               className="input-field text-lg"
-              placeholder="z. B. Max Mustermann"
+              placeholder={isTeam ? 'z. B. Abteilung Toxikologie' : 'z. B. Max Mustermann'}
               value={name}
               onChange={(e) => onChange({ name: e.target.value })}
               maxLength={80}

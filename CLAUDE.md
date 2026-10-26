@@ -49,7 +49,8 @@ React Router v6 SPA — alle Nicht-API-Anfragen landen via `vercel.json` Rewrite
 |--------------------|------------------------------------------------|
 | `/`                | Startseite (`Home.jsx`)                        |
 | `/eintrag`         | Formular zum Eintrag hinterlassen (`GuestPage`)|
-| `/galerie`         | Öffentliche Galerie (`GalleryPage`)            |
+| `/fuer-herrn-krug` | Galerie nur für Herrn Krug (`KrugPage`: Passwort → `GalleryPage`); vom Zugangscode in `middleware.js` ausgenommen |
+| `/galerie`         | Weiterleitung auf `/fuer-herrn-krug`           |
 | `/admin`           | Admin-Login + Dashboard (`AdminPage`)          |
 | `/fotobuch`        | PDF-Vorschau des Abschiedsbuchs (`FotobuchPreview`)|
 
@@ -66,13 +67,15 @@ Einzige Tabelle: **`entries`**
 | `id`         | uuid PK      |                                                      |
 | `name`       | text         |                                                      |
 | `message`    | text         |                                                      |
-| `category`   | text         | CHECK: `dankbarkeit` \| `erinnerungen` \| `wuensche` \| `humor` |
+| `category`   | text         | CHECK: `privat` \| `team` \| `sonstige` (Labels zentral in `src/config.js` → `CATEGORIES`) |
 | `photo_url`  | text         | Öffentliche URL aus Supabase Storage (Bucket: photos)|
 | `created_at` | timestamptz  |                                                      |
 
 **Besonderheit:** Das `fotobuch`-Feld existiert nicht – alle Einträge fließen automatisch in das Abschiedsbuch ein.
 
-RLS-Regeln: öffentlich lesen + anlegen; löschen nur als `authenticated`.
+RLS-Regeln (Migration 008/009): anlegen öffentlich; lesen nur mit `app_metadata.role` = `admin` oder `krug` – alle anderen (auch weitere Logins) sehen keine fremden Einträge; bearbeiten/löschen nur mit `app_metadata.role = 'admin'`. Startseiten-Zähler über RPC `entry_count()`. Die Print-Seite für den PDF-Export liest über `api/print-entries.js` (Service-Role-Key, geschützt per `x-pdf-token`); `api/pdf.js` verlangt ein Supabase-Access-Token.
+
+Zusätzliche Env-Variablen (Vercel): `VITE_KRUG_EMAIL`, `SUPABASE_SERVICE_ROLE_KEY`.
 
 Storage-Bucket `photos` ist öffentlich. Fotos werden vor dem Upload clientseitig auf max. 1200 px / ~400 KB komprimiert (`src/lib/imageCompression.js`).
 

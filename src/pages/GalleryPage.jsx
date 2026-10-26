@@ -1,34 +1,19 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import { getGalleryVisible } from '../lib/settings'
-import { NAME } from '../config'
 import GalleryFilter from '../components/Gallery/GalleryFilter'
 import GalleryGrid from '../components/Gallery/GalleryGrid'
 
-export default function GalleryPage() {
+// Galerie – nur mit Login erreichbar (Herr Krug oder Admin, siehe KrugPage).
+export default function GalleryPage({ onLogout }) {
   const [entries, setEntries]   = useState([])
   const [filter, setFilter]     = useState('alle')
   const [sort, setSort]         = useState('newest')
   const [loading, setLoading]   = useState(true)
   const [error, setError]       = useState(null)
-  const [locked, setLocked]     = useState(false)
 
   useEffect(() => {
     async function load() {
       setLoading(true)
-
-      const { data: { session } } = await supabase.auth.getSession()
-      const isAdmin = !!session
-
-      if (!isAdmin) {
-        const visible = await getGalleryVisible()
-        if (!visible) {
-          setLocked(true)
-          setLoading(false)
-          return
-        }
-      }
 
       const { data, error } = await supabase
         .from('entries')
@@ -45,20 +30,6 @@ export default function GalleryPage() {
     }
     load()
   }, [])
-
-  if (locked) {
-    return (
-      <div className="min-h-dvh bg-brand flex flex-col items-center justify-center px-8 text-center">
-        <p className="font-display italic text-3xl text-cream mb-3">Kommt bald</p>
-        <p className="font-body text-sm text-cream/70 max-w-xs">
-          Die Galerie wird zu einem besonderen Moment freigeschaltet.
-        </p>
-        <Link to="/eintrag" className="btn-primary max-w-[240px] mt-10">
-          Eigenen Eintrag hinterlassen
-        </Link>
-      </div>
-    )
-  }
 
   const counts = entries.reduce((acc, e) => {
     acc[e.category] = (acc[e.category] || 0) + 1
@@ -77,16 +48,13 @@ export default function GalleryPage() {
       {/* Sticky Header */}
       <header className="sticky top-0 z-10 border-b" style={{ background: 'rgba(15,24,32,0.82)', backdropFilter: 'blur(14px)', borderColor: 'rgba(250,247,242,0.08)' }}>
         <div className="max-w-3xl lg:max-w-6xl mx-auto px-5 lg:px-8 py-3 flex items-center justify-between">
-          <Link to="/" className="font-body text-xs tracking-widest uppercase text-cream/70 hover:text-cream transition-colors">
-            ← Zur Startseite
-          </Link>
-          <Link
-            to="/eintrag"
-            className="font-body text-xs tracking-widest uppercase transition-colors"
-            style={{ color: '#3DBA9C' }}
+          <p className="font-display italic text-gold-light text-lg">Abschiedsbuch</p>
+          <button
+            onClick={onLogout}
+            className="font-body text-xs tracking-widest uppercase text-cream/70 hover:text-cream transition-colors"
           >
-            + Eintrag
-          </Link>
+            Abmelden
+          </button>
         </div>
 
         {/* Sticky Filter-Leiste */}
@@ -101,7 +69,7 @@ export default function GalleryPage() {
           Galerie
         </p>
         <h1 className="font-display font-light text-cream mb-3" style={{ fontSize: 'clamp(2rem,5vw,3rem)', lineHeight: 1.15 }}>
-          Was wir {NAME} mitgeben
+          Was wir Ihnen mitgeben
         </h1>
         <div className="flex items-center justify-center gap-3 my-5" aria-hidden="true">
           <span style={{ display: 'inline-block', height: 1, width: 48, background: 'linear-gradient(to right, transparent, rgba(201,168,76,0.6))' }} />
@@ -109,7 +77,7 @@ export default function GalleryPage() {
           <span style={{ display: 'inline-block', height: 1, width: 48, background: 'linear-gradient(to left, transparent, rgba(201,168,76,0.6))' }} />
         </div>
         <p className="font-body text-cream/70 max-w-xl mx-auto" style={{ fontSize: 15, lineHeight: 1.7 }}>
-          Alle Grüße, Erinnerungen und Fotos der Kolleg*innen —
+          Alle Grüße, Erinnerungen und Fotos Ihrer Kolleg*innen —
           dicht an dicht zu einem Album.
         </p>
       </section>
@@ -144,9 +112,6 @@ export default function GalleryPage() {
             <p className="font-display italic text-cream/50 mb-6" style={{ fontSize: 'clamp(1.5rem,3.5vw,2rem)' }}>
               Noch keine Einträge in dieser Kategorie
             </p>
-            <Link to="/eintrag" className="btn-primary max-w-[260px] mx-auto block">
-              Erster Beitrag
-            </Link>
           </div>
         )}
 

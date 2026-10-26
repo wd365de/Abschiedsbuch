@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
-import { getGalleryVisible, setGalleryVisible } from '../../lib/settings'
 import { downloadCSV, downloadZIP } from './AdminExport'
 import { Link } from 'react-router-dom'
+import { CATEGORIES, KRUG_PATH } from '../../config'
 
-const CATEGORY_META = {
-  // Neue Kategorien
-  'gruesse':         { label: 'Grüße' },
-  'erinnerungen':    { label: 'Erinnerungen' },
-  'abschiedsfeier':  { label: 'Abschiedsfeier' },
-  // Alte Kategorien (Seed-Daten, werden vor Go-Live entfernt)
-  'dankbarkeit':     { label: 'Dankbarkeit (alt)' },
-  'wuensche':        { label: 'Wünsche (alt)' },
-  'humor':           { label: 'Humor (alt)' },
-  'vermaechtnis':    { label: 'Vermächtnis (alt)' },
-}
+const CATEGORY_META = Object.fromEntries(
+  CATEGORIES.map((c) => [c.id, { label: c.label }])
+)
 
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString('de-DE', {
@@ -51,32 +43,6 @@ function StorageBar({ usedBytes }) {
   )
 }
 
-function GalleryToggle({ visible, onToggle, saving }) {
-  return (
-    <div className="bg-white rounded-2xl p-5 border border-ink/5 flex items-center justify-between mb-6">
-      <div>
-        <p className="font-body text-sm font-medium text-ink">Galerie-Sichtbarkeit</p>
-        <p className="font-body text-xs text-ink-muted mt-0.5">
-          {visible
-            ? 'Öffentlich sichtbar – jeder mit Link kann die Galerie ansehen.'
-            : 'Gesperrt – Gäste sehen "Kommt bald", bis ihr freischaltet.'}
-        </p>
-      </div>
-      <button
-        onClick={onToggle}
-        disabled={saving}
-        className="font-body text-xs px-4 py-2 rounded-full transition-colors disabled:opacity-50"
-        style={{
-          background: visible ? '#009775' : '#B87068',
-          color: '#FAF7F2',
-        }}
-      >
-        {saving ? '…' : visible ? 'Galerie sperren' : 'Galerie freigeben'}
-      </button>
-    </div>
-  )
-}
-
 export default function AdminDashboard({ onLogout }) {
   const [entries, setEntries]         = useState([])
   const [loading, setLoading]         = useState(true)
@@ -84,8 +50,6 @@ export default function AdminDashboard({ onLogout }) {
   const [zipProgress, setZipProgress] = useState(null)
   const [deleteId, setDeleteId]       = useState(null)
   const [storageUsed, setStorageUsed] = useState(null)
-  const [galleryVisible, setGalleryVisibleState] = useState(false)
-  const [galleryToggling, setGalleryToggling]     = useState(false)
   const [approvingId, setApprovingId] = useState(null)
 
   const load = async () => {
@@ -104,7 +68,6 @@ export default function AdminDashboard({ onLogout }) {
       setStorageUsed(total)
     }
 
-    setGalleryVisibleState(await getGalleryVisible())
   }
 
   useEffect(() => { load() }, [])
@@ -130,14 +93,6 @@ export default function AdminDashboard({ onLogout }) {
       setEntries((prev) => prev.map((e) => e.id === entry.id ? { ...e, approved: !e.approved } : e))
     }
     setApprovingId(null)
-  }
-
-  const handleGalleryToggle = async () => {
-    setGalleryToggling(true)
-    const next = !galleryVisible
-    const { error } = await setGalleryVisible(next)
-    if (!error) setGalleryVisibleState(next)
-    setGalleryToggling(false)
   }
 
   const handleZIP = async () => {
@@ -166,7 +121,7 @@ export default function AdminDashboard({ onLogout }) {
             <p className="font-body text-xs text-cream/50 mt-0.5">Verwaltung</p>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/galerie" className="font-body text-xs text-cream/60 hover:text-cream transition-colors">
+            <Link to={KRUG_PATH} className="font-body text-xs text-cream/60 hover:text-cream transition-colors">
               Galerie
             </Link>
             <Link to="/praesentation" className="font-body text-xs text-cream/60 hover:text-cream transition-colors">
@@ -204,13 +159,11 @@ export default function AdminDashboard({ onLogout }) {
           </div>
         )}
 
-        <GalleryToggle visible={galleryVisible} onToggle={handleGalleryToggle} saving={galleryToggling} />
-
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
           {/* Filter */}
           <div className="flex gap-2 flex-wrap flex-1">
-            {['alle', 'gruesse', 'erinnerungen', 'abschiedsfeier', 'dankbarkeit', 'wuensche', 'humor', 'vermaechtnis'].map((f) => (
+            {['alle', ...CATEGORIES.map((c) => c.id)].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}

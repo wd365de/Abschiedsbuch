@@ -3,14 +3,10 @@ import { supabase } from '../lib/supabase'
 import { Link } from 'react-router-dom'
 import { pdf } from '@react-pdf/renderer'
 import { FotobuchDocument } from '../lib/fotobuchPDF'
-import { NAME, NAME_FULL, TAGLINE, INSTITUTE, ROLE } from '../config'
+import { NAME, NAME_FULL, TAGLINE, INSTITUTE, ROLE, CATEGORIES as CATEGORY_LIST } from '../config'
 import AdminLogin from '../components/Admin/AdminLogin'
 
-const CATEGORIES = [
-  { id: 'gruesse',        label: 'Grüße',         color: '#009775', bg: '#F2F0EA' },
-  { id: 'erinnerungen',   label: 'Erinnerungen',  color: '#009775', bg: '#F2F0EA' },
-  { id: 'abschiedsfeier', label: 'Abschiedsfeier', color: '#009775', bg: '#F2F0EA' },
-]
+const CATEGORIES = CATEGORY_LIST.map((c) => ({ ...c, color: '#009775', bg: '#F2F0EA' }))
 
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })
@@ -109,26 +105,19 @@ function BackgroundDeco({ pageIndex, color }) {
   )
 }
 
-// ── Klebeband ─────────────────────────────────────────────────
-function Tape({ color, angle = -35, top = '-8px', left = '14px' }) {
-  return (
-    <div style={{
-      position: 'absolute', top, left,
-      width: '32px', height: '13px',
-      background: color + '60',
-      borderRadius: '1px',
-      transform: `rotate(${angle}deg)`,
-      zIndex: 5,
-      boxShadow: '0 1px 3px rgba(0,0,0,0.10)',
-    }} />
-  )
+// ── Verspielte Neigung ────────────────────────────────────────
+// Richtung wechselt je Position (links/rechts geneigt), Reihe 2
+// beginnt gespiegelt, jede zweite Seite ebenfalls – lebendig, aber
+// ausgewogen. Betrag stabil pro Eintrag.
+function tilt(entry, index, min = 2, max = 5, flip = 0) {
+  const row  = Math.floor(index / 2)
+  const sign = (index + row + flip) % 2 === 0 ? -1 : 1
+  return sign * prng(entry.id, min, max)
 }
 
 // ── Polaroid ──────────────────────────────────────────────────
-function Polaroid({ entry, cat, posStyle }) {
-  const rot     = prng(entry.id,       -6, 6)
-  const tapeAng = prng(entry.id + 't', -55, 55)
-  const tapeX   = prng(entry.id + 'p',  8,  52)
+function Polaroid({ entry, cat, posStyle, index = 0, flip = 0 }) {
+  const rot     = tilt(entry, index, 2, 5, flip)
   return (
     <div style={{
       position: 'absolute',
@@ -139,7 +128,6 @@ function Polaroid({ entry, cat, posStyle }) {
       zIndex: 3,
       ...posStyle,
     }}>
-      <Tape color={cat.color} angle={tapeAng} left={`${tapeX}px`} />
       {/* Quadratischer Ausschnitt, Bildausschnitt oben → Gesichter sichtbar */}
       <div style={{ width: '100%', aspectRatio: '1/1', background: '#F0EBE1', overflow: 'hidden' }}>
         <img src={entry.photo_url} alt=""
@@ -160,9 +148,8 @@ function Polaroid({ entry, cat, posStyle }) {
 }
 
 // ── Zettelkarte (kein Foto) ───────────────────────────────────
-function NoteCard({ entry, cat, posStyle }) {
-  const rot     = prng(entry.id,       -5, 5)
-  const tapeAng = prng(entry.id + 't', -55, 55)
+function NoteCard({ entry, cat, posStyle, index = 0, flip = 0 }) {
+  const rot     = tilt(entry, index, 1.5, 4, flip)
   return (
     <div style={{
       position: 'absolute',
@@ -174,7 +161,6 @@ function NoteCard({ entry, cat, posStyle }) {
       zIndex: 3,
       ...posStyle,
     }}>
-      <Tape color={cat.color} angle={tapeAng} />
       <p style={{
         fontFamily: '"DM Sans",Arial,sans-serif', fontStyle: 'italic',
         fontSize: '12.5px', lineHeight: 1.85, color: '#2C2418', margin: '0 0 9px',
@@ -208,9 +194,8 @@ function heroPolaroidWidthMm(chars) {
   return Math.min(150, Math.max(85, w))
 }
 
-function HeroPolaroid({ entry, cat }) {
-  const rot     = prng(entry.id,       -3, 3)
-  const tapeAng = prng(entry.id + 't', -30, 30)
+function HeroPolaroid({ entry, cat, pageIndex = 0 }) {
+  const rot     = tilt(entry, pageIndex, 1, 3)
   const chars   = (entry.message || '').length
   const widthMm = heroPolaroidWidthMm(chars)
   return (
@@ -220,7 +205,6 @@ function HeroPolaroid({ entry, cat }) {
       boxShadow: '0 10px 30px rgba(0,0,0,0.28), 0 3px 8px rgba(0,0,0,0.14)',
       transform: `rotate(${rot}deg)`, width: `${widthMm}mm`, boxSizing: 'border-box',
     }}>
-      <Tape color={cat.color} angle={tapeAng} top="-10px" left="60px" />
       <div style={{ width: '100%', aspectRatio: '4/3', background: '#F0EBE1', overflow: 'hidden' }}>
         <img src={entry.photo_url} alt=""
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />
@@ -238,9 +222,8 @@ function HeroPolaroid({ entry, cat }) {
   )
 }
 
-function HeroNoteCard({ entry, cat }) {
-  const rot     = prng(entry.id,       -2, 2)
-  const tapeAng = prng(entry.id + 't', -25, 25)
+function HeroNoteCard({ entry, cat, pageIndex = 0 }) {
+  const rot     = tilt(entry, pageIndex, 0.5, 2)
   return (
     <div style={{
       position: 'relative', margin: '20mm auto 0',
@@ -248,7 +231,6 @@ function HeroNoteCard({ entry, cat }) {
       padding: '28px 32px', boxShadow: '0 6px 20px rgba(0,0,0,0.14)',
       transform: `rotate(${rot}deg)`, width: '160mm', boxSizing: 'border-box',
     }}>
-      <Tape color={cat.color} angle={tapeAng} top="-10px" left="70px" />
       <p style={{
         fontFamily: '"DM Sans",Arial,sans-serif', fontStyle: 'italic',
         fontSize: '14px', lineHeight: 1.85, color: '#2C2418', margin: '0 0 16px',
@@ -275,8 +257,8 @@ function HeroEntryPage({ entry, cat, pageIndex }) {
       </div>
       <div style={{ position: 'relative', zIndex: 3 }}>
         {entry.photo_url
-          ? <HeroPolaroid entry={entry} cat={cat} />
-          : <HeroNoteCard entry={entry} cat={cat} />}
+          ? <HeroPolaroid entry={entry} cat={cat} pageIndex={pageIndex} />
+          : <HeroNoteCard entry={entry} cat={cat} pageIndex={pageIndex} />}
       </div>
       <div style={{ position: 'absolute', bottom: '10mm', left: '14mm', right: '14mm', textAlign: 'center', zIndex: 5 }}>
         <p style={{ fontFamily: 'Georgia,serif', fontSize: '7px', color: cat.color + '50', letterSpacing: '3px', margin: 0 }}>
@@ -372,8 +354,8 @@ function EntriesPage({ pageEntries, cat, pageIndex }) {
       <div style={{ position: 'relative', height: '255mm' }}>
         {items.map((entry, i) =>
           entry.photo_url
-            ? <Polaroid  key={entry.id} entry={entry} cat={cat} posStyle={template[i] || template[0]} />
-            : <NoteCard  key={entry.id} entry={entry} cat={cat} posStyle={template[i] || template[0]} />
+            ? <Polaroid  key={entry.id} entry={entry} cat={cat} index={i} flip={pageIndex} posStyle={template[i] || template[0]} />
+            : <NoteCard  key={entry.id} entry={entry} cat={cat} index={i} flip={pageIndex} posStyle={template[i] || template[0]} />
         )}
       </div>
 
@@ -402,7 +384,19 @@ export default function FotobuchPreview({ printMode = false }) {
   }, [printMode])
 
   useEffect(() => {
-    if (!printMode && !session) return
+    if (printMode) {
+      // Print-Seite (Puppeteer) hat keinen Login: Einträge kommen über
+      // die Server-Function, die den x-pdf-token prüft.
+      fetch('/api/print-entries')
+        .then((r) => (r.ok ? r.json() : []))
+        .catch(() => [])
+        .then((e) => {
+          setEntries(Array.isArray(e) ? e : [])
+          setLoading(false)
+        })
+      return
+    }
+    if (!session) return
     supabase.from('entries').select('*').eq('approved', true).order('created_at').then(({ data: e }) => {
       setEntries(e || [])
       setLoading(false)
@@ -436,10 +430,12 @@ export default function FotobuchPreview({ printMode = false }) {
   const handlePDF = async () => {
     setPdfLoading(true)
     try {
-      // Server-seitige PDF-Generierung via Puppeteer-Function.
-      // Fuer die URL wird kein Secret gebraucht — die Function selbst
-      // haelt das PDF_SECRET fuer den internen Fetch der Print-Seite.
-      const res = await fetch(`/api/pdf?format=${format}`)
+      // Server-seitige PDF-Generierung via Puppeteer-Function. Das
+      // Supabase-Token weist den Aufrufer als angemeldet aus; das
+      // PDF_SECRET fuer den internen Fetch haelt nur die Function.
+      const res = await fetch(`/api/pdf?format=${format}`, {
+        headers: { Authorization: `Bearer ${session?.access_token || ''}` },
+      })
       if (!res.ok) {
         const txt = await res.text().catch(() => '')
         throw new Error(`PDF-Download fehlgeschlagen (${res.status}): ${txt.slice(0, 200)}`)

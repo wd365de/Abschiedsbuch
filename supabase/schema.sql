@@ -13,9 +13,9 @@ create table if not exists public.entries (
   id          uuid        default uuid_generate_v4() primary key,
   name        text        not null,
   message     text        not null,
-  category    text        not null check (category in ('gruesse', 'erinnerungen', 'abschiedsfeier')),
+  category    text        not null check (category in ('privat', 'team', 'sonstige')),
   photo_url   text,
-  approved    boolean     not null default false,
+  approved    boolean     not null default true,
   anonymous   boolean     not null default false,
   created_at  timestamptz default now()
 );
@@ -23,30 +23,38 @@ create table if not exists public.entries (
 -- Row Level Security aktivieren
 alter table public.entries enable row level security;
 
--- Öffentlich sind nur freigegebene Einträge lesbar (Moderation vor Veröffentlichung)
-create policy "Freigegebene Einträge sind öffentlich lesbar"
+-- Lesen nur Admin + Herr Krug (app_metadata.role) – alle anderen sehen keine fremden Einträge
+create policy "Admin und Krug können Einträge lesen"
   on public.entries for select
-  using (approved = true);
+  to authenticated
+  using ((auth.jwt() -> 'app_metadata' ->> 'role') in ('admin', 'krug'));
 
--- Admin sieht auch nicht freigegebene Einträge
-create policy "Admin kann alle Einträge lesen"
-  on public.entries for select
-  using (auth.role() = 'authenticated');
-
--- Jeder kann Einträge anlegen (Gäste ohne Login) – landen zunächst unfreigegeben
+-- Jeder kann Einträge anlegen (Gäste ohne Login)
 create policy "Gäste können Einträge anlegen"
   on public.entries for insert
   with check (true);
 
--- Nur eingeloggte Admins können Einträge freigeben/bearbeiten
+-- Bearbeiten/Löschen nur mit Admin-Rolle (app_metadata.role = 'admin')
 create policy "Admin kann Einträge bearbeiten"
   on public.entries for update
-  using (auth.role() = 'authenticated');
+  using ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 
--- Nur eingeloggte Admins können Einträge löschen
 create policy "Admin kann Einträge löschen"
   on public.entries for delete
-  using (auth.role() = 'authenticated');
+  using ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
+
+-- Zähler für die Startseite (ohne Lesezugriff auf Inhalte)
+create or replace function public.entry_count()
+returns bigint
+language sql
+security definer
+set search_path = public
+as $$
+  select count(*) from public.entries where approved = true;
+$$;
+
+revoke all on function public.entry_count() from public;
+grant execute on function public.entry_count() to anon, authenticated;
 
 -- ============================================================
 -- Tabelle: settings (Key-Value, z.B. Galerie-Sichtbarkeit)
@@ -82,12 +90,12 @@ create policy "Fotos hochladen erlaubt"
   on storage.objects for insert
   with check (bucket_id = 'photos');
 
--- Fotos sind öffentlich abrufbar
-create policy "Fotos sind öffentlich"
+-- Bild-URLs sind über den public Bucket abrufbar; Auflisten nur für Admin
+create policy "Admin kann Fotos auflisten"
   on storage.objects for select
-  using (bucket_id = 'photos');
+  using (bucket_id = 'photos' and (auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 
 -- Nur Admins können Fotos löschen
 create policy "Admin kann Fotos löschen"
   on storage.objects for delete
-  using (bucket_id = 'photos' and auth.role() = 'authenticated');
+  using (bucket_id = 'photos' and (auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');

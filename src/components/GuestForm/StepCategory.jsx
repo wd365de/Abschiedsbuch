@@ -1,20 +1,4 @@
-const CATEGORIES = [
-  {
-    id:          'gruesse',
-    title:       'Grüße',
-    description: 'Worte zum Abschied — gern einzeln oder als Team, Gruppe, Abteilung.',
-  },
-  {
-    id:          'erinnerungen',
-    title:       'Erinnerungen',
-    description: 'Alte Fotos und Erinnerungsbilder, gern mit Zeitangabe oder passender Anekdote.',
-  },
-  {
-    id:          'abschiedsfeier',
-    title:       'Abschiedsfeier',
-    description: 'Aktuelle Fotos von den Abschiedsfestivitäten (Kuratoriumssitzung + Winter-Info im November).',
-  },
-]
+import { CATEGORIES } from '../../config'
 
 export default function StepCategory({ selected, onChange, onNext }) {
   return (
@@ -47,7 +31,7 @@ export default function StepCategory({ selected, onChange, onNext }) {
                     className="font-body font-medium text-base md:text-lg"
                     style={{ margin: 0, color: '#FAF7F2' }}
                   >
-                    {cat.title}
+                    {cat.label}
                   </p>
                   <p className="font-body text-sm md:text-base mt-1" style={{ margin: 0, color: 'rgba(250,247,242,0.8)' }}>
                     {cat.description}

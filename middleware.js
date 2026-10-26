@@ -11,9 +11,12 @@
 // die Tokens nicht forgeable ohne Kenntnis des Passworts.
 //
 // matcher lässt /api/keepalive (Cron), Favicon und Robots unberührt.
+// Ebenfalls frei: /fuer-herrn-krug (eigener Zugang mit persönlichem
+// Passwort via Supabase-Login) und /assets/ (gebaute JS/CSS-Bundles,
+// enthalten keine Einträge – die liegen RLS-geschützt in Supabase).
 
 export const config = {
-  matcher: ['/((?!api/keepalive|favicon|robots\\.txt|\\.well-known).*)'],
+  matcher: ['/((?!api/keepalive|favicon|robots\\.txt|\\.well-known|fuer-herrn-krug|assets/).*)'],
 }
 
 const COOKIE_NAME = 'abschiedsbuch_access'

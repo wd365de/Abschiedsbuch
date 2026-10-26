@@ -1,8 +1,8 @@
+import { CATEGORIES } from '../../config'
+
 const FILTERS = [
-  { id: 'alle',           label: 'Alle' },
-  { id: 'gruesse',        label: 'Grüße' },
-  { id: 'erinnerungen',   label: 'Erinnerungen' },
-  { id: 'abschiedsfeier', label: 'Abschiedsfeier' },
+  { id: 'alle', label: 'Alle' },
+  ...CATEGORIES.map((c) => ({ id: c.id, label: c.label })),
 ]
 
 export default function GalleryFilter({ active, onChange, counts = {} }) {

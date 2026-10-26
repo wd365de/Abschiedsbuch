@@ -1,8 +1,4 @@
-const CATEGORY_LABELS = {
-  'gruesse':        'Grüße',
-  'erinnerungen':   'Erinnerungen',
-  'abschiedsfeier': 'Abschiedsfeier',
-}
+import { CATEGORY_LABELS } from '../../config'
 
 export default function StepPreview({ formData, onSubmit, onBack, loading, error }) {
   const label = CATEGORY_LABELS[formData.category] || formData.category

@@ -1,4 +1,4 @@
-import { NAME } from '../../config'
+import { CATEGORY_LABELS } from '../../config'
 
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString('de-DE', {
@@ -6,25 +6,17 @@ function formatDate(iso) {
   })
 }
 
-// Deterministischer Pseudo-Zufall aus der entry-id — fuer sanfte,
-// aber stabile Variation (Tape-Position, Rotation).
-function prng(seed, min = 0, max = 1) {
-  let h = 0
-  const s = String(seed)
-  for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0
-  return min + (Math.abs(h) % 10000) / 10000 * (max - min)
-}
-
-const CATEGORY_ACCENT = {
-  gruesse:        { color: '#C9A84C', label: 'Grüße' },
-  erinnerungen:   { color: '#009775', label: 'Erinnerungen' },
-  abschiedsfeier: { color: '#B87068', label: 'Abschiedsfeier' },
+const CATEGORY_COLOR = {
+  privat:   '#009775',
+  team:     '#C9A84C',
+  sonstige: '#B87068',
 }
 
 export default function GalleryCard({ entry, onOpen }) {
-  const accent = CATEGORY_ACCENT[entry.category] || { color: '#009775', label: '' }
-  const tapeLeft = prng(entry.id + 't', 20, 60)
-  const tapeRot  = prng(entry.id + 'r', -8, 8)
+  const accent = {
+    color: CATEGORY_COLOR[entry.category] || '#009775',
+    label: CATEGORY_LABELS[entry.category] || '',
+  }
 
   return (
     <button
@@ -32,21 +24,6 @@ export default function GalleryCard({ entry, onOpen }) {
       style={{ cursor: 'pointer' }}
       onClick={onOpen}
     >
-      {/* Washi-Tape in Kategorie-Farbe */}
-      <span
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: -7, left: `${tapeLeft}%`,
-          width: 44, height: 14,
-          background: accent.color + '99',
-          transform: `rotate(${tapeRot}deg)`,
-          boxShadow: '0 1px 3px rgba(0,0,0,0.14)',
-          zIndex: 3, pointerEvents: 'none',
-          borderRadius: 1,
-        }}
-      />
-
       <div
         className="overflow-hidden"
         style={{

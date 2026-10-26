@@ -116,6 +116,7 @@ export default function GuestPage() {
           name={formData.name}
           message={formData.message}
           anonymous={formData.anonymous}
+          category={formData.category}
           onChange={update}
           onNext={() => {
             setError(null)

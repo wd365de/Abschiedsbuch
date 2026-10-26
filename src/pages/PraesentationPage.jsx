@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import { getGalleryVisible } from '../lib/settings'
+import { KRUG_PATH } from '../config'
 
 const ADVANCE_MS = 9000
 
@@ -22,15 +22,11 @@ export default function PraesentationPage() {
       setLoading(true)
 
       const { data: { session } } = await supabase.auth.getSession()
-      const isAdmin = !!session
-
-      if (!isAdmin) {
-        const visible = await getGalleryVisible()
-        if (!visible) {
-          setLocked(true)
-          setLoading(false)
-          return
-        }
+      // Einträge sind nur mit Login lesbar (Admin oder Herr Krug)
+      if (!session) {
+        setLocked(true)
+        setLoading(false)
+        return
       }
 
       const { data } = await supabase
@@ -66,10 +62,11 @@ export default function PraesentationPage() {
   if (locked) {
     return (
       <div className="min-h-dvh bg-brand flex flex-col items-center justify-center px-8 text-center">
-        <p className="font-display italic text-3xl text-cream mb-3">Kommt bald</p>
+        <p className="font-display italic text-3xl text-cream mb-3">Bitte anmelden</p>
         <p className="font-body text-sm text-cream/50 max-w-xs">
-          Die Präsentation wird zum Übergabe-Moment freigeschaltet.
+          Die Präsentation ist nur nach Anmeldung sichtbar.
         </p>
+        <Link to={KRUG_PATH} className="font-body text-xs text-gold mt-6 tracking-widest uppercase">Zur Anmeldung</Link>
       </div>
     )
   }

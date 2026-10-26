@@ -13,9 +13,10 @@
 //                   der exakte Supabase-Hostname extrahiert; nur dieser
 //                   darf von Puppeteer geladen werden (keine Wildcard).
 //
-// Die eigentliche Aufrufer-Authentisierung erfolgt ueber die Edge-
-// Middleware (Passwort-Cookie). Diese Function selbst muss den
-// Cookie nicht nochmal pruefen.
+// Aufrufer-Authentisierung: Der gemeinsame Zugangscode (Middleware)
+// reicht nicht, denn den kennen alle Kolleg*innen. Zusaetzlich wird
+// ein gueltiges Supabase-Access-Token (Admin oder Herr Krug) als
+// "Authorization: Bearer ..." verlangt und bei Supabase geprueft.
 
 import chromium from '@sparticuz/chromium-min'
 import puppeteer from 'puppeteer-core'
@@ -69,6 +70,28 @@ function isAllowedUrl(rawUrl, appOrigin, supabaseHost) {
   }
 }
 
+// Nur Admin und Herr Krug (app_metadata.role) dürfen das PDF erzeugen –
+// die Print-Seite liest mit dem Service-Role-Key und umgeht damit RLS.
+const PDF_ROLES = new Set(['admin', 'krug'])
+
+async function isAllowed(req) {
+  const auth = req.headers.authorization || ''
+  const token = auth.startsWith('Bearer ') ? auth.slice(7) : ''
+  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
+  const anon = process.env.VITE_SUPABASE_ANON_KEY
+  if (!token || !url || !anon) return false
+  try {
+    const r = await fetch(`${url}/auth/v1/user`, {
+      headers: { apikey: anon, Authorization: `Bearer ${token}` },
+    })
+    if (!r.ok) return false
+    const user = await r.json()
+    return PDF_ROLES.has(user?.app_metadata?.role)
+  } catch {
+    return false
+  }
+}
+
 function isSameOrigin(rawUrl, appOrigin) {
   try { return new URL(rawUrl).origin === appOrigin } catch { return false }
 }
@@ -85,6 +108,11 @@ export default async function handler(req, res) {
     return
   }
   const supabaseHost = resolveSupabaseHost()
+
+  if (!(await isAllowed(req))) {
+    res.status(401).send('Keine Berechtigung.')
+    return
+  }
 
   const format = req.query?.format === 'quadrat' ? 'quadrat' : 'a4'
   const printUrl = new URL('/fotobuch-print', appOrigin)
